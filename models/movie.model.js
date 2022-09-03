@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const constants = require("../utils/constants");
 
 const movieSchema  = new mongoose.Schema({
     name : {
@@ -30,15 +31,21 @@ const movieSchema  = new mongoose.Schema({
     },
     releaseStatus : {
         type : String,
-        required : true
-        //TODO : Make it an enum RELEASED | COMING_SOON | BLOCKED
+        required : true,
+        default : constants.releaseStatus.comming_soon,
+        enum : [constants.releaseStatus.blocked, constants.releaseStatus.comming_soon, constants.releaseStatus.released]
     },
     imdbRating :{
         type : Number
     },
     genre : {
-        type : [ String ]
-        //TODO : Make it as enum - COMEDY | ROMCOM | DRAMA | SCIFI | OFFBEAT
+        type : [ String ],
+        enum : [constants.genre.comedy, constants.genre.drama, constants.genre.offbeat, constants.genre.romcom, constants.genre.scifi]
+    },
+    isDeleted : {
+        type : String,
+        default : constants.isDeleted.no,
+        enum : [constants.isDeleted.no, constants.isDeleted.yes]
     }
 },{ timestamps : true , versionKey : false});
 
