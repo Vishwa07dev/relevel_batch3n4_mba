@@ -1,9 +1,8 @@
 /**
  * This file should have the controller methods to perform crud on
  * the movie resource
- */
+*/
 
-const mongoose = require('mongoose');
 const constants = require('../utils/constants');
 const Movie = require('../models/movie.model');
 
@@ -37,7 +36,7 @@ exports.getAllMovies = async (req, res) => {
     try {
 
 
-        // I assum that query should be on movie name
+        // I assume that query should be on movie name
         const queryObj = {}
         if(req.query.name){
             queryObj.name = req.query.name
@@ -124,8 +123,8 @@ exports.deleteMovie = async (req, res) => {
             })
         }
 
-        movie.isDeleted = constants.isDeleted.yes;
-        await movie.save()
+        await Movie.deleteOne({_id : req.params.id})
+        
         res.status(200).send({
             message : "Movie Deleted Successfully"
         })

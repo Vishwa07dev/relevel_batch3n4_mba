@@ -31,6 +31,7 @@ db.once("open", () => {
 async function init() {
     try {
 
+        await Movie.collection.drop()
         const movieObj = {
             name : "temp Movie",
             description : "hello this a good movie",

@@ -41,12 +41,8 @@ const movieSchema  = new mongoose.Schema({
     genre : {
         type : [ String ],
         enum : [constants.genre.comedy, constants.genre.drama, constants.genre.offbeat, constants.genre.romcom, constants.genre.scifi]
-    },
-    isDeleted : {
-        type : String,
-        default : constants.isDeleted.no,
-        enum : [constants.isDeleted.no, constants.isDeleted.yes]
     }
+    
 },{ timestamps : true , versionKey : false});
 
 
