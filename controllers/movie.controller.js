@@ -16,6 +16,8 @@
          language : req.body.language,
          genre : req.body.genre,
          imdbRating : req.body.imdbRating,
+         trailerUrls : req.body.trailerUrls,
+         posterUrls :req.body.posterUrls,
          releaseStatus : req.body.releaseStatus,
          releaseDate : req.body.releaseDate
      }
@@ -39,10 +41,17 @@
  
  
  exports.getOneMovie = async (req,res) =>{
- 
+    
+     try{
      const movie = await Movie.findOne({id:req.params.id});
  
      res.status(200).send(movie)
+     }catch(err){
+        console.log("Some error happened",err.message);
+        return res.status(500).send({
+            message : "internal server error"
+        })
+     }
  }
  
  

@@ -42,7 +42,7 @@ const movieSchema  = new mongoose.Schema({
     genre : {
         type : [ String ],
         enum : [constants.genreTypes.action,constants.genreTypes.adventure,constants.genreTypes.comedy,
-        constants.genreTypes.drama,constants.genreTypes.horror,constants.genreTypes.scifi]
+        constants.genreTypes.drama,constants.genreTypes.horror,constants.genreTypes.scifi,constants.genreTypes.fantasy]
         //TODO : Make it as enum - COMEDY | ROMCOM | DRAMA | SCIFI | OFFBEAT
     }
 },{ timestamps : true , versionKey : false});

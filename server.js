@@ -27,22 +27,28 @@ db.once("open",()=>{
 /**
 * Initialize the DB with few seed movie data
 */
-const User = require("./models/user.model")
-const bcrypt = require("bcryptjs")
+
+const Movie = require('./models/movie.model')
 async function init(){
 
     try{
-    await User.collection.drop();
-    
-    const user =  await User.create({
-        name : "deepanshu",
-        userId : "admin",
-        email : "deepanshusing54@gmail.com",
-        password : bcrypt.hashSync("deepanshu",8),
-        userType : "ADMIN"
+    await Movie.collection.drop()
+
+    const movie = await Movie.create({
+        name : "Avatar2 the way of water",
+        description : "it is second part of of avatar1 and things will continue from there ",
+        casts :["Sam Worthington as Jake Sully","Zoe Saldana as Neytiri","Sigourney Weaver as Kiri"],
+        language : "english",
+        imdbRating : 9,
+        genre : ["FANTASY","ADVENTURE","ACTION","SCI-FI"],
+        trailerUrls : ["https://youtu.be/NZrX_ES93JA","https://youtu.be/rSiZGsyClUc"],
+        posterUrls :["https://images.app.goo.gl/rjwjyrH852Ex8iFW7","https://images.app.goo.gl/euGmNPPtofra4Wmk8"],
+        releaseDate : 2022-09-16,
+        releaseStatus : "COMING_SOON",
     })
-    const moive = 
-    console.log(user)
+    
+    console.log(movie)
+    
 }catch(err){
     console.log("Error in db initialization",err.message)
 }

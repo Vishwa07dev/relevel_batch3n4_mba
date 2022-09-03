@@ -11,6 +11,7 @@ module.exports = {
         adventure : "ADVENTURE",
         drama : "DRAMA",
         horror : "HORROR",
-        comedy : "COMEDY"
+        comedy : "COMEDY",
+        fantasy : "FANTASY"
     }
 }
