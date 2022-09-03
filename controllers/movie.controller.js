@@ -43,7 +43,7 @@
  exports.getOneMovie = async (req,res) =>{
     
      try{
-     const movie = await Movie.findOne({id:req.params.id});
+     const movie = await Movie.findOne({_id:req.params.id});
  
      res.status(200).send(movie)
      }catch(err){
@@ -58,7 +58,7 @@
  exports.updateMovie = async (req,res) =>{
      
      try{
-     const movie = await Movie.findOne({id:req.params.id});
+     const movie = await Movie.findOne({_id:req.params.id});
      if(!movie){
          res.status(400).send({
              message : "Movie doesn't exist"
@@ -85,7 +85,7 @@
  
  exports.delete = async (req,res) =>{
      try{
-     const movie = await Movie.deleteOne({id:req.params.id});
+     const movie = await Movie.deleteOne({_id:req.params.id});
      res.status(200).send(movie)
  
      }catch(err){
