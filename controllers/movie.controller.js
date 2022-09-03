@@ -90,7 +90,7 @@ exports.getAllMovies = async (req,res)=>{
     }
 }
 
-exports.getSingleMovie = (req,res)=>{
+exports.getSingleMovie = async (req,res)=>{
 
     try{
         const movie = await Movie.findOne({_id : req.params.id});
