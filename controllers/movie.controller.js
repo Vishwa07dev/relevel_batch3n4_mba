@@ -2,8 +2,10 @@
  * This file should have the controller methods to perform crud on
  * the movie resource
  */
+
 const Movie=require("../models/movie.model")
 const objectConverter=require("../utils/objectConverter")
+
 exports.movieCreated=async (req,res)=>{
     const Body=req.body;
     const movieObj={
@@ -38,29 +40,32 @@ exports.movieUpdate=async (req,res)=>{
             const Body=req.body;
             const movie=await Movie.findOne({_id:req.params.id})
             
-                movie.name=Body.name!=undefined?Body.name:movie.name;
-                movie.description=Body.description!=undefined?Body.description:movie.description;
-                movie.casts=Body.casts!=undefined?Body.casts:movie.casts;
-                movie.trailerUrls=Body.trailerUrls!=undefined?Body.undefined:movie.trailerUrls;
-                movie.posterUrls=Body.posterUrls!=undefined?Body.posterUrls:movie.posterUrls;
-                movie.language=Body.language!=undefined?Body.language:movie.language;
-                movie.releaseDate=Body.releaseDate!=undefined?Body.releaseDate:movie.releaseDate;
-                movie.releaseStatus=Body.releaseStatus!=undefined?Body.releaseStatus:movie.releaseStatus;
-                movie.imdbRating=Body.imdbRating!=undefined?Body.imdbRating:movie.imdbRating;
-                movie.genre=Body.genre!=undefined?Body.genre:movie.genre;
-                const updateMovie=movie.save()
+            movie.name=Body.name!=undefined?Body.name:movie.name;
+            movie.description=Body.description!=undefined?Body.description:movie.description;
+            movie.casts=Body.casts!=undefined?Body.casts:movie.casts;
+            movie.trailerUrls=Body.trailerUrls!=undefined?Body.undefined:movie.trailerUrls;
+            movie.posterUrls=Body.posterUrls!=undefined?Body.posterUrls:movie.posterUrls;
+            movie.language=Body.language!=undefined?Body.language:movie.language;
+            movie.releaseDate=Body.releaseDate!=undefined?Body.releaseDate:movie.releaseDate;
+            movie.releaseStatus=Body.releaseStatus!=undefined?Body.releaseStatus:movie.releaseStatus;
+            movie.imdbRating=Body.imdbRating!=undefined?Body.imdbRating:movie.imdbRating;
+            movie.genre=Body.genre!=undefined?Body.genre:movie.genre;
+            
+            const updateMovie=await movie.save()
     
             res.status(200).send({
-                name:movie.name,
-                description:movie.description,
-                casts:movie.casts,
-                trailerUrls:movie.trailerUrls,
-                posterUrls:movie.posterUrls,
-                language:movie.language,
-                releaseDate:movie.releaseDate,
-                imdbRating:movie.imdbRating,
-                genre:movie.genre
-            })
+                name:updateMovie.name,
+                description:updateMovie.description,
+                casts:updateMovie.casts,
+                trailerUrls:updateMovie.trailerUrls,
+                posterUrls:updateMovie.posterUrls,
+                language:updateMovie.language,
+                releaseDate:updateMovie.releaseDate,
+                imdbRating:updateMovie.imdbRating,
+                genre:updateMovie.genre
+            });
+
+        
     }
     catch(err)
     {
@@ -75,8 +80,8 @@ exports.movieUpdate=async (req,res)=>{
 exports.getMovie=async (req,res)=>{    
     try
     {
-        const movie=await Movie.findOne({_id:req.params.id})
-        return res.status(200).send(movie)  
+        const movie=await Movie.find({_id:req.params.id})
+        return res.status(200).send(objectConverter.movieResponse(movie))  
     }
     catch(err)
     {
