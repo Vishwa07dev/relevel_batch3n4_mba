@@ -75,8 +75,8 @@ exports.movieUpdate=async (req,res)=>{
 exports.getMovie=async (req,res)=>{    
     try
     {
-        const movies=await Movie.findOne({_id:req.params.id})
-        return res.status(200).send(movies)  
+        const movie=await Movie.findOne({_id:req.params.id})
+        return res.status(200).send(movie)  
     }
     catch(err)
     {
