@@ -1,0 +1,14 @@
+module.exports={
+    releaseStatus:{
+        released:"RELEASED",
+        coming_soon:"COMING_SOON",
+        bloacked:"BLOCKED"
+    },
+    genre:{
+        comedy:"COMEDY",
+        romcom:"ROMCOM",
+        drama:"DRAMA",
+        scifi:"SCIFI",
+        offbeat:"OFFBEAT"
+    }
+}
