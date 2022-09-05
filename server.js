@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
-const serverConfig = require('./configs/server.config')
+const serverConfig = require('./src/configs/server.config')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const dbConfig = require('./configs/db.config');
-const init = require('./init')
+const dbConfig = require('./src/configs/db.config');
+const init = require('./src/init')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
@@ -19,7 +19,8 @@ db.once("open",()=>{
     init();
 });
 
-require('./routes/movie.routes')(app);
+require('./src/routes/movie.routes')(app);
+require('./src/routes/theatre.routes')(app);
 
 
 app.listen(serverConfig.PORT,()=>{
