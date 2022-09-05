@@ -15,5 +15,11 @@ module.exports = {
         romance : "ROMANCE",
         thriller : "THRILLER"
     },
+    showTypes:{
+        morning:"MORNING",
+        noon:"NOON",
+        evening:"EVENING",
+        night:"NIGHT"
+    }
 
 }
