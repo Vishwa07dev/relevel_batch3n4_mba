@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 module.exports = {
@@ -20,4 +21,24 @@ module.exports = {
         yes : "YES",
         no : "No"
     }
+=======
+module.exports = {
+    movieReleaseStatuses : {
+        released : "RELEASED",
+        coming_soon : "COMING_SOON",
+        blocked : "BLOCKED"
+    },
+
+    movieGenre : {
+        action : "ACTION",
+        comedy : "COMEDY",
+        drama : "DRAMA",
+        fantasy : "FANTASY",
+        horror : "HORROR",
+        mystery : "MYSTERY",
+        romance : "ROMANCE",
+        thriller : "THRILLER"
+    },
+
+>>>>>>> cb53a3b79209cb6de8b8b437a7d21fe45608ab83
 }
