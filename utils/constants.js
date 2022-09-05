@@ -16,4 +16,11 @@ module.exports = {
         thriller : "THRILLER"
     },
 
+    theatreShows : {
+        morning : "MORNING",
+        noon : "NOON",
+        evening : "EVENING",
+        night : "NIGHT",
+    }
+
 }
