@@ -2,20 +2,21 @@ const Theatre = require('../models/theatre.model')
  
  exports.NewTheatre = async (req,res)=>{
      try{
-         const data = {
-             name : req.body.name,
-             description : req.body.description,
-             city : req.body.city,
-             pinCode : req.body.pinCode,
-             showTypes : req.body.showTypes,
-             numberOfSeats : req.body.numberOfSeats,
-         }
-         console.log("in")
-     
-         const theatre = await Theatre.create(data);
 
-         console.log(`#### New Theatre '${theatre.name}' created ####`);
-         res.status(201).send(theatre);
+        const data = {
+            name : req.body.name,
+            description : req.body.description,
+            city : req.body.city,
+            pinCode : req.body.pinCode,
+            showTypes : req.body.showTypes,
+            numberOfSeats : req.body.numberOfSeats,
+        }
+
+    
+        const theatre = await Theatre.create(data);
+
+        console.log(`#### New Theatre '${theatre.name}' created ####`);
+        res.status(201).send(theatre);
 
  
         }catch(err){
