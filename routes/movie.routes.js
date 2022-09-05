@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Create routes for following APIs
  * 
@@ -15,3 +16,14 @@ module.exports=(app)=>{
     app.get("/mbs/api/v1/movies/:id",controller.getMovieById)
     app.get("/mbs/api/v1/movies",controller.getAllMovie)
 }
+=======
+ const movieController = require('../controllers/movie.controller');
+ 
+ module.exports = (app)=>{
+     app.post("/mbs/api/v1/movies", movieController.NewMovie);
+     app.put("/mbs/api/v1/movies/:id", movieController.editMovie)
+     app.delete("/mbs/api/v1/movies/:id", movieController.deleteMovie)
+     app.get("/mbs/api/v1/movies", movieController.getAllMovies)
+     app.get("/mbs/api/v1/movies/:id", movieController.getSingleMovie)
+ }
+>>>>>>> 46cbcded36e89cc9e58cc470120d3dceade2294d
