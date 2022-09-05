@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /**
  * This file should have the controller methods to perform crud on
  * the movie resource
@@ -89,9 +89,6 @@ exports.getAllMovie=async(req,res)=>{
         res.status(500).send("There was an error from our side")
     }
 }
-=======
- const Movie = require('../models/movie.model')
- 
  exports.NewMovie = async (req,res)=>{
      try{
          const data = {
@@ -197,4 +194,4 @@ exports.getSingleMovie = async (req,res)=>{
     }
 
 }
->>>>>>> 46cbcded36e89cc9e58cc470120d3dceade2294d
+
