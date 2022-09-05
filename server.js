@@ -20,7 +20,7 @@ db.once("open",()=>{
 });
 
 require('./routes/movie.routes')(app);
-
+require('./routes/theatre.routes')(app);
 
 app.listen(serverConfig.PORT,()=>{
     console.log(`#### connected to server at port no.: ${serverConfig.PORT} ####`);

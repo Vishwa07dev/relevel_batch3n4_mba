@@ -13,7 +13,16 @@ module.exports = {
         horror : "HORROR",
         mystery : "MYSTERY",
         romance : "ROMANCE",
-        thriller : "THRILLER"
+        thriller : "THRILLER",
+        adventure : "ADVENTURE",
+        sci_fi : "SCI-FI"
     },
+
+    showTypes : {
+        monrning : "MORNING",
+        noon : "NOON",
+        evening : "EVENING",
+        night : "NIGHT"
+    }
 
 }

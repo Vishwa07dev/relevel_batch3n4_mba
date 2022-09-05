@@ -3,6 +3,7 @@ const constants = require('./utils/constants')
 
 module.exports = async ()=>{
     try{
+        await Movie.collection.drop();
         const movies = [];
         movies[0] = {
             name : "Movie 1",
