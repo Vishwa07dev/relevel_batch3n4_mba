@@ -29,6 +29,7 @@ const theatreSchema = new mongoose.Schema(
         showTypes.noon,
       ],
       required: true,
+      //TODO : MORNING | NOON | EVENING | NIGHT
     },
     numberOfSeats: {
       type: Number,
