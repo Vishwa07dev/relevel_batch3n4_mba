@@ -39,7 +39,7 @@ const movieSchema  = new mongoose.Schema({
     },
     genre : {
         type : [ String ],
-        enum : [constants.movieGenre.action, constants.movieGenre.comedy, constants.movieGenre.drama, constants.movieGenre.fantasy, constants.movieGenre.horror, constants.movieGenre.mystery, constants.movieGenre.romance, constants.movieGenre.thriller]
+        enum : [constants.movieGenre.action, constants.movieGenre.comedy, constants.movieGenre.drama, constants.movieGenre.fantasy, constants.movieGenre.horror, constants.movieGenre.mystery, constants.movieGenre.romance, constants.movieGenre.thriller, constants.movieGenre.adventure, constants.movieGenre.sci_fi]
     }
 },{ timestamps : true , versionKey : false});
 
