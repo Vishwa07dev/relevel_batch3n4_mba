@@ -23,6 +23,8 @@ const theatreSchema = new mongoose.Schema({
         type : [String],
         required : true,
         enum : [constants.showTypes.evening, constants.showTypes.morning, constants.showTypes.night, constants.showTypes.noon]
+        required : true
+
     },
     numberOfSeats : {
         type : Number,
