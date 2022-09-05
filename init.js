@@ -1,4 +1,5 @@
-const Movie = require('./models/movie.model')
+const Movie = require('./models/movie.model');
+const Theatre = require("./controllers/theatre.controller")
 const constants = require('./utils/constants')
 
 module.exports = async ()=>{
@@ -17,16 +18,16 @@ module.exports = async ()=>{
             genre : [constants.movieGenre.action]
         },
         movies[0] = {
-        name : "Movie 1",
-        description : "Description for movie 1",
-        casts : ["SomeOne", "SomeOneElse"],
-        trailerUrls : ["TrailerURL"],
-        posterUrls : ["PosterURL"],
-        languages : ["English","Hindi"],
-        releaseDate : 2022-10-10,
-        releaseStatus : constants.movieReleaseStatuses.coming_soon,
-        imdbRating : 8.5,
-        genre : [constants.movieGenre.action]
+            name : "Movie 1",
+            description : "Description for movie 1",
+            casts : ["SomeOne", "SomeOneElse"],
+            trailerUrls : ["TrailerURL"],
+            posterUrls : ["PosterURL"],
+            languages : ["English","Hindi"],
+            releaseDate : 2022-10-10,
+            releaseStatus : constants.movieReleaseStatuses.coming_soon,
+            imdbRating : 8.5,
+            genre : [constants.movieGenre.action]
         },
         movies[1] = {
             name : "Movie 2",
@@ -41,19 +42,33 @@ module.exports = async ()=>{
             genre : [constants.movieGenre.action]
         },
         movies[2] = {
-        name : "Movie 3",
-        description : "Description for movie 3",
-        casts : ["SomeOne", "SomeOneElse"],
-        trailerUrls : ["TrailerURL"],
-        posterUrls : ["PosterURL"],
-        languages : ["English","Hindi"],
-        releaseDate : 2022-12-12,
-        releaseStatus : constants.movieReleaseStatuses.coming_soon,
-        imdbRating : 8.5,
-        genre : [constants.movieGenre.action]
+            name : "Movie 3",
+            description : "Description for movie 3",
+            casts : ["SomeOne", "SomeOneElse"],
+            trailerUrls : ["TrailerURL"],
+            posterUrls : ["PosterURL"],
+            languages : ["English","Hindi"],
+            releaseDate : 2022-12-12,
+            releaseStatus : constants.movieReleaseStatuses.coming_soon,
+            imdbRating : 8.5,
+            genre : [constants.movieGenre.action]
         }
 
         await Movie.insertMany(movies);
+
+
+        const theatres = [];
+        
+        theatres[0] = {
+            name : "PVR",
+            description : "high clarity",
+            city : "Bengaluru",
+            pinCode : 560024,
+            showType : constants.showTypes.evening,
+            numberOfSeate : 225
+        }
+
+        await Theatre.insertMany(theatres);
     }
     catch(err){
         console.log("#### Error in seed data initialization #### ", err.message);
