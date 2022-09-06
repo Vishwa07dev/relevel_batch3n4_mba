@@ -19,7 +19,7 @@ exports.newTheather=async(req,res)=>{
     {
         console.log("#### Error whilel creating new theatre ####",err.message);
         res.status(500).send({
-            message:"Internal Server Error while creating new theather"
+            message:"Internal server error while creating new theather"
         })
     }
 }
@@ -44,7 +44,7 @@ exports.updateRecord=async (req,res)=>{
     {
         console.log("#### Error while updating theather data ####",err.message);
         res.status(500).send({
-            message:"Internal Server Error.."
+            message:"Internal server error while updating existing theather record"
         })
     }
     
@@ -56,8 +56,8 @@ exports.getTheather=async (req,res)=>{
         const theatre=await Theatre.findOne({_id:req.params.id});
         if(theatre==null)
         {
-            res.status(400).send({
-                message:"#### Theatre Doesn't Exist ####"
+            return res.status(400).send({
+                message:"Failed!!! Theatre Doesn't Exist "
             })
         }
         res.status(200).send(theatre)
@@ -78,7 +78,7 @@ exports.getAllTheather=async (req,res)=>{
     }catch(err){
         console.log("#### Errror while getting all theather ####",err.message);
         res.status(500).send({
-            message:"#### Internal server error while getting all theather ####"
+            message:"Internal server error while getting all theather "
         })
     }
     
@@ -89,9 +89,9 @@ exports.deleteTheather=async(req,res)=>{
     {
         const theather=await Theatre.findOne({_id:req.params.id});
         await theather.remove();
-        console.log("#### Theather Deleted ####")
+        console.log(`#### Theather '${theather.name}'  Deleted ####`)
         res.status(200).send({
-            message:"Succesfully Deleted"
+            message:`Succesfully  Deleted ${theather.name} `
         })
     }catch(err)
     {
