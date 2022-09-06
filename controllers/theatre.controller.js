@@ -1,46 +1,48 @@
 const Theatre=require("../models/theatre.model")
 
-exports.createTheatre=async(req,res)=>{
-    const theatreBody=req.body;
-    const theatreObj={
-        name:theatreBody.name,
-        description:theatreBody.description,
-        city:theatreBody.city,
-        pinCode:theatreBody.pinCode,
-        showTypes:theatreBody.showTypes,
-        numberOfSeats:theatreBody.numberOfSeats
-    }
+exports.newTheather=async(req,res)=>{
     try
     {
-        const newTheatre=await Theatre.create(theatreObj);
-        res.status(201).send(newTheatre)
+        const Body=req.body;
+        const theatreObj={
+            name:Body.name,
+            description:Body.description,
+            city:Body.city,
+            pinCode:Body.pinCode,
+            showTypes:Body.showTypes,
+            numberOfSeats:Body.numberOfSeats
+        }
+            const theather=await Theatre.create(theatreObj);
+            console.log(`#### New Theather '${theather.name}' created ####`)
+            res.status(201).send(theather)
     }catch(err)
     {
-        console.log("Error whilel Creating Theatre",err.message);
+        console.log("#### Error whilel creating new theatre ####",err.message);
         res.status(500).send({
-            message:"Internal Server Error"
+            message:"Internal Server Error while creating new theather"
         })
     }
 }
 
 exports.updateRecord=async (req,res)=>{
     try{
-        const theatreBody=req.body;
+        const Body=req.body;
 
-        const theatre=await Theatre.find({_id:req.params.id});
+        const theatre=await Theatre.findOne({_id:req.params.id});
         
-        theatre.name=theatreBody.name!=undefined?theatreBody.name:theatre.name;
-        theatre.description=theatreBody.description!=undefined?theatreBody.description:theatre.description;
-        theatre.city=theatreBody.city!=undefined?theatreBody.city:theatre.city;
-        theatre.pinCode=theatreBody.pinCode!=undefined?theatreBody.pinCode:theatre.pinCode;
-        theatre.showTypes=theatreBody.showTypes!=undefined?theatreBody.showTypes:theatre.showTypes;
-        theatre.numberOfSeats=theatreBody.numberOfSeats!=undefined?theatreBody.numberOfSeats:theatre.numberOfSeats;
+        theatre.name=Body.name!=undefined?Body.name:theatre.name;
+        theatre.description=Body.description!=undefined?Body.description:theatre.description;
+        theatre.city=Body.city!=undefined?Body.city:theatre.city;
+        theatre.pinCode=Body.pinCode!=undefined?Body.pinCode:theatre.pinCode;
+        theatre.showTypes=Body.showTypes!=undefined?Body.showTypes:theatre.showTypes;
+        theatre.numberOfSeats=Body.numberOfSeats!=undefined?Body.numberOfSeats:theatre.numberOfSeats;
     
         const theatreObj=await theatre.save();
+        console.log(`#### Theather '${theatreObj.name}' data Updated ####`);
         res.status(200).send(theatreObj)
     }catch(err)
     {
-        console.log("Error While Updating Theather",err.message);
+        console.log("#### Error while updating theather data ####",err.message);
         res.status(500).send({
             message:"Internal Server Error.."
         })
@@ -55,14 +57,14 @@ exports.getTheather=async (req,res)=>{
         if(theatre==null)
         {
             res.status(400).send({
-                message:"Theatre Doesn't Exist!!!"
+                message:"#### Theatre Doesn't Exist ####"
             })
         }
         res.status(200).send(theatre)
     }catch(err){
-        console.log("Errror while finding theather",err.message);
+        console.log("#### Errror while getting the  theather ####",err.message);
         res.status(500).send({
-            message:"Internal Server Error"
+            message:"Internal server error while getting the theather"
         })
     }
     
@@ -74,9 +76,9 @@ exports.getAllTheather=async (req,res)=>{
         const theatre=await Theatre.find();
         res.status(200).send(theatre)
     }catch(err){
-        console.log("Errror while finding theather",err.message);
+        console.log("#### Errror while getting all theather ####",err.message);
         res.status(500).send({
-            message:"Internal Server Error"
+            message:"#### Internal server error while getting all theather ####"
         })
     }
     
@@ -87,14 +89,15 @@ exports.deleteTheather=async(req,res)=>{
     {
         const theather=await Theatre.findOne({_id:req.params.id});
         await theather.remove();
-    
-        res.status.send({
-            message:"Succesfully Deleted..."
+        console.log("#### Theather Deleted ####")
+        res.status(200).send({
+            message:"Succesfully Deleted"
         })
     }catch(err)
     {
+        console.log("#### Errror while deleting theather ####",err.message);
         res.status(500).send({
-            message:"Internal server error while Deleting "
+            message:"Internal server error while deleting theather "
         })
     }
     

@@ -1,9 +1,28 @@
 const Movie = require('./models/movie.model')
 const constants = require('./utils/constants')
-
+const Theatre=require("./models/theatre.model")
 module.exports = async ()=>{
     try{
+        await Movie.collection.drop();
+        await Theatre.collection.drop();
         const movies = [];
+        const theather=[];
+        theather[0]={
+            name:"PVPMovies",
+            description:"dsadsa",
+            city:"Mumbai",
+            pinCode:400095,
+            showTypes:"MORNING",
+            numberOfSeats:400
+        },
+        theather[1]={
+            name:"Cinimex",
+            description:"dsadsa",
+            city:"Mumbai",
+            pinCode:400095,
+            showTypes:"NOON",
+            numberOfSeats:300
+        }
         movies[0] = {
             name : "Movie 1",
             description : "Description for movie 1",
@@ -54,6 +73,9 @@ module.exports = async ()=>{
         }
 
         await Movie.insertMany(movies);
+        await Theatre.insertMany(theather);
+        console.log(theather)
+        // console.log(movies)
     }
     catch(err){
         console.log("#### Error in seed data initialization #### ", err.message);
