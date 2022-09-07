@@ -125,6 +125,8 @@ exports.getTheatreMovies = async (req,res)=>{
         if(req.body.removeMovies){
             theatre.movies = theatre.movies.filter(movie => !req.body.removeMovies.includes(movie))
         }
+
+        theatre.save();
         
     }catch(err){
         console.log("#### Error while updating the movies in theatre ####", err.message);
