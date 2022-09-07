@@ -1,5 +1,34 @@
-const Theatre = require('../models/theatre.model')
+/**
+ * vijay's code
+ */
+
+
+// exports.getTheatre = async (req, res) => {
+
+//     try {
+//         let theatre;
+//         if(req.params.id){
+//             theatre = await Theatre.findOne({ _id: req.params.id });
+//         }else{
+//             theatre = await Theatre.find();
+//         }
+
+//         res.status(200).send({
+//             message: (req.params.id && theatre && theatre.length > 0) || (!req.params.id && theatre) ? "Theatre data's" : "No theatre data found",
+//             theatre
+//         });
+//     } catch (err) {
+//         console.log("#### Error while getting theatre #### ", err);
+//         res.status(500).send({
+//             message : "Internal server error while getting theatre"
+//         });
+//     }
+// }
  
+
+
+const Theatre = require('../models/theatre.model');
+
  exports.NewTheatre = async (req,res)=>{
      try{
 
