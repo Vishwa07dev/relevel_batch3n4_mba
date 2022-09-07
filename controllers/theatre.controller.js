@@ -23,7 +23,7 @@ exports.NewTheatre = async (req,res)=>{
        }catch(err){
         console.log("#### Error while creating new Theatre #### ", err);
         res.status(500).send({
-            message : "Internal server error while creating new Theatre"
+            message : "Internal server error "
         });
     }
 }
@@ -48,7 +48,7 @@ exports.editTheatre = async (req,res)=>{
    }catch(err){
        console.log("#### Error while updating theatre data #### ", err.message);
        res.status(500).send({
-           message : "Internal server error while updating theatre data"
+           message : "Internal server error "
        });
    }
 }
@@ -65,7 +65,7 @@ exports.deleteTheatre = async (req,res)=>{
    }catch(err){
        console.log("#### Error while deleting theatre #### ", err.message);
        res.status(500).send({
-           message : "Internal server error while deleting theatre"
+           message : "Internal server error "
        });
    }
 }
@@ -87,7 +87,7 @@ exports.getTheatre = async (req, res) => {
     } catch (err) {
         console.log("#### Error while getting theatre #### ", err);
         res.status(500).send({
-            message : "Internal server error while getting theatre"
+            message : "Internal server error "
         });
     }
 }
