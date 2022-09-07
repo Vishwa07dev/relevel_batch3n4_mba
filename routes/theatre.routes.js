@@ -7,3 +7,15 @@ module.exports = (app)=>{
     app.get("/mbs/api/v1/theatres", theatreController.getAllTheatres)
     app.get("/mbs/api/v1/theatres/:id", theatreController.getSingleTheatre)
 }
+
+/***
+ * I want to get the list of all the movies runninig in a theater
+ * 
+ *    GET /mba/api/v1/theatres/:id/movies
+ * 
+ * Add/Remove a movie inside a theatre  -- Adding or removing multiple movies at a time
+ *    PUT /mba/api/v1/theatres/:id/movies
+ * 
+ * 
+ *  
+ */
