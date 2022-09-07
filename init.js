@@ -4,6 +4,10 @@ const constants = require('./utils/constants')
 
 module.exports = async ()=>{
     try{
+        await Movie.collection.drop();
+        await Theatre.collection.drop();
+
+
         const movies = [];
 
         movies[0] = {
