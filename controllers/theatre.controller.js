@@ -108,7 +108,7 @@ exports.updateMoviesInTheatre = async (req, res) =>{
         const delMovies = req.body.delMovies;
         const theatre = await Theatre.findOne({_id : req.params.id});
         if(addMovies){
-            const theatre = await Theatre.findOne({_id : req.params.id});
+            
             addMovies.forEach(movie => {
                 theatre.movies.push(movie);
             });
