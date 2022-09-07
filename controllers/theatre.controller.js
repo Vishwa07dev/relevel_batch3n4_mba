@@ -1,29 +1,28 @@
-
 const Theatre = require('../models/theatre.model');
-
-exports.NewTheatre = async (req,res)=>{
+const Movie = require('../models/movie.model');
+ 
+ 
+exports.newTheatre = async (req,res)=>{
     try{
+        const data = {
+            name : req.body.name,
+            description : req.body.description,
+            city : req.body.city,
+            pinCode : req.body.pinCode,
+            showTypes : req.body.showTypes,
+            numberOfSeats : req.body.numberOfSeats
+        }
+    
+        const theatre = await Theatre.create(data);
 
-       const data = {
-           name : req.body.name,
-           description : req.body.description,
-           city : req.body.city,
-           pinCode : req.body.pinCode,
-           showTypes : req.body.showTypes,
-           numberOfSeats : req.body.numberOfSeats,
-       }
-
-   
-       const theatre = await Theatre.create(data);
-
-       console.log(`#### New Theatre '${theatre.name}' created ####`);
-       res.status(201).send(theatre);
+        console.log(`#### New theatre '${theatre.name}' created ####`);
+        res.status(201).send(theatre);
 
 
        }catch(err){
-        console.log("#### Error while creating new Theatre #### ", err);
+        console.log("#### Error while creating new theatre #### ", err);
         res.status(500).send({
-            message : "Internal server error "
+            message : "Internal server error while creating new theatre"
         });
     }
 }
@@ -40,15 +39,15 @@ exports.editTheatre = async (req,res)=>{
        theatre.showTypes = req.body.showTypes ? req.body.showTypes : theatre.showTypes,
        theatre.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : theatre.numberOfSeats
 
-       const updatedTheatre = await theatre.save();
+       const updatedTheatre = await Theatre.save();
 
-       console.log(`#### theatre data updated ####`);
+       console.log(`#### Theatre data updated ####`);
        res.status(200).send(updatedTheatre);
 
    }catch(err){
        console.log("#### Error while updating theatre data #### ", err.message);
        res.status(500).send({
-           message : "Internal server error "
+           message : "Internal server error while updating theatre data"
        });
    }
 }
@@ -59,35 +58,95 @@ exports.deleteTheatre = async (req,res)=>{
 
        await theatre.remove();
 
-       console.log(`#### theatre deleted ####`);
+       console.log(`#### Theatre deleted ####`);
        res.status(200).send({message : "Theatre deleted"});
 
    }catch(err){
        console.log("#### Error while deleting theatre #### ", err.message);
        res.status(500).send({
-           message : "Internal server error "
+           message : "Internal server error while deleting theatre"
        });
    }
 }
 
-exports.getTheatre = async (req, res) => {
 
+exports.getAllTheatres = async (req,res)=>{
+   try{
+       const theatres = await Theatre.find();
+   
+       res.status(200).send(theatres);
+   
+   }catch(err){
+       console.log("#### Error while getting all theatres ####", err.message);
+       res.status(500).send({
+           message : "Internal server error while getting all theatres"
+       })
+   }
+}
+
+exports.getSingleTheatre = async (req,res)=>{
+
+   try{
+       const theatre = await Theatre.findOne({_id : req.params.id});
+   
+       res.status(200).send(theatre);
+   
+   }catch(err){
+       console.log("#### Error while getting the theatre ####", err.message);
+       res.status(500).send({
+           message : "Internal server error while getting the theatre"
+       })
+   }
+
+}
+
+exports.updateMoviesInTheatre = async (req, res) =>{
+    
     try {
-        let theatre;
-        if(req.params.id){
-            theatre = await Theatre.findOne({ _id: req.params.id });
-        }else{
-            theatre = await Theatre.find();
+
+        const addMovies = req.body.addMovies;
+        const delMovies = req.body.delMovies;
+        const theatre = await Theatre.findOne({_id : req.params.id});
+        if(addMovies){
+            const theatre = await Theatre.findOne({_id : req.params.id});
+            addMovies.forEach(movie => {
+                theatre.movies.push(movie);
+            });
         }
 
-        res.status(200).send({
-            message: (req.params.id && theatre && theatre.length > 0) || (!req.params.id && theatre) ? "Theatre data's" : "No theatre data found",
-            theatre
-        });
-    } catch (err) {
-        console.log("#### Error while getting theatre #### ", err);
+        if(delMovies){
+
+            theatre.movies.filter(movie => !delMovies.includes(movie))
+        }
+
+        theatre.save();
+
+    }catch(err){
+        console.log("#### Error while updating the movies in the theatre ####", err.message);
         res.status(500).send({
-            message : "Internal server error "
-        });
+            message : "Internal server error"
+        })
     }
+
+}
+
+exports.getAllMoviesInTheatre = async (req, res) =>{
+    
+    try {
+        const theatre = await Theatre.findOne({_id : req.params.id});
+        const moviesInTheatre = theatre.movies;
+
+        const queryObj = {};
+        queryObj["_id"] = { $in: moviesInTheatre};
+
+        const movies = await Movie.find(queryObj);
+
+        res.status(200).send(movies);
+    }catch(err){
+        console.log("#### Error while getting the movies in the theatre ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while getting the theatre"
+        })
+    }
+
 }

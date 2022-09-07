@@ -1,15 +1,39 @@
-const Movie = require('./models/movie.model');
-const Theatre = require('./models/theatre.model');
-const constants = require('./utils/constants');
+const Movie = require('./models/movie.model')
+const Theatre = require('./models/theatre.model')
+const constants = require('./utils/constants')
 
 module.exports = async ()=>{
-
-    await Movie.collection.drop();
-    await Theatre.collection.drop();
-
     try{
-        const movies = [];
+
         const theatres = [];
+        theatres[0] = {
+            name : "Theatre 1",
+            description : "Description for theatre 1",
+            city : "Mumbai",
+            pinCode : 400049,
+            showTypes : [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night],
+            numberOfSeats : 100,
+        },
+        theatres[1] = {
+            name : "Theatre 2",
+            description : "Description for theatre 2",
+            city : "Ahmedabad =",
+            pinCode : 380007,
+            showTypes : [constants.theatreShows.evening, constants.theatreShows.night],
+            numberOfSeats : 50,
+        },
+        theatres[2] = {
+            name : "Theatre 3",
+            description : "Description for theatre 3",
+            city : "New Delhi",
+            pinCode : 110031,
+            showTypes : [constants.theatreShows.evening],
+            numberOfSeats : 75,
+        }
+
+        await Theatre.insertMany(theatres);
+
+        const movies = [];
         movies[0] = {
             name : "Movie 1",
             description : "Description for movie 1",
@@ -23,18 +47,6 @@ module.exports = async ()=>{
             genre : [constants.movieGenre.action]
         },
         movies[1] = {
-        name : "Movie 1",
-        description : "Description for movie 1",
-        casts : ["SomeOne", "SomeOneElse"],
-        trailerUrls : ["TrailerURL"],
-        posterUrls : ["PosterURL"],
-        languages : ["English","Hindi"],
-        releaseDate : 2022-10-10,
-        releaseStatus : constants.movieReleaseStatuses.coming_soon,
-        imdbRating : 8.5,
-        genre : [constants.movieGenre.action]
-        },
-        movies[2] = {
             name : "Movie 2",
             description : "Description for movie 2",
             casts : ["SomeOne", "SomeOneElse"],
@@ -46,7 +58,7 @@ module.exports = async ()=>{
             imdbRating : 8.5,
             genre : [constants.movieGenre.action]
         },
-        movies[3] = {
+        movies[2] = {
         name : "Movie 3",
         description : "Description for movie 3",
         casts : ["SomeOne", "SomeOneElse"],
@@ -59,24 +71,6 @@ module.exports = async ()=>{
         genre : [constants.movieGenre.action]
         }
 
-        theatres[0] = {
-            name : "PGR",
-            description : "Enjoy the show...!",
-            city : "Bangalore",
-            pinCode : 517567,
-            showTypes : [constants.showTypes.morning, constants.showTypes.noon, constants.showTypes.evening, constants.showTypes.night],
-            numberOfSeats : 125
-        },
-        theatres[1] = {
-            name : "PGR-2",
-            description : "Enjoy the show...!",
-            city : "Bangalore",
-            pinCode : 517566,
-            showTypes : [constants.showTypes.morning, constants.showTypes.noon, constants.showTypes.evening, constants.showTypes.night],
-            numberOfSeats : 125
-        }
-
-        await Theatre.insertMany(theatres)
         await Movie.insertMany(movies);
     }
     catch(err){
