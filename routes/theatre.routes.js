@@ -1,7 +1,7 @@
 const theatreController = require('../controllers/theatre.controller');
  
 module.exports = (app)=>{
-    app.post("/mbs/api/v1/theatres", theatreController.newTheatre);
+    app.post("/mbs/api/v1/theatres", theatreController.createTheatre);
     app.put("/mbs/api/v1/theatres/:id", theatreController.editTheatre);
     app.delete("/mbs/api/v1/theatres/:id", theatreController.deleteTheatre);
     app.get("/mbs/api/v1/theatres", theatreController.getAllTheatres);
