@@ -120,6 +120,9 @@ exports.updateMoviesInTheatre = async (req, res) =>{
         }
 
         theatre.save();
+        console.log("hello")
+
+        res.status(200).send(theatre);
 
     }catch(err){
         console.log("#### Error while updating the movies in the theatre ####", err.message);
