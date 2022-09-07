@@ -1,4 +1,5 @@
 const  mongoose = require("mongoose");
+const constants = require('../utils/constants');
 
 const theatreSchema = new mongoose.Schema({
 
@@ -20,6 +21,7 @@ const theatreSchema = new mongoose.Schema({
     },
     showTypes : {
         type : [String],
+        enum : [constants.showTypes.morning, constants.showTypes.noon, constants.showTypes.evening, constants.showTypes.night],
         required : true
         //TODO : MORNING | NOON | EVENING | NIGHT
     },
