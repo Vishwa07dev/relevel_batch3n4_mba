@@ -116,13 +116,13 @@ exports.updateMoviesInTheatre = async (req, res) =>{
 
         if(delMovies){
 
-            theatre.movies.filter(movie => !delMovies.includes(movie))
+            theatre.movies = theatre.movies.filter(movie => !delMovies.includes(movie))
         }
 
         theatre.save();
-        console.log("hello")
+        
 
-        res.status(200).send(theatre);
+        res.status(201).send(theatre);
 
     }catch(err){
         console.log("#### Error while updating the movies in the theatre ####", err.message);
