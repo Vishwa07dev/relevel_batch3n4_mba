@@ -1,4 +1,6 @@
-const Theatre = require('../models/theatre.model')
+const Theatre = require('../models/theatre.model');
+const Movie = require('../models/movie.model')
+const constants = require('../utils/constants')
  
 exports.newTheatre = async (req,res)=>{
     try{
@@ -96,4 +98,59 @@ exports.getSingleTheatre = async (req,res)=>{
        })
    }
 
+}
+
+exports.getallMoviesByTheatreId = async (req,res)=>{
+
+    try{
+        const theatre = await Theatre.findOne({_id : req.params.id});
+        const movieIds = theatre.movies;
+
+        const movies = await Movie.find({_id : movieIds})
+        res.status(200).send(movies);
+    
+    }catch(err){
+        console.log("#### Error while getting all movie of that theatre ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while getting the theatre"
+        })
+    }
+ 
+}
+
+exports.addingAndRemovingMovie = async (req,res)=>{
+
+    try{
+        const theatre = await Theatre.findOne({_id : req.params.id});
+        const movieIds = req.body.movies;
+
+        if(req.body.operationType == constants.operationType.add){
+            
+            for(let i=0; i<movieIds.length; i++){
+                theatre.movies.push(movieIds[i])
+            }
+
+        }else{
+
+            let allMoviesInTheatre = theatre.movies;
+
+            for(let i=0; i<movieIds.length; i++){
+                allMoviesInTheatre = allMoviesInTheatre.filter(elm => {
+                    return (!elm.equals(movieIds[i]))
+                    
+                })
+            }
+            theatre.movies = allMoviesInTheatre
+        }
+
+        await theatre.save()
+        res.status(200).send(theatre.movies);
+    
+    }catch(err){
+        console.log("#### Error while getting the theatre ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while getting the theatre"
+        })
+    }
+ 
 }
