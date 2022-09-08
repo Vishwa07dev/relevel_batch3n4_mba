@@ -123,10 +123,12 @@ exports.getTheatreMovies = async (req,res)=>{
         }
 
         if(req.body.removeMovies){
-            theatre.movies = theatre.movies.filter(movie => !req.body.removeMovies.includes(movie))
+            req.body.removeMovies.forEach(movie => {
+                theatre.movies.remove(movie)
+            })
         }
 
-        theatre.save();
+        await theatre.save();
         res.status(201).send({message : "Updated movies in theatre"});
         
     }catch(err){
