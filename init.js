@@ -94,7 +94,10 @@ module.exports = async ()=>{
         allMovies.forEach(async (movie) => {
             let minIdx = getMin(allTheatre)
             allTheatre[minIdx].movies.push(movie._id)
+            movie.theatres.push(allTheatre[minIdx]._id)
+
             await allTheatre[minIdx].save()
+            await movie.save()
         })
 
     }
