@@ -37,7 +37,7 @@ exports.editTheatre = async (req,res)=>{
        theatre.showTypes = req.body.showTypes ? req.body.showTypes : theatre.showTypes,
        theatre.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : theatre.numberOfSeats
 
-       const updatedTheatre = await Theatre.save();
+       const updatedTheatre = await theatre.save();
 
        console.log(`#### Theatre data updated ####`);
        res.status(200).send(updatedTheatre);
@@ -97,3 +97,50 @@ exports.getSingleTheatre = async (req,res)=>{
    }
 
 }
+
+
+exports.moviesInTheatre = async (req,res)=>{
+
+    try{
+        const theatre = await Theatre.findOne({_id : req.params.id}).populate('movies');
+        console.log(theatre);
+        res.status(200).send(theatre.movies);
+    
+    }catch(err){
+        console.log("#### Error while getting the theatre ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while getting the theatre"
+        })
+    }
+ 
+ }
+
+ exports.moviesOnTheatres = async (req,res)=>{
+
+    try{
+        const theatre = await Theatre.findOne({_id : req.params.id});
+        
+        if(req.body.addMovies){
+            req.body.addMovies.forEach(movie => {
+                theatre.movies.push(movie)
+            })
+        }
+
+        if(req.body.removeMovies){
+            req.body.removeMovies.forEach(movie => {
+                theatre.movies.remove(movie)
+            })
+        }
+
+        await theatre.save();
+        res.status(201).send({message : "Updated movies in theatre"});
+
+    
+    }catch(err){
+        console.log("#### Error while performing movie on theatre ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while getting the theatre"
+        })
+    }
+ 
+ }
