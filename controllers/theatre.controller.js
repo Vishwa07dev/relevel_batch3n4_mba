@@ -151,4 +151,3 @@ exports.getMoviesInTheatre = async (req,res)=>{
         })
     }
  }
- 
