@@ -21,6 +21,7 @@ db.once("open",()=>{
 
 require('./routes/movie.routes')(app);
 require('./routes/theatre.routes')(app);
+require('./routes/user.routes')(app);
 
 
 app.listen(serverConfig.PORT,()=>{

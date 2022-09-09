@@ -1,26 +1,29 @@
 {
-    "name": "relevel_batch3n4_mba",
-    "version": "1.0.0",
-    "description": "relevel_batch3n4_mba",
-    "main": "index.js",
-    "scripts": {
-        "start": "nodemon server.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Vishwa07dev/relevel_batch3n4_mba.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/Vishwa07dev/relevel_batch3n4_mba/issues"
-    },
-    "homepage": "https://github.com/Vishwa07dev/relevel_batch3n4_mba#readme",
-    "dependencies": {
-        "body-parser": "^1.20.0",
-        "dotenv": "^16.0.2",
-        "express": "^4.18.1",
-        "mongoose": "^6.5.4"
-    }
+  "name": "relevel_batch3n4_mba",
+  "version": "1.0.0",
+  "description": "relevel_batch3n4_mba",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vishwa07dev/relevel_batch3n4_mba.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vishwa07dev/relevel_batch3n4_mba/issues"
+  },
+  "homepage": "https://github.com/Vishwa07dev/relevel_batch3n4_mba#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.4",
+    "nodemon": "^2.0.19"
+  }
 }
