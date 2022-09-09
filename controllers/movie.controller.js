@@ -1,6 +1,6 @@
  const Movie = require('../models/movie.model')
  
- exports.NewMovie = async (req,res)=>{
+ exports.createNewMovie = async (req,res)=>{
      try{
          const data = {
              name : req.body.name,

@@ -1,5 +1,5 @@
 const  mongoose = require("mongoose");
-const constants = require('../utils/constants'); 
+const constants = require('../utils/constants')
 
 const theatreSchema = new mongoose.Schema({
 
@@ -22,12 +22,16 @@ const theatreSchema = new mongoose.Schema({
     showTypes : {
         type : [String],
         required : true,
-        //TODO : MORNING | NOON | EVENING | NIGHT
-        enum : [constants.showTypes.morning, constants.showTypes.noon, constants.showTypes.evening, constants.showTypes.night]
+        enum : [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night]
     },
     numberOfSeats : {
         type : Number,
         required : true
+    },
+    movies : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
+        ref : "Movie"
     }
 },{ timestamps : true , versionKey : false});
 

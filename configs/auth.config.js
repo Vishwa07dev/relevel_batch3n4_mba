@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
-    secret : "Kuch-Bhi"
+    secret : process.env.SECRET
 }
