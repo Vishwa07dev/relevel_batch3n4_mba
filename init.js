@@ -1,4 +1,7 @@
+const bcrypt = require("bcryptjs");
+
 const Movie = require('./models/movie.model')
+const User = require('./models/user.model')
 const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
 
@@ -9,6 +12,8 @@ module.exports = async ()=>{
         console.log("#### Movie collection dropped ####");
         await Theatre.collection.drop();
         console.log("#### Theatre collection dropped ####");
+        await User.collection.drop();
+        console.log("#### User collection dropped ####");
 
         const theatres = [];
         theatres[0] = {
@@ -75,7 +80,35 @@ module.exports = async ()=>{
         imdbRating : 8.5,
         genre : [constants.movieGenre.action]
         }
+        
+        const users = [];
+        users[0] = {
+            name: 'user',
+            userId : 'userId',
+            email : 'email@gmail.com',
+            userType : constants.userTypes.admin,
+            password: bcrypt.hashSync("password",10),
+            userStatus : constants.status.approved
+        }
+        users[1] = {
+            name: 'user1',
+            userId : 'userId1',
+            email : 'email1@gmail.com',
+            userType : constants.userTypes.customer,
+            password: bcrypt.hashSync("password",10),
+            userStatus : constants.status.approved
+        }
+        users[2] = {
+            name: 'user2',
+            userId : 'userId2',
+            email : 'email2@gmail.com',
+            userType : constants.userTypes.owner,
+            password: bcrypt.hashSync("password",10),
+            userStatus : constants.status.pending
+        }
 
+        await Movie.insertMany(movies);
+        await User.insertMany(users);
         moviesCreated = await Movie.insertMany(movies);
 
         theatresCreated[0].movies.push(moviesCreated[0]._id, moviesCreated[1]._id)
