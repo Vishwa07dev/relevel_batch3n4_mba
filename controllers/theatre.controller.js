@@ -108,9 +108,11 @@ exports.updateMoviesInTheatre = async (req, res) =>{
 
         if(req.body.addMovies && req.body.addMovies.length > 0){
 
-            req.body.addMovies.forEach(movie => {
+            req.body.addMovies.forEach(async movie => {
                 
                 theatre.movies.push(movie);
+                const movie = await Movie.find({_id : movie});
+                movie.theatres.push(theatre._id);
             })
         }
 
@@ -119,6 +121,10 @@ exports.updateMoviesInTheatre = async (req, res) =>{
 
                 let index = theatre.movies.indexOf(movieObjId);
                 theatre.movies.splice(index, 1);
+                
+                const movie = await Movie.find({_id : movieObjId});
+                index = movie.theatres.indexOf(theatre._id);
+                movie.theatres.splice(index, 1);
             }
 
         }
