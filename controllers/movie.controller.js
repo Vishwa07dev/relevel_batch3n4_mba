@@ -1,4 +1,4 @@
- const Movie = require('../models/movie.model')
+ const Movie = require('../models/movie.model');
  
  exports.newMovie = async (req,res)=>{
      try{

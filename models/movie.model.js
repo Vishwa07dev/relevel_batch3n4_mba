@@ -38,8 +38,14 @@ const movieSchema  = new mongoose.Schema({
         type : Number
     },
     genre : {
-        type : [ String ],
+        type : [String],
+        required : true,
         enum : [constants.movieGenre.action, constants.movieGenre.comedy, constants.movieGenre.drama, constants.movieGenre.fantasy, constants.movieGenre.horror, constants.movieGenre.mystery, constants.movieGenre.romance, constants.movieGenre.thriller]
+    },
+    theatres : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
+        ref : "Theatre"
     }
 },{ timestamps : true , versionKey : false});
 
