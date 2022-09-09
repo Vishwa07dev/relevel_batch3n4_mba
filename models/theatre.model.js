@@ -27,7 +27,11 @@ const theatreSchema = new mongoose.Schema({
     numberOfSeats : {
         type : Number,
         required : true
-    }
+    }, 
+    movies: {
+        type: [mongoose.SchemaTypes.ObjectId],
+        ref: "Movie",
+    },
 },{ timestamps : true , versionKey : false});
 
 module.exports = mongoose.model("Theatre" , theatreSchema);
