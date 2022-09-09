@@ -99,7 +99,7 @@ exports.getSingleTheatre = async (req,res)=>{
 
 }
 
-exports.getTheatreMovies = async (req,res)=>{
+exports.getMoviesInTheatre = async (req,res)=>{
     try{
         const theatre = await Theatre.findOne({_id : req.params.id});
 
@@ -115,7 +115,7 @@ exports.getTheatreMovies = async (req,res)=>{
     }
  }
 
- exports.editTheatreMovies = async (req,res)=>{
+ exports.editMoviesInTheatre = async (req,res)=>{
     try{
         const theatre = await Theatre.findOne({_id : req.params.id});
 
