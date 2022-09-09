@@ -128,6 +128,9 @@ exports.addingAndRemovingMovie = async (req,res)=>{
             
             for(let i=0; i<movieIds.length; i++){
                 theatre.movies.push(movieIds[i])
+                const movie = await Movie.findOne({_id : movieIds[i]});
+                movie.theatres.push(theatre._id);
+                await movie.save()
             }
 
         }else{
@@ -135,6 +138,12 @@ exports.addingAndRemovingMovie = async (req,res)=>{
             let allMoviesInTheatre = theatre.movies;
 
             for(let i=0; i<movieIds.length; i++){
+
+                const movie = await Movie.findOne({_id : movieIds[i]});
+                let idx = movie.theatres.indexOf(theatre._id);
+                movie.theatres.splice(idx, 1);
+                await movie.save()
+
                 allMoviesInTheatre = allMoviesInTheatre.filter(elm => {
                     return (!elm.equals(movieIds[i]))
                     

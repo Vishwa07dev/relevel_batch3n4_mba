@@ -43,6 +43,7 @@ const movieSchema  = new mongoose.Schema({
     },
     theatres : {
         type : [mongoose.SchemaTypes.ObjectId],
+        defaule : [],
         ref : "Theatre"
     }
 },{ timestamps : true , versionKey : false});
