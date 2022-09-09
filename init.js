@@ -77,6 +77,8 @@ module.exports = async ()=>{
         }
 
         await Movie.insertMany(movies);
+
+        console.log("#### Seed data initialized ####");
     }
     catch(err){
         console.log("#### Error in seed data initialization #### ", err.message);

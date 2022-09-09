@@ -1,4 +1,5 @@
 const Theatre = require('../models/theatre.model')
+const Movie = require('../models/movie.model')
  
 exports.createNewTheatre = async (req,res)=>{
     try{
@@ -37,7 +38,7 @@ exports.editTheatre = async (req,res)=>{
        theatre.showTypes = req.body.showTypes ? req.body.showTypes : theatre.showTypes,
        theatre.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : theatre.numberOfSeats
 
-       const updatedTheatre = await Theatre.save();
+       const updatedTheatre = await theatre.save();
 
        console.log(`#### Theatre data updated ####`);
        res.status(200).send(updatedTheatre);
@@ -101,8 +102,10 @@ exports.getSingleTheatre = async (req,res)=>{
 exports.getTheatreMovies = async (req,res)=>{
     try{
         const theatre = await Theatre.findOne({_id : req.params.id});
+
+        const movies = await Movie.find({_id : theatre.movies})
     
-        res.status(200).send(theatre.movies);
+        res.status(200).send(movies);
     
     }catch(err){
         console.log("#### Error while getting the movies in theatre ####", err.message);
@@ -129,7 +132,7 @@ exports.getTheatreMovies = async (req,res)=>{
         }
 
         await theatre.save();
-        res.status(201).send({message : "Updated movies in theatre"});
+        res.status(200).send({message : "Updated movies in theatre"});
         
     }catch(err){
         console.log("#### Error while updating the movies in theatre ####", err.message);
