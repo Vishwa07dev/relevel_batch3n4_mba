@@ -4,17 +4,17 @@ const { authJwt } = require('../middlewares');
 module.exports = (app)=>{
     app.post(
         "/mba/api/v1/theatres", 
-        [authJwt.verifyToken, authJwt.isAdmin, authJwt.isTheatreOwner], 
+        [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], 
         theatreController.createNewTheatre
     );
     app.put(
         "/mba/api/v1/theatres/:id", 
-        [authJwt.verifyToken, authJwt.isAdmin, authJwt.isTheatreOwner], 
+        [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], 
         theatreController.editTheatre
     )
     app.delete(
         "/mba/api/v1/theatres/:id", 
-        [authJwt.verifyToken, authJwt.isAdmin, authJwt.isTheatreOwner], 
+        [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], 
         theatreController.deleteTheatre
     )
 
@@ -27,7 +27,7 @@ module.exports = (app)=>{
     
     app.put(
         "/mba/api/v1/theatres/:id/movies", 
-        [authJwt.verifyToken, authJwt.isAdmin, authJwt.isTheatreOwner], 
+        [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], 
         theatreController.editMoviesInTheatre
     )
 }

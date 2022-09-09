@@ -4,17 +4,17 @@ const { authJwt } = require('../middlewares');
 module.exports = (app) => {
     app.post(
         "/mba/api/v1/movies", 
-        [authJwt.verifyToken, authJwt.isAdmin, authJwt.isTheatreOwner], 
+        [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], 
         movieController.createNewMovie
     );
     app.put(
         "/mba/api/v1/movies/:id", 
-        [authJwt.verifyToken, authJwt.isAdmin, authJwt.isTheatreOwner], 
+        [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], 
         movieController.editMovie
     )
     app.delete(
         "/mba/api/v1/movies/:id", 
-        [authJwt.verifyToken, authJwt.isAdmin, authJwt.isTheatreOwner], 
+        [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], 
         movieController.deleteMovie
     )
 

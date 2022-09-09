@@ -56,11 +56,25 @@ const isTheatreOwner = async (req, res, next) =>{
     }
 }
 
+const isTheatreOwnerOrAdmin = async (req, res, next) =>{
+
+    const user = await User.findOne({ userId : req.userId});
+
+    if(user && (user.userType == constants.userTypes.owner || user.userType == constants.userTypes.admin)){
+        req.user = user;
+        next();
+    }else{
+        res.status(403).send({
+            message : "Only Theatre's Owner or Admin's are allowed..!"
+        })
+    }
+}
 
 const authJwt = {
     verifyToken,
     isAdmin,
-    isTheatreOwner
+    isTheatreOwner,
+    isTheatreOwnerOrAdmin
 }
 
 module.exports = authJwt;
