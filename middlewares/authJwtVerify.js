@@ -33,6 +33,7 @@ const isAdmin = async (req, res, next) =>{
     const user = await User.findOne({ userId : req.userId});
 
     if(user && user.userType == constants.userTypes.admin){
+        req.user = user;
         next();
     }else{
         res.status(403).send({
@@ -46,6 +47,7 @@ const isTheatreOwner = async (req, res, next) =>{
     const user = await User.findOne({ userId : req.userId});
 
     if(user && user.userType == constants.userTypes.owner){
+        req.user = user;
         next();
     }else{
         res.status(403).send({
