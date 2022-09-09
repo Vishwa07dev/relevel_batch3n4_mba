@@ -14,8 +14,7 @@ module.exports = async ()=>{
             city : "Mumbai",
             pinCode : 400049,
             showTypes : [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 100,
-            movies : ["6318d36e7bc1a57afo188e9f"]
+            numberOfSeats : 100
         },
         theatres[1] = {
             name : "Theatre 2",
@@ -23,8 +22,7 @@ module.exports = async ()=>{
             city : "Ahmedabad =",
             pinCode : 380007,
             showTypes : [constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 50,
-            movies : ["6318d36e7bc1a57afo188e9f"]
+            numberOfSeats : 50
         }
 
         await Theatre.insertMany(theatres);
@@ -40,8 +38,7 @@ module.exports = async ()=>{
             releaseDate : 2022-10-10,
             releaseStatus : constants.movieReleaseStatuses.coming_soon,
             imdbRating : 8.5,
-            genre : [constants.movieGenre.action],
-            theatres : ["6318d36e7bc1a57af4188e9f"]
+            genre : [constants.movieGenre.action]
 
         },
         movies[1] = {
@@ -54,8 +51,7 @@ module.exports = async ()=>{
             releaseDate : 2022-09-09,
             releaseStatus : constants.movieReleaseStatuses.coming_soon,
             imdbRating : 8.5,
-            genre : [constants.movieGenre.action],
-            theatres : ["6318d36e7bc1a57af4188e0f"]
+            genre : [constants.movieGenre.action]
             
         }
 

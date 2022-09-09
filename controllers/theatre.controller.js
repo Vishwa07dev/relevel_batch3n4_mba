@@ -111,8 +111,8 @@ exports.updateMoviesInTheatre = async (req, res) =>{
             req.body.addMovies.forEach(async movie => {
                 
                 theatre.movies.push(movie);
-                const movie = await Movie.find({_id : movie});
-                movie.theatres.push(theatre._id);
+                const moviee = await Movie.find({_id : movie});
+                moviee.theatres.push(theatre._id);
             })
         }
 
@@ -121,7 +121,7 @@ exports.updateMoviesInTheatre = async (req, res) =>{
 
                 let index = theatre.movies.indexOf(movieObjId);
                 theatre.movies.splice(index, 1);
-                
+
                 const movie = await Movie.find({_id : movieObjId});
                 index = movie.theatres.indexOf(theatre._id);
                 movie.theatres.splice(index, 1);
