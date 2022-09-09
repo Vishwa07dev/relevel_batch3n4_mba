@@ -125,6 +125,7 @@ exports.getMoviesInTheatre = async (req,res)=>{
             })
             req.body.addMovies.forEach(async (movie) =>{
                 let temp = await Movie.findOne({_id : movie})
+                console.log("temp: ", temp)
                 temp.theatres.push(theatre._id);
                 await temp.save();
             })
