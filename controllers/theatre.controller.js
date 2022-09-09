@@ -113,6 +113,7 @@ exports.updateMoviesInTheatre = async (req, res) =>{
                 theatre.movies.push(movie);
                 const moviee = await Movie.find({_id : movie});
                 moviee.theatres.push(theatre._id);
+                await moviee.save();
             })
         }
 
@@ -125,9 +126,11 @@ exports.updateMoviesInTheatre = async (req, res) =>{
                 const movie = await Movie.find({_id : movieObjId});
                 index = movie.theatres.indexOf(theatre._id);
                 movie.theatres.splice(index, 1);
+                await movie.save();
             }
 
         }
+
 
         const updatedTheatre = await theatre.save();
 

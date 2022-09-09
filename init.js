@@ -25,7 +25,7 @@ module.exports = async ()=>{
             numberOfSeats : 50
         }
 
-        await Theatre.insertMany(theatres);
+        let theatresCreated =await Theatre.insertMany(theatres);
 
         const movies = [];
         movies[0] = {
@@ -48,14 +48,21 @@ module.exports = async ()=>{
             trailerUrls : ["TrailerURL"],
             posterUrls : ["PosterURL"],
             languages : ["English","Hindi"],
-            releaseDate : 2022-09-09,
+            releaseDate : 2022-10-10,
             releaseStatus : constants.movieReleaseStatuses.coming_soon,
             imdbRating : 8.5,
             genre : [constants.movieGenre.action]
-            
+
         }
 
-        await Movie.insertMany(movies);
+        let moviesCreated = await Movie.insertMany(movies);
+
+        theatresCreated[0].movies.push(moviesCreated[0]._id)
+        moviesCreated[0].theatres.push(theatresCreated[0]._id)
+
+        await theatresCreated[0].save()
+        await moviesCreated[0].save()
+  
     }
     catch(err){
         console.log("#### Error in seed data initialization #### ", err.message);
