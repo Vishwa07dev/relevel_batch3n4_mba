@@ -1,5 +1,7 @@
 const Theatre = require('../models/theatre.model')
- 
+const Movie=require("../models/movie.model")
+
+
 exports.newTheatre = async (req,res)=>{
     try{
         const data = {
@@ -96,4 +98,90 @@ exports.getSingleTheatre = async (req,res)=>{
        })
    }
 
+}
+exports.getAllMovies=async (req,res)=>{
+    try
+    {
+        const theater=await Theatre.findOne({_id:req.params.id});
+        const queryObj={};
+        if(theater==null)
+        {
+            return res.status(500).send({
+                message:"Theater Doesn't Exist"
+            })
+        }
+        const movies=theater.movies;
+        queryObj["_id"]={$in:movies};
+        const move=await Movie.find(queryObj)
+        res.status(200).send(move);
+
+        }
+    catch(err)
+    {
+        console.log("#### Error while getting movies ####",err.message);
+        res.status(500).send({
+            message:"Internal server error while getting movies"
+        })
+    }
+    
+
+}
+
+exports.addMovies=async (req,res)=>{
+    try
+    {
+        const theater=await Theatre.findOne({_id:req.params.id});
+        if(theater==null)
+        {
+            return res.status(500).send({
+                message:"Theater Doesn't Exist"
+            });
+        }
+       // console.log("Id:",theater.movies._id,"movies:",theater.movies)
+        const movie=await Movie.findOne({_id:req.body.id})
+        //console.log(movie._id,movie)
+        if(movie!=null && theater.movies!=movie._id)
+        {   
+            
+        theater.movies.push(movie._id);
+        console.log("movies",theater.movies)
+        await theater.save()
+        }
+        else if(theater.movies==movie._id)
+        {
+            console.log("1")
+            await theater.movies._id.remove();
+            console.log("2")
+        }
+        res.status(200).send(theater);       
+    }
+    catch(err)
+    {
+        console.log("Error while adding movie to a theatre")
+        res.status(500).send({
+            message:"Internal server Error while adding movie to a theatre"
+        })
+    }
+    
+
+}
+
+exports.deleteMovie=async (req,res)=>{
+    try
+    {
+        const theater=await Theatre.findOne({_id:req.params.id});
+        const movie=await Movie.findOne({_id:req.params.id});
+        if(theater.movies==movie._id)
+        {
+            await theater.movies.remove();
+        }
+        res.status(200).send("Successfully Deleted")
+
+    }catch(err)
+    {
+        console.log("#### error while removing movie ####",err.message)
+        res.status(500).send({
+            message:"Internal Server Error while removing movie"
+        })
+    }
 }

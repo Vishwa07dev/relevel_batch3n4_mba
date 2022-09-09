@@ -1,5 +1,5 @@
  const Movie = require('../models/movie.model')
- 
+ const Theatre=require("../models/theatre.model")
  exports.newMovie = async (req,res)=>{
      try{
          const data = {
@@ -16,8 +16,16 @@
          }
      
          const movie = await Movie.create(data);
-
+         if(movie)
+         {
+            const theater=await Theatre.findOne({_id:req.params.id})
+            theater.movies.push(movie._id)
+            movie.theatres.push(theater._id)
+            await theater.save();
+            await movie.save();
+         }
          console.log(`#### New Movie '${movie.name}' created ####`);
+         
          res.status(201).send(movie);
 
  
@@ -94,7 +102,6 @@ exports.getSingleMovie = async (req,res)=>{
 
     try{
         const movie = await Movie.findOne({_id : req.params.id});
-    
         res.status(200).send(movie);
     
     }catch(err){
