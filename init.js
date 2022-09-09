@@ -5,6 +5,11 @@ const constants = require('./utils/constants')
 module.exports = async ()=>{
     try{
 
+        await Movie.collection.drop();
+        console.log("#### Movie collection dropped ####");
+        await Theatre.collection.drop();
+        console.log("#### Theatre collection dropped ####");
+
         const theatres = [];
         theatres[0] = {
             name : "Theatre 1",
@@ -31,7 +36,7 @@ module.exports = async ()=>{
             numberOfSeats : 75,
         }
 
-        await Theatre.insertMany(theatres);
+        theatresCreated = await Theatre.insertMany(theatres);
 
         const movies = [];
         movies[0] = {
@@ -71,7 +76,17 @@ module.exports = async ()=>{
         genre : [constants.movieGenre.action]
         }
 
-        await Movie.insertMany(movies);
+        moviesCreated = await Movie.insertMany(movies);
+
+        theatresCreated[0].movies.push(moviesCreated[0]._id, moviesCreated[1]._id)
+        moviesCreated[0].theatres.push(theatresCreated[0]._id)
+        moviesCreated[1].theatres.push(theatresCreated[0]._id)
+    
+        theatresCreated[0].save()
+        moviesCreated[0].save()
+        moviesCreated[1].save()
+
+        console.log("#### Seed data initialized ####");
     }
     catch(err){
         console.log("#### Error in seed data initialization #### ", err.message);

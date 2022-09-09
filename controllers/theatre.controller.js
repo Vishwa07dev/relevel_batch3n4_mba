@@ -1,6 +1,7 @@
 const Theatre = require('../models/theatre.model')
+const Movie = require('../models/movie.model')
  
-exports.newTheatre = async (req,res)=>{
+exports.createNewTheatre = async (req,res)=>{
     try{
         const data = {
             name : req.body.name,
@@ -37,7 +38,7 @@ exports.editTheatre = async (req,res)=>{
        theatre.showTypes = req.body.showTypes ? req.body.showTypes : theatre.showTypes,
        theatre.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : theatre.numberOfSeats
 
-       const updatedTheatre = await Theatre.save();
+       const updatedTheatre = await theatre.save();
 
        console.log(`#### Theatre data updated ####`);
        res.status(200).send(updatedTheatre);
@@ -97,3 +98,57 @@ exports.getSingleTheatre = async (req,res)=>{
    }
 
 }
+
+exports.getMoviesInTheatre = async (req,res)=>{
+    try{
+        const theatre = await Theatre.findOne({_id : req.params.id});
+
+        const movies = await Movie.find({_id : theatre.movies})
+    
+        res.status(200).send(movies);
+    
+    }catch(err){
+        console.log("#### Error while getting the movies in theatre ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while getting the movies in theatre"
+        })
+    }
+ }
+
+ exports.editMoviesInTheatre = async (req,res)=>{
+    try{
+        const theatre = await Theatre.findOne({_id : req.params.id});
+
+        if(req.body.addMovies){
+            req.body.addMovies.forEach(movie => {
+                theatre.movies.push(movie)
+            })
+            req.body.addMovies.forEach(async (movie) =>{
+                let temp = await Movie.findOne({_id : movie})
+                temp.theatres.push(theatre._id);
+                await temp.save();
+            })
+    }
+
+        if(req.body.removeMovies){
+            req.body.removeMovies.forEach(movie => {
+                theatre.movies.remove(movie)
+            })
+            req.body.removeMovies.forEach(async (movie) =>{
+                let temp = await Movie.findOne({_id : movie})
+                temp.theatres.remove(theatre._id);
+                await temp.save();
+            })
+    }
+
+        await theatre.save();
+        res.status(200).send({message : "Updated movies in theatre"});
+        
+    }catch(err){
+        console.log("#### Error while updating the movies in theatre ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while updating the movies in theatre"
+        })
+    }
+ }
+ 
