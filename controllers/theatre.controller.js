@@ -131,28 +131,26 @@ exports.addMovies=async (req,res)=>{
     try
     {
         const theater=await Theatre.findOne({_id:req.params.id});
+    
         if(theater==null)
         {
             return res.status(500).send({
                 message:"Theater Doesn't Exist"
             });
         }
-       // console.log("Id:",theater.movies._id,"movies:",theater.movies)
+
         const movie=await Movie.findOne({_id:req.body.id})
-        //console.log(movie._id,movie)
-        if(movie!=null && theater.movies!=movie._id)
+     
+        if(movie!=null )
         {   
             
         theater.movies.push(movie._id);
         console.log("movies",theater.movies)
+        movie.theatres.push(theater._id);
         await theater.save()
+        await movie.save();
         }
-        else if(theater.movies==movie._id)
-        {
-            console.log("1")
-            await theater.movies._id.remove();
-            console.log("2")
-        }
+      
         res.status(200).send(theater);       
     }
     catch(err)
