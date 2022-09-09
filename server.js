@@ -19,6 +19,7 @@ db.once("open",()=>{
     init();
 });
 
+require('./routes/auth.routes')(app);
 require('./routes/movie.routes')(app);
 require('./routes/theatre.routes')(app);
 

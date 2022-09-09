@@ -1,6 +1,8 @@
-const Movie = require('./models/movie.model')
-const Theatre = require('./models/theatre.model')
-const constants = require('./utils/constants')
+const Movie = require('./models/movie.model');
+const Theatre = require('./models/theatre.model');
+const User = require('./models/user.model');
+const bcrypt = require('bcryptjs')
+const constants = require('./utils/constants');
 
 module.exports = async ()=>{
     try{
@@ -9,6 +11,8 @@ module.exports = async ()=>{
         console.log("#### Movie collection dropped ####");
         await Theatre.collection.drop();
         console.log("#### Theatre collection dropped ####");
+        await User.collection.drop();
+        console.log("#### User collection dropped ####");
 
         const theatres = [];
         theatres[0] = {
@@ -17,7 +21,7 @@ module.exports = async ()=>{
             city : "Mumbai",
             pinCode : 400049,
             showTypes : [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 100,
+            numberOfSeats : 100
         },
         theatres[1] = {
             name : "Theatre 2",
@@ -25,7 +29,7 @@ module.exports = async ()=>{
             city : "Ahmedabad =",
             pinCode : 380007,
             showTypes : [constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 50,
+            numberOfSeats : 50
         },
         theatres[2] = {
             name : "Theatre 3",
@@ -33,7 +37,7 @@ module.exports = async ()=>{
             city : "New Delhi",
             pinCode : 110031,
             showTypes : [constants.theatreShows.evening],
-            numberOfSeats : 75,
+            numberOfSeats : 75
         }
 
         theatresCreated = await Theatre.insertMany(theatres);
@@ -76,9 +80,40 @@ module.exports = async ()=>{
         genre : [constants.movieGenre.action]
         }
 
+        let users = [];
+        users[0] = {
+            name: "Pavan Kumar",
+            userId: "admin",
+            email: "lakP1@gmail.com",
+            password: bcrypt.hashSync("Welcome1", 8),
+            address: {
+                city: "mars colony",
+                pinCode: 000117
+            },
+            userType: constants.userTypes.admin
+        },
+        users[1] = {
+            name: "someOne",
+            userId: "theatreOwner",
+            email: "thOw1@gmail.com",
+            password: bcrypt.hashSync("Welcome1", 8),
+            address: {
+                city: "mars colony",
+                pinCode: 000117
+            },
+            userType: constants.userTypes.theatreOwner
+        }
+
+        let userscreated = await User.insertMany(users);
+
         moviesCreated = await Movie.insertMany(movies);
 
         theatresCreated[0].movies.push(moviesCreated[0]._id, moviesCreated[1]._id)
+        theatresCreated[0].owner.push(userscreated[1]._id);
+        theatresCreated[1].owner.push(userscreated[1]._id);
+
+        userscreated[1].theatresOwned.push(theatresCreated[0]._id,theatresCreated[1]._id);
+
         moviesCreated[0].theatres.push(theatresCreated[0]._id)
         moviesCreated[1].theatres.push(theatresCreated[0]._id)
     
