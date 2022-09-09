@@ -86,25 +86,25 @@ module.exports = async ()=>{
             name: 'user',
             userId : 'userId',
             email : 'email@gmail.com',
-            userType : 'ADMIN',
+            userType : constants.userTypes.admin,
             password: bcrypt.hashSync("password",10),
-            userStatus : 'APPROVED'
+            userStatus : constants.status.approved
         }
         users[1] = {
             name: 'user1',
             userId : 'userId1',
             email : 'email1@gmail.com',
-            userType : 'CUSTOMER',
+            userType : constants.userTypes.customer,
             password: bcrypt.hashSync("password",10),
-            userStatus : 'APPROVED'
+            userStatus : constants.status.approved
         }
         users[2] = {
             name: 'user2',
             userId : 'userId2',
             email : 'email2@gmail.com',
-            userType : 'THEATRE OWNER',
+            userType : constants.userTypes.owner,
             password: bcrypt.hashSync("password",10),
-            userStatus : 'PENDING'
+            userStatus : constants.status.pending
         }
 
         await Movie.insertMany(movies);
