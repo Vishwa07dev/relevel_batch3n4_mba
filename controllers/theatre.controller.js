@@ -1,5 +1,5 @@
 const Theatre = require('../models/theatre.model')
- 
+const Movie = require('../models/movie.model');
 exports.newTheatre = async (req,res)=>{
     try{
         const data = {
@@ -115,7 +115,7 @@ exports.moviesInTheatre = async (req,res)=>{
  
  }
 
- exports.moviesOnTheatres = async (req,res)=>{
+ exports.modifiyTheatre = async (req,res)=>{
 
     try{
         const theatre = await Theatre.findOne({_id : req.params.id});
@@ -123,12 +123,27 @@ exports.moviesInTheatre = async (req,res)=>{
         if(req.body.addMovies){
             req.body.addMovies.forEach(movie => {
                 theatre.movies.push(movie)
+            });
+            req.body.addMovies.forEach(async movie=>{
+                const singleMovie = await Movie.findById(movie);
+                if(singleMovie != null){
+                    singleMovie.theatres.push(theatre._id);
+                    singleMovie.save();
+                }
             })
+            
         }
 
         if(req.body.removeMovies){
             req.body.removeMovies.forEach(movie => {
                 theatre.movies.remove(movie)
+            })
+            req.body.removeMovies.forEach(async movie=>{
+                const singleMovie = await Movie.findById(movie);
+                if(singleMovie != null){
+                    singleMovie.theatres.remove(theatre._id);
+                    singleMovie.save();
+                }
             })
         }
 

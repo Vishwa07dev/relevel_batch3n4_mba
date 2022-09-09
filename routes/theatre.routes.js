@@ -7,7 +7,7 @@ module.exports = (app)=>{
     app.get("/mba/api/v1/theatres", theatreController.getAllTheatres)
     app.get("/mba/api/v1/theatres/:id", theatreController.getSingleTheatre)
     app.get("/mba/api/v1/theatres/:id/movies", theatreController.moviesInTheatre)
-    app.put("/mba/api/v1/theatres/:id/movies", theatreController.moviesOnTheatres)
+    app.put("/mba/api/v1/theatres/:id/movies", theatreController.modifiyTheatre)
 
 
 }
