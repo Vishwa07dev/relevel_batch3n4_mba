@@ -11,7 +11,7 @@ module.exports = (app)=>{
 
     app.put("/mba/api/v1/theatres/:id/movies",theatreController.addMovies);
 
-    app.put("/mba/api/v1/theatres/:id/movies",theatreController.deleteMovie);
+    app.put("/mba/api/v1/theatres/:id/moviex",theatreController.deleteMovie);
 }
 
 /***

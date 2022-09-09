@@ -1,6 +1,6 @@
 const Theatre = require('../models/theatre.model')
 const Movie=require("../models/movie.model")
-
+const mongoose=require("mongoose")
 
 exports.newTheatre = async (req,res)=>{
     try{
@@ -169,14 +169,12 @@ exports.addMovies=async (req,res)=>{
 exports.deleteMovie=async (req,res)=>{
     try
     {
-        const theater=await Theatre.findOne({_id:req.params.id});
-        const movie=await Movie.findOne({_id:req.params.id});
-        if(theater.movies==movie._id)
-        {
-            await theater.movies.remove();
-        }
-        res.status(200).send("Successfully Deleted")
 
+        const theater=await Theatre.findOne({_id:req.params.id});
+        await theater.collection.updateMany({_id:theater._id},{$unset:{"movies":""}})
+        console.log("#### Movies Delete ####")
+        res.status(200).send("Successfully Deleted")
+    
     }catch(err)
     {
         console.log("#### error while removing movie ####",err.message)
