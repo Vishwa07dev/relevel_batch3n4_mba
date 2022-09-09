@@ -117,21 +117,32 @@ exports.getAllMovies =async (req,res) =>{
 exports.updateMovies= async (req,res) =>{
     try{
     const theatre = await Theatre.findOne({_id : req.params.id});
-   // console.log(req.body.movies)
-    //console.log(theatre.movies)
-    theatre.movies = req.body.movies ? req.body.movies : theatre.movies
-    console.log(theatre)
-    const updatedTheatre = await theatre.save();
+    
+    if(req.body.addMovies){
+        let movies = req.body.addMovies;
+        movies.forEach(async(mov) => {
+            theatre.movies.push(mov)
+            let currentMovie = await Movie.findOne({_id:mov})
+            currentMovie.theatres.push(theatre._id)
+        });
+
+    }
+    
+    if(req.body.delMovies){
+        let movies = req.body.addMovies;
+        let leftMovies =theatre.movies.filter((mov ) =>{ !movies.includes(mov)})  
+        leftMovies.forEach( async(mov) => {
+            theatre.movies.push(mov);
+            let currentMovie = await Movie.findOne({_id:mov})
+            let updatedMoviesTheatres =currentMovie.theatres.filter(( t ) =>{ t!= theatre})  
+            console.log(updatedMoviesTheatres)
+            updatedMoviesTheatres.forEach((t) =>{
+                currentMovie.theatres.push(t)
+            })
+        });      
+    }
    
     res.status(200).send(updatedTheatre);
-
-    // const query = {_id : req.params.id};
-    // const updateDocument = {
-    //   $push: { "movies": req.body.movies }
-    // };
-    // const updatedTheatre = await Theatre.updateOne(query, updateDocument);
-    // console.log(updatedTheatre)
-    // res.status(200).send(updatedTheatre);
     }catch(err){
         console.log("#### Error while updating theatre data #### ", err.message);
         res.status(500).send({
