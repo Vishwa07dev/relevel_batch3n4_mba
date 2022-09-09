@@ -21,6 +21,10 @@ module.exports = {
         noon : "NOON",
         evening : "EVENING",
         night : "NIGHT",
+    },
+    operationType : {
+        add : "ADD",
+        remove : "REMOVE"
     }
 
 }

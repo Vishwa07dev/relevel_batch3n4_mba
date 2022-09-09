@@ -1,9 +1,13 @@
+const mongoose  = require('mongoose')
 const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
 
 module.exports = async ()=>{
     try{
+
+        await Movie.collection.drop();
+        await Theatre.collection.drop()
 
         const theatres = [];
         theatres[0] = {
@@ -72,6 +76,30 @@ module.exports = async ()=>{
         }
 
         await Movie.insertMany(movies);
+
+        // Adding all movieId into theatre(circularly)
+        function getMin(arr, min = Infinity, minIdx = -1){
+            for(let i=0; i<arr.length; i++){
+                if(arr[i].movies.length < min){
+                    min = arr[i].movies.length;
+                    minIdx = i
+                }
+            }
+            return minIdx
+        }
+
+        const allMovies = await Movie.find();
+        const allTheatre = await Theatre.find();
+
+        allMovies.forEach(async (movie) => {
+            let minIdx = getMin(allTheatre)
+            allTheatre[minIdx].movies.push(movie._id)
+            movie.theatres.push(allTheatre[minIdx]._id)
+
+            await allTheatre[minIdx].save()
+            await movie.save()
+        })
+
     }
     catch(err){
         console.log("#### Error in seed data initialization #### ", err.message);

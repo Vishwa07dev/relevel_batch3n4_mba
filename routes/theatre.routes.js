@@ -6,6 +6,10 @@ module.exports = (app)=>{
     app.delete("/mbs/api/v1/theatres/:id", theatreController.deleteTheatre)
     app.get("/mbs/api/v1/theatres", theatreController.getAllTheatres)
     app.get("/mbs/api/v1/theatres/:id", theatreController.getSingleTheatre)
+
+    app.get("/mba/api/v1/theatres/:id/movies", theatreController.getallMoviesByTheatreId)
+
+    app.put("/mba/api/v1/theatres/:id/movies", theatreController.addingAndRemovingMovie)
 }
 
 /***
