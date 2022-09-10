@@ -3,6 +3,5 @@ const userController = require('../controllers/user.controller');
 
 module.exports = (app)=>{
 
-    app.put("/crm/api/v1/users/:id", [authJwt.verifyToken, authJwt.isAdmin],userController.update)
-
+    app.put("/crm/api/v1/users/:id", [authJwt.verifyToken],userController.update)
 }
