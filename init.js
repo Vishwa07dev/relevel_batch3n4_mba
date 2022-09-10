@@ -1,42 +1,88 @@
+const User = require('./models/user.model')
 const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
+const bcrypt = require('bcryptjs')
 
 module.exports = async ()=>{
     try{
 
+        await User.collection.drop();
+        console.log("#### User collection dropped ####");
         await Movie.collection.drop();
         console.log("#### Movie collection dropped ####");
         await Theatre.collection.drop();
         console.log("#### Theatre collection dropped ####");
 
+        await User.create({
+            name : "Dharmit",
+            userId : "admin",
+            password : bcrypt.hashSync("Admin1",8),
+            email : "dharmit@admin.com",
+            userType : constants.userTypes.admin
+        });
+
+        console.log("#### Admin user created ####");
+
+        const users = [];
+        users[0] = {
+            name : "Dharmit Customer",
+            userId : "customer1",
+            password : bcrypt.hashSync("Customer1",8),
+            email : "dharmit@customer.com",
+            userType : constants.userTypes.customer
+        },
+        users[1] = {
+            name : "Theatre Owner 1",
+            userId : "theatreOwner1",
+            password : bcrypt.hashSync("TheatreOwner1",8),
+            email : "theatreOwner1@app.com",
+            userType : constants.userTypes.theatre_owner
+        },
+        users[2] = {
+            name : "Theatre Owner 2",
+            userId : "theatreOwner2",
+            password : bcrypt.hashSync("TheatreOwner2",8),
+            email : "theatreOwner2@app.com",
+            userType : constants.userTypes.theatre_owner
+        },
+
+        usersCreated = await User.insertMany(users);
+
         const theatres = [];
         theatres[0] = {
+            ownerId : usersCreated[1]._id,
             name : "Theatre 1",
             description : "Description for theatre 1",
             city : "Mumbai",
             pinCode : 400049,
             showTypes : [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 100,
+            numberOfSeats : 100
         },
         theatres[1] = {
+            ownerId : usersCreated[2]._id,
             name : "Theatre 2",
             description : "Description for theatre 2",
-            city : "Ahmedabad =",
+            city : "Ahmedabad",
             pinCode : 380007,
             showTypes : [constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 50,
+            numberOfSeats : 50
         },
         theatres[2] = {
+            ownerId : usersCreated[2]._id,
             name : "Theatre 3",
             description : "Description for theatre 3",
             city : "New Delhi",
             pinCode : 110031,
             showTypes : [constants.theatreShows.evening],
-            numberOfSeats : 75,
+            numberOfSeats : 75
         }
 
         theatresCreated = await Theatre.insertMany(theatres);
+        usersCreated[1].theatresOwned.push(theatresCreated[0]._id);
+        usersCreated[2].theatresOwned.push(theatresCreated[1]._id, theatresCreated[2]._id);
+        usersCreated[1].save();
+        usersCreated[2].save();
 
         const movies = [];
         movies[0] = {

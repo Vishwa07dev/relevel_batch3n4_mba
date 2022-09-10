@@ -3,6 +3,11 @@ const constants = require('../utils/constants')
 
 const theatreSchema = new mongoose.Schema({
 
+    ownerId : {
+        type : mongoose.SchemaTypes.ObjectId,
+        ref : "user",
+        required : true
+    },
     name : {
         type : String,
         required : true

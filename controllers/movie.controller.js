@@ -1,4 +1,5 @@
  const Movie = require('../models/movie.model')
+ const Theatre = require('../models/theatre.model')
  
  exports.createNewMovie = async (req,res)=>{
      try{
@@ -61,6 +62,13 @@ exports.editMovie = async (req,res)=>{
 exports.deleteMovie = async (req,res)=>{
     try{
         const movie = await Movie.findOne({_id : req.params.id});
+        if(movie.theatres.length > 0){
+            movie.theatres.forEach(async (theatre)=>{
+                let temp = await Theatre.findOne({_id : theatre})
+                await temp.movies.remove(movie._id);
+                temp.save();
+            })
+        }
 
         await movie.remove();
 
