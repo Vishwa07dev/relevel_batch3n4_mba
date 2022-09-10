@@ -17,7 +17,13 @@ const validateTheatreRequestBody = (req, res, next) => {
                 })
             }
         }
-            next()
+
+        if(!constants.validatePIN(req.body.pinCode)){
+            return res.status(400).send({
+                message : "Provided pincode is not valid"
+            })
+        }
+        next()
 
     }catch(err){
         console.log("error in validateTheatreRequestBody");
