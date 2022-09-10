@@ -45,6 +45,10 @@ const movieSchema  = new mongoose.Schema({
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
         ref : "Theatre"
+    },
+    creater : {
+        type : mongoose.SchemaTypes.ObjectId,
+        ref : "User"
     }
 },{ timestamps : true , versionKey : false});
 
