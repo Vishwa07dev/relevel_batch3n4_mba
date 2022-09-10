@@ -66,6 +66,7 @@ const isAdminOrTheatreOwner = async (req, res, next) => {
                 message : "Only admin or theatre owner can hit this api"
             })
         }
+
         next()
 
     }catch(err){
@@ -74,30 +75,6 @@ const isAdminOrTheatreOwner = async (req, res, next) => {
     }
 };
 
-const isAdminOrMovieCreater = async (req, res, next) => {
-    try{
-
-        const movie = await Movie.findOne({_id : req.params.id});
-
-        const user = await User.findOne({userId : req.userId});
-        
-        if(movie.creater.equals(user._id) || user.userType == constants.userType.admin){
-            next()
-
-        }else{
-            return res.status(401).send({
-                message : "only admin and movie creater can not hit this api"
-            })
-        }
-        
-
-    }catch(err){
-        console.log("error in isAdminOrMovieCreater middlewares");
-        res.status(500).send({
-            message : "Internal Serveer Error"
-        })
-    }
-};
 
 const isAdminOrTheatreCreater = async (req, res, next) => {
     try{
@@ -128,7 +105,6 @@ const authRequestValidator = {
     verifyToken : verifyToken,
     isAdmin : isAdmin,
     isAdminOrTheatreOwner : isAdminOrTheatreOwner,
-    isAdminOrMovieCreater : isAdminOrMovieCreater,
     isAdminOrTheatreCreater : isAdminOrTheatreCreater
 }
 
