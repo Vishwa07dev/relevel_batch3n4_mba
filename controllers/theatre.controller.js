@@ -6,7 +6,7 @@ const constants = require('../utils/constants')
 exports.createNewTheatre = async (req,res)=>{
     try{
         const data = {
-            ownerId : req.user.userType == constants.userTypes.admin ? req.body.ownerId : req.user._id,
+            ownerId : req.user._id,
             name : req.body.name,
             description : req.body.description,
             city : req.body.city,
