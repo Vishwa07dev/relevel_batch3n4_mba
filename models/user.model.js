@@ -38,11 +38,6 @@ const userSchema = new mongoose.Schema({
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
         ref : "Theatre"
-    },
-    moviesBooked : {
-        type : [mongoose.SchemaTypes.ObjectId],
-        default : [],
-        ref : "Movie"
     }
 },{ timestamps : true , versionKey : false});
 
