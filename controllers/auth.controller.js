@@ -4,6 +4,7 @@ const User = require('../models/user.model')
 const jwt = require('jsonwebtoken');
 const authConfig = require('../configs/auth.config');
 const constants = require('../utils/constants');
+const objectConverter = require('../utils/objectConverter')
 
 
 exports.signup = async (req,res)=>{
@@ -19,21 +20,9 @@ exports.signup = async (req,res)=>{
 
     try{
         const userCreated = await User.create(userObj);
-        
 
-        const response = {
-            name : userCreated.name,
-            userId : userCreated.userId,
-            email : userCreated.email,
-            userType : userCreated.userType,
-            userStatus : userCreated.userStatus,
-            createdAt : userCreated.createdAt,
-            updatedAt : userCreated.updatedAt
-        }
-
-
-        console.log(`#### ${response.userType} ${response.name} created ####`);
-        res.status(201).send(response);
+        console.log(`#### ${userCreated.userType} ${userCreated.name} created ####`);
+        res.status(201).send(objectConverter.multipleUserResponse(userCreated));
     }catch(err){
         console.log("#### error while user sign up #### ", err.message);
         res.status(500).send({

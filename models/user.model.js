@@ -22,15 +22,6 @@ const userSchema = new mongoose.Schema({
         minLength : 10,
         unique : true
     },
-    createdAt : {
-        type : Date,
-        immutable :true,
-        default : () => {return Date.now()}
-    },
-    updatedAt : {
-        type : Date,
-        default : () => {return Date.now()}
-    },
     userType : {
         type : String,
         required : true,
@@ -43,27 +34,10 @@ const userSchema = new mongoose.Schema({
         default : constants.userStatus.approved,
         enum : [constants.userStatus.approved, constants.userStatus.pending, constants.userStatus.rejected]
     },
-    openTicketsCreated : {
+    theatresOwned : {
         type : [mongoose.SchemaTypes.ObjectId],
-        ref : "Ticket"
-    },
-    closedTicketsCreated : {
-        type : [mongoose.SchemaTypes.ObjectId],
-        ref : "Ticket"
-    },
-    openTicketsAssigned : {
-        type : [mongoose.SchemaTypes.ObjectId],
-        ref : "Ticket"
-    },
-    closedTicketsAssigned : {
-        type : [mongoose.SchemaTypes.ObjectId],
-        ref : "Ticket"
-    },
-    emailVerified : {
-        type : Boolean,
-        required : true,
-        default : false
+        ref : "Theatre"
     }
-});
+},{ timestamps : true , versionKey : false});
 
 module.exports = mongoose.model("user",userSchema);

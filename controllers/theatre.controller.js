@@ -1,10 +1,12 @@
+const User = require('../models/user.model')
 const Theatre = require('../models/theatre.model')
 const Movie = require('../models/movie.model')
+const constants = require('../utils/constants')
  
 exports.createNewTheatre = async (req,res)=>{
     try{
         const data = {
-            ownerId : req.user._id,
+            ownerId : req.user.userType == constants.userTypes.admin ? req.body.ownerId : req.user._id,
             name : req.body.name,
             description : req.body.description,
             city : req.body.city,
@@ -14,6 +16,9 @@ exports.createNewTheatre = async (req,res)=>{
         }
     
         const theatre = await Theatre.create(data);
+        const theatreOwner = await User.findOne({_id : theatre.ownerId});
+        theatreOwner.theatresOwned.push(theatre._id);
+        await theatreOwner.save();
 
         console.log(`#### New theatre '${theatre.name}' created ####`);
         res.status(201).send(theatre);
@@ -55,6 +60,9 @@ exports.editTheatre = async (req,res)=>{
 exports.deleteTheatre = async (req,res)=>{
    try{
        const theatre = await Theatre.findOne({_id : req.params.id});
+       const theatreOwner = await User.findOne({_id : theatre.ownerId});
+       await theatreOwner.theatresOwned.remove(theatre._id);
+       await theatreOwner.save();
 
        await theatre.remove();
 
@@ -132,12 +140,12 @@ exports.getMoviesInTheatre = async (req,res)=>{
     }
 
         if(req.body.removeMovies){
-            req.body.removeMovies.forEach(movie => {
-                theatre.movies.remove(movie)
+            req.body.removeMovies.forEach(async (movie) => {
+                await theatre.movies.remove(movie)
             })
             req.body.removeMovies.forEach(async (movie) =>{
                 let temp = await Movie.findOne({_id : movie})
-                temp.theatres.remove(theatre._id);
+                await temp.theatres.remove(theatre._id);
                 await temp.save();
             })
     }

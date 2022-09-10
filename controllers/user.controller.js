@@ -19,7 +19,7 @@ exports.findAll = async (req,res)=>{
     try{
         const users = await User.find(queryObj);
 
-        res.status(200).send(objectConverter.userResponse(users));
+        res.status(200).send(objectConverter.multipleUserResponse(users));
 
     }catch(err){
         console.log("#### Error while fetching all user's data #### ", err.message);
@@ -31,8 +31,8 @@ exports.findAll = async (req,res)=>{
 
 exports.findByUserId = async (req,res)=>{
     try{
-        const user = req.userInParams;
-        res.status(200).send(objectConverter.userResponse(user));
+        const user = await User.findOne({_id : req.params.id})
+        res.status(200).send(objectConverter.singleUserResponse(user));
 
     }catch(err){
         console.log("#### Error while searching for the user #### ", err.message);
@@ -59,13 +59,7 @@ exports.updateUser = async (req,res)=>{
 
 
         console.log(`#### ${updatedUser.userType} ${updatedUser.name} data updated ####`);
-        res.status(200).send({
-            name : updatedUser.name,
-            userId : updatedUser.userId,
-            email : updatedUser.email,
-            userTypes : updatedUser.userType,
-            userStatus : updatedUser.userStatus
-        });
+        res.status(200).send(objectConverter.singleUserResponse(updatedUser));
 
     }catch(err){
         console.log("#### Error while updating user data #### ", err.message);
