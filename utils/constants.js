@@ -21,6 +21,16 @@ module.exports = {
         noon : "NOON",
         evening : "EVENING",
         night : "NIGHT",
+    },
+    userType : {
+        customer : "CUSTOMER",
+        admin : "ADMIN",
+        theatre_owner : "THEATRE_OWNER"
+    },
+    userStatus : {
+        approved : "APPROVED",
+        pending : "PENDING",
+        rejected : "REJECTED"
     }
 
 }

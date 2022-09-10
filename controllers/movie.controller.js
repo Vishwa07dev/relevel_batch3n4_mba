@@ -1,7 +1,11 @@
  const Movie = require('../models/movie.model')
+ const User = require('../models/user.model');
+ const constants = require('../utils/constants');
  
  exports.createNewMovie = async (req,res)=>{
      try{
+        const user = await User.findOne({userId : req.userId})
+ 
          const data = {
              name : req.body.name,
              description : req.body.description,
@@ -12,7 +16,8 @@
              releaseDate : req.body.releaseDate,
              releaseStatus : req.body.releaseStatus,
              imdbRating : req.body.imdbRating,
-             genre : req.body.genre
+             genre : req.body.genre,
+             creater : user._id
          }
      
          const movie = await Movie.create(data);
@@ -32,7 +37,7 @@
  
 exports.editMovie = async (req,res)=>{
     try{
-        const movie = await Movie.findOne({_id : req.params.id});
+        const movie = await Movie.findOne({_id : req.params.id})
 
         movie.name = req.body.name ? req.body.name : movie.name,
         movie.description = req.body.description ? req.body.description : movie.description,

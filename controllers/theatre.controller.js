@@ -1,15 +1,19 @@
 const Theatre = require('../models/theatre.model')
-const Movie = require('../models/movie.model')
+const Movie = require('../models/movie.model');
+const User = require('../models/user.model');
  
 exports.createNewTheatre = async (req,res)=>{
     try{
+
+        const user = await User.findOne({userId : req.userId})
         const data = {
             name : req.body.name,
             description : req.body.description,
             city : req.body.city,
             pinCode : req.body.pinCode,
             showTypes : req.body.showTypes,
-            numberOfSeats : req.body.numberOfSeats
+            numberOfSeats : req.body.numberOfSeats,
+            creater : user._id
         }
     
         const theatre = await Theatre.create(data);
