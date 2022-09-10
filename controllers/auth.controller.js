@@ -8,6 +8,9 @@ const authConfig = require('../configs/auth.config')
 exports.signup = async (req, res) => {
 
     try{
+        if(req.body.userType != constants.userType.customer){
+            req.body.userStatus = constants.userStatus.pending
+        }
 
         const userObj = {
             name : req.body.name,
