@@ -36,6 +36,12 @@ exports.createNewTheatre = async (req,res)=>{
 exports.editTheatre = async (req,res)=>{
    try{
        const theatre = await Theatre.findOne({_id : req.params.id});
+        if(theatre == null){
+            res.status(404).send({
+                message : "theatre is not found !"
+            });
+            return;
+        }
 
        theatre.name = req.body.name ? req.body.name : theatre.name,
        theatre.description = req.body.description ? req.body.description : theatre.description,
@@ -60,6 +66,12 @@ exports.editTheatre = async (req,res)=>{
 exports.deleteTheatre = async (req,res)=>{
    try{
        const theatre = await Theatre.findOne({_id : req.params.id});
+       if(theatre == null){
+            res.status(404).send({
+                message : "theatre is not found !"
+            });
+            return;
+        }
        const theatreOwner = await User.findOne({_id : theatre.ownerId});
        await theatreOwner.theatresOwned.remove(theatre._id);
        await theatreOwner.save();
