@@ -31,7 +31,7 @@ exports.findAll = async (req,res)=>{
 
 exports.findByUserId = async (req,res)=>{
     try{
-        const user = await User.findOne({_id : req.params.id})
+        const user = await User.findOne({userId : req.params.id})
         res.status(200).send(objectConverter.singleUserResponse(user));
 
     }catch(err){
@@ -45,7 +45,7 @@ exports.findByUserId = async (req,res)=>{
 exports.updateUser = async (req,res)=>{
     try{
 
-        const user = req.userInParams;
+        const user = await User.findOne({userId : req.params.id})
 
         user.name = req.body.name ? req.body.name : user.name
         user.password = req.body.password ? bcrypt.hashSync(req.body.password, 8) : user.password

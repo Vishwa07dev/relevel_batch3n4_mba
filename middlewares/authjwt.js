@@ -78,7 +78,7 @@ const isTheatreOwnerOrAdmin = async (req,res,next)=>{
 const isValidTheatreOwner = async (req,res,next)=>{
     try {
         if(req.user.userType==constants.userTypes.theatre_owner){
-            const theatre = Theatre.findOne({_id : req.params.id})
+            const theatre = await Theatre.findOne({_id : req.params.id})
             if (theatre.ownerId.equals(req.user._id)){
                 next()
             }else{

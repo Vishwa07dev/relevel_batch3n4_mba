@@ -22,7 +22,7 @@ exports.signup = async (req,res)=>{
         const userCreated = await User.create(userObj);
 
         console.log(`#### ${userCreated.userType} ${userCreated.name} created ####`);
-        res.status(201).send(objectConverter.multipleUserResponse(userCreated));
+        res.status(201).send(objectConverter.singleUserResponse(userCreated));
     }catch(err){
         console.log("#### error while user sign up #### ", err.message);
         res.status(500).send({

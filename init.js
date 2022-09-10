@@ -63,7 +63,7 @@ module.exports = async ()=>{
             ownerId : usersCreated[2]._id,
             name : "Theatre 2",
             description : "Description for theatre 2",
-            city : "Ahmedabad =",
+            city : "Ahmedabad",
             pinCode : 380007,
             showTypes : [constants.theatreShows.evening, constants.theatreShows.night],
             numberOfSeats : 50
