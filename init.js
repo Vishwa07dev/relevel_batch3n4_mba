@@ -1,5 +1,8 @@
 const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
+const User = require('./models/user.model')
+
+
 const constants = require('./utils/constants')
 
 module.exports = async ()=>{
@@ -9,6 +12,35 @@ module.exports = async ()=>{
         console.log("#### Movie collection dropped ####");
         await Theatre.collection.drop();
         console.log("#### Theatre collection dropped ####");
+        await User.collection.drop();
+        console.log("#### User collection dropped ####");
+         
+        let users =[]
+        users[0] ={
+            name: "customer",
+            userId: "customer1",
+            email: "customer1@gmail.com",
+            userType: "CUSTOMER",
+            password: "welcome"  
+        },
+        users[1] ={
+            name: "admin",
+            userId: "admin",
+            email: "admin1@gmail.com",
+            userType: "ADMIN",
+            password: "welcome"  
+        }, 
+        users[2] ={
+            name: "thearte_owner",
+            userId: "thearte_owner1",
+            email: "thearte_owner1@gmail.com",
+            userType: "THEARTE_OWNER",
+            password: "welcome"  
+        }
+
+        
+        usersCreated = await User.insertMany(users);
+        
 
         const theatres = [];
         theatres[0] = {
