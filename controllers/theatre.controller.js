@@ -128,7 +128,7 @@ exports.getMoviesInTheatre = async (req,res)=>{
                 temp.theatres.push(theatre._id);
                 await temp.save();
             })
-    }
+        }
 
         if(req.body.removeMovies){
             req.body.removeMovies.forEach(movie => {
@@ -139,7 +139,7 @@ exports.getMoviesInTheatre = async (req,res)=>{
                 temp.theatres.remove(theatre._id);
                 await temp.save();
             })
-    }
+        }
 
         await theatre.save();
         res.status(200).send({message : "Updated movies in theatre"});

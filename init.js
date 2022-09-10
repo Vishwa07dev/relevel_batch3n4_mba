@@ -1,10 +1,26 @@
 const Movie = require('./models/movie.model')
+const User = require('./models/user.model')
 const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
+const bcrypt = require("bcryptjs")
 
 module.exports = async ()=>{
     try{
 
+        await User.collection.drop();
+
+        const admin = await User.create({
+            name : "Mohammad",
+            userId: "ADMIN",
+            password : bcrypt.hashSync("junaid", 8),
+            email : "mojunaid2050@gmail.com",
+            userType : "ADMIN",
+            userStatus : "APPROVED"
+        })
+
+        const Admin = await admin.save()
+        console.log(Admin);
+    
         await Movie.collection.drop();
         console.log("#### Movie collection dropped ####");
         await Theatre.collection.drop();
