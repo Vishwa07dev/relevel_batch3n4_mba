@@ -4,7 +4,6 @@
  
  exports.createNewMovie = async (req,res)=>{
      try{
-        const user = await User.findOne({userId : req.userId})
  
          const data = {
              name : req.body.name,
@@ -17,7 +16,6 @@
              releaseStatus : req.body.releaseStatus,
              imdbRating : req.body.imdbRating,
              genre : req.body.genre,
-             creater : user._id
          }
      
          const movie = await Movie.create(data);

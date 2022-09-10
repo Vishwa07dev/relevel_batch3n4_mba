@@ -67,8 +67,7 @@ module.exports = async ()=>{
             releaseDate : 2022-10-10,
             releaseStatus : constants.movieReleaseStatuses.coming_soon,
             imdbRating : 8.5,
-            genre : [constants.movieGenre.action],
-            creater : user._id
+            genre : [constants.movieGenre.action]
         },
         movies[1] = {
             name : "Movie 2",
@@ -80,8 +79,7 @@ module.exports = async ()=>{
             releaseDate : 2022-09-09,
             releaseStatus : constants.movieReleaseStatuses.coming_soon,
             imdbRating : 8.5,
-            genre : [constants.movieGenre.action],
-            creater : user._id
+            genre : [constants.movieGenre.action]
         },
         movies[2] = {
         name : "Movie 3",
@@ -93,8 +91,7 @@ module.exports = async ()=>{
         releaseDate : 2022-12-12,
         releaseStatus : constants.movieReleaseStatuses.coming_soon,
         imdbRating : 8.5,
-        genre : [constants.movieGenre.action],
-        creater : user._id
+        genre : [constants.movieGenre.action]
         }
 
         const moviesCreated = await Movie.insertMany(movies);
@@ -104,15 +101,11 @@ module.exports = async ()=>{
         moviesCreated[1].theatres.push(theatresCreated[0]._id)
         moviesCreated[2].theatres.push(theatresCreated[0]._id)
 
-        user.moviesCreated.push(moviesCreated[0]._id, moviesCreated[1]._id, moviesCreated[2]._id)
-        user.theatresCreated.push(theatresCreated[0]._id, theatresCreated[1]._id, theatresCreated[2]._id)
     
         await theatresCreated[0].save()
         await moviesCreated[0].save()
         await moviesCreated[1].save()
         await moviesCreated[2].save()
-
-        await user.save();
         
 
         console.log("#### Seed data initialized ####");
