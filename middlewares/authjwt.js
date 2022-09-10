@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../configs/auth.config')
 const User = require('../models/user.model')
-const Theatre = require('../models/theatre.model')
 const constants = require('../utils/constants')
 
 
@@ -78,7 +77,7 @@ const isTheatreOwnerOrAdmin = async (req,res,next)=>{
 const isValidTheatreOwner = async (req,res,next)=>{
     try {
         if(req.user.userType==constants.userTypes.theatre_owner){
-            const theatre = await Theatre.findOne({_id : req.params.id})
+            const theatre = req.theatreInParams
             if (theatre.ownerId.equals(req.user._id)){
                 next()
             }else{
@@ -97,11 +96,11 @@ const isValidTheatreOwner = async (req,res,next)=>{
 
 
 const authJwt = {
-    verifyToken : verifyToken,
-    isAdmin : isAdmin,
-    isAdminOrOwner : isAdminOrOwner,
-    isTheatreOwnerOrAdmin : isTheatreOwnerOrAdmin,
-    isValidTheatreOwner : isValidTheatreOwner
+    verifyToken,
+    isAdmin,
+    isAdminOrOwner,
+    isTheatreOwnerOrAdmin,
+    isValidTheatreOwner
 }
 
 module.exports = authJwt
