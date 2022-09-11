@@ -1,14 +1,69 @@
 const theatreController = require('../controllers/theatre.controller')
-const {authJwt} = require('../middlewares')
+const { authJwt, theatreValidator, pathParamValidator } = require('../middlewares')
 
- 
-module.exports = (app)=>{
-    app.post("/mba/api/v1/theatres", [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin], theatreController.createNewTheatre);
-    app.put("/mba/api/v1/theatres/:id", [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin, authJwt.isValidTheatreOwner], theatreController.editTheatre)
-    app.delete("/mba/api/v1/theatres/:id", [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin, authJwt.isValidTheatreOwner], theatreController.deleteTheatre)
-    app.get("/mba/api/v1/theatres", [authJwt.verifyToken], theatreController.getAllTheatres)
-    app.get("/mba/api/v1/theatres/:id", [authJwt.verifyToken], theatreController.getSingleTheatre)
 
-    app.get("/mba/api/v1/theatres/:id/movies", [authJwt.verifyToken], theatreController.getMoviesInTheatre)
-    app.put("/mba/api/v1/theatres/:id/movies", [authJwt.verifyToken, authJwt.isTheatreOwnerOrAdmin, authJwt.isValidTheatreOwner], theatreController.editMoviesInTheatre)
+module.exports = (app) => {
+    app.post(
+        "/mba/api/v1/theatres",
+        [
+            authJwt.verifyToken,
+            authJwt.isTheatreOwnerOrAdmin,
+            theatreValidator.validateTheatreRequest
+        ],
+        theatreController.createNewTheatre
+    );
+    app.put(
+        "/mba/api/v1/theatres/:id",
+        [
+            authJwt.verifyToken,
+            authJwt.isTheatreOwnerOrAdmin,
+            authJwt.isValidTheatreOwner,
+            pathParamValidator.validateTheatreId,
+            theatreValidator.validateTheatreRequest
+        ],
+        theatreController.editTheatre
+    )
+    app.delete(
+        "/mba/api/v1/theatres/:id",
+        [
+            authJwt.verifyToken,
+            authJwt.isTheatreOwnerOrAdmin,
+            authJwt.isValidTheatreOwner,
+            pathParamValidator.validateTheatreId,
+        ],
+        theatreController.deleteTheatre
+    )
+    app.get(
+        "/mba/api/v1/theatres",
+        [authJwt.verifyToken],
+        theatreController.getAllTheatres
+    )
+    app.get(
+        "/mba/api/v1/theatres/:id",
+        [
+            authJwt.verifyToken,
+            pathParamValidator.validateTheatreId,
+        ],
+        theatreController.getSingleTheatre
+    )
+
+    app.get(
+        "/mba/api/v1/theatres/:id/movies",
+        [
+            authJwt.verifyToken,
+            pathParamValidator.validateTheatreId,
+        ],
+        theatreController.getMoviesInTheatre
+    )
+    app.put(
+        "/mba/api/v1/theatres/:id/movies",
+        [
+            authJwt.verifyToken,
+            authJwt.isTheatreOwnerOrAdmin,
+            authJwt.isValidTheatreOwner,
+            pathParamValidator.validateTheatreId,
+            theatreValidator.validateRequestForAddAndRemove
+        ],
+        theatreController.editMoviesInTheatre
+    )
 }
