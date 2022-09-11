@@ -6,7 +6,7 @@ const userInParams = async (req,res,next)=>{
 
     try{
 
-        const user = await User.find({userId : req.params.id});
+        const user = await User.findOne({userId : req.params.id});
 
         if(!user){
             return res.status(400).send({
@@ -28,7 +28,7 @@ const theatreInParams = async (req,res,next)=>{
 
     try{
 
-        const theatre = await Theatre.find({_id : req.params.id});
+        const theatre = await Theatre.findOne({_id : req.params.id});
 
         if(!theatre){
             return res.status(400).send({
@@ -50,7 +50,7 @@ const movieInParams = async (req,res,next)=>{
 
     try{
 
-        const movie = await Movie.find({_id : req.params.id});
+        const movie = await Movie.findOne({_id : req.params.id});
 
         if(!movie){
             return res.status(400).send({

@@ -8,7 +8,7 @@ const allowedShowTypes = [constants.theatreShows.morning, constants.theatreShows
  
 function isValidObjectId(id){
 
-    if(ObjectId.isValid(id)){
+    if (ObjectId.isValid(id)){
         if((String)(new ObjectId(id)) === id)
             return true;
         return false;
@@ -19,7 +19,7 @@ function isValidObjectId(id){
 function checkShows (given){
     let temp = true;
     given.forEach(e => {
-        if(!allowedShowTypes.includes(e)){
+        if (!allowedShowTypes.includes(e)){
             temp = false
         }
     })
@@ -29,11 +29,11 @@ function checkShows (given){
 function checkValidObjectIds (array){
     let temp = {validIds :true, moviesExist : true};
     array.forEach(async e => {
-        if(!isValidObjectId(e)){
+        if (!isValidObjectId(e)){
             temp.validIds = false;
         }else{
             let movie = await Movie.findOne({_id : e})
-            if(!movie){
+            if (!movie){
                 moviesExist = false
             }
         }
@@ -58,7 +58,7 @@ const newTheatreBody = async (req,res,next)=>{
                 });
             }else{
                 const owner = await User.findOne({_id : req.body.ownerId})
-                if(!owner){
+                if (!owner){
                     return res.status(400).send({
                         message: "Failed ! Theatre owner id provided does not exist"
                     });
@@ -171,6 +171,8 @@ const editMoviesInTheatreBody = (req,res,next)=>{
 
         if (req.body.addMovies){
 
+            req.body.addMovies = req.body.addMovies.filter(movieId => !req.theatreInParams.movies.map(e=>{e.str}).includes(movieId));
+
             if (!Array.isArray(req.body.addMovies)){
                 return res.status(400).send({
                     message: "Failed ! Movie ids in addMovies are not in correct format (Array)"
@@ -189,11 +191,11 @@ const editMoviesInTheatreBody = (req,res,next)=>{
                 });
             }
 
-            req.body.addMovies = req.body.addMovies.filter(e => !req.theatreInParams.movies.includes(e));
-
         }
 
         if (req.body.removeMovies){
+
+            req.body.removeMovies = req.body.removeMovies.filter(movieId => req.theatreInParams.movies.map(e=>{e.str}).includes(movieId));
 
             if (!Array.isArray(req.body.removeMovies)){
                 return res.status(400).send({
@@ -212,8 +214,6 @@ const editMoviesInTheatreBody = (req,res,next)=>{
                     message: "Failed ! Movie id provided in removeMovies does not exist"
                 });
             }
-
-            req.body.removeMovies = req.body.removeMovies.filter(e => req.theatreInParams.movies.includes(e));
             
         }
 

@@ -20,6 +20,11 @@ const verifyToken = (req,res,next)=>{
             })
         }
         const user = await User.findOne({userId : decoded.id});
+        if(!user){
+            return res.status(400).send({
+                message : "The user that this token belongs to does not exist"
+            })
+        }
         req.user = user;
         next();
     })

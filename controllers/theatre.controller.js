@@ -110,9 +110,8 @@ exports.getSingleTheatre = async (req,res)=>{
 
 exports.getMoviesInTheatre = async (req,res)=>{
     try{
-        const theatre = req.theatreInParams;
 
-        const movies = await Movie.find({_id : theatre.movies})
+        const movies = await Movie.find({_id : req.theatreInParams.movies})
     
         res.status(200).send(movies);
     

@@ -9,7 +9,7 @@ const allowedMovieGenre = [constants.movieGenre.action, constants.movieGenre.com
 function checkGenre (given){
     let temp = true
     given.forEach(e=>{
-        if(!allowedMovieGenre.includes(e)){
+        if (!allowedMovieGenre.includes(e)){
             temp = false
         }
     })
@@ -98,7 +98,7 @@ const newMovieBody = (req,res,next)=>{
         }
 
         if (req.body.genere){
-            if(!Array.isArray(req.body.genere)){
+            if (!Array.isArray(req.body.genere)){
                 return res.status(400).send({
                     message: "Failed ! Movie genere are not in correct format (Array)"
                 });
@@ -120,46 +120,46 @@ const newMovieBody = (req,res,next)=>{
 
 const editMovieBody = (req,res,next)=>{
     try{
-        if(req.body.casts && !Array.isArray(req.body.casts)){
+        if (req.body.casts && !Array.isArray(req.body.casts)){
             return res.status(400).send({
                 message: "Failed ! Movie casts are not in correct format (Array)"
             });
         }
 
 
-        if(req.body.trailerUrls && !Array.isArray(req.body.trailerUrls)){
+        if (req.body.trailerUrls && !Array.isArray(req.body.trailerUrls)){
             return res.status(400).send({
                 message: "Failed ! Movie trailers are not in correct format (Array)"
             });
         }
 
 
-        if(req.body.posterUrls && !Array.isArray(req.body.posterUrls)){
+        if (req.body.posterUrls && !Array.isArray(req.body.posterUrls)){
             return res.status(400).send({
                 message: "Failed ! Movie posters are not in correct format (Array)"
             });
         }
 
 
-        if(req.body.languages && !Array.isArray(req.body.languages)){
+        if (req.body.languages && !Array.isArray(req.body.languages)){
             return res.status(400).send({
                 message: "Failed ! Movie languages are not in correct format (Array)"
             });
         }
 
-        if(req.body.releaseDate && !isDate(req.body.releaseDate)){
+        if (req.body.releaseDate && !isDate(req.body.releaseDate)){
             return res.status(400).send({
                 message: "Failed ! Movie release date is not in correct format (Date)"
             });
         }
 
-        if(req.body.releaseStatus && !AllowedReleaseStatuses.includes(req.body.releaseStatus)){
+        if (req.body.releaseStatus && !AllowedReleaseStatuses.includes(req.body.releaseStatus)){
             return res.status(400).send({
                 message: "Failed ! Invalid movie release status provided"
             });
         }
     
-        if(req.body.imdbRating && typeof req.body.imdbRating !== "number"){
+        if (req.body.imdbRating && typeof req.body.imdbRating !== "number"){
             return res.status(400).send({
                 message: "Failed ! Movie IMDb rating is not in correct format (Number)"
             });
