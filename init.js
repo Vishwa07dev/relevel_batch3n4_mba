@@ -15,7 +15,7 @@ module.exports = async ()=>{
         console.log("#### Theatre collection dropped ####");
 
         await User.create({
-            name : "Dharmit",
+            name : "Sandeep",
             userId : "admin",
             password : bcrypt.hashSync("Admin1",8),
             email : "dharmit@admin.com",

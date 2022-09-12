@@ -93,6 +93,7 @@ const isValidTheatreOwner = async (req,res,next)=>{
             message : "Internal server error while authenticating the user data"
         })
     }
+    
 }
 
 
