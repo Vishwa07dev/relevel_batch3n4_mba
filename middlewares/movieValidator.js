@@ -54,14 +54,34 @@ exports.validateMovieRequest = async (req, res, next) => {
             message: "Failed ! Movie description is not provided"
         })
     }
-    if (!casts && casts.length <= 0) {
+    if (!casts) {
         return res.status(400).send({
             message: "Failed ! Casts is not provided"
         })
     }
-    if (!trailerUrls && trailerUrls.length <= 0) {
+    if (!Array.isArray(casts)) {
+        return res.status(400).send({
+            message: "Failed ! Casts is need to be Array"
+        })
+    }
+    if (casts.length == 0) {
+        return res.status(400).send({
+            message: "Failed ! Casts is empty Array"
+        })
+    }
+    if (!trailerUrls) {
         return res.status(400).send({
             message: "Failed ! Trailer Urls is not provided"
+        })
+    }
+    if (!Array.isArray(trailerUrls)) {
+        return res.status(400).send({
+            message: "Failed ! Trailer Urls is need to be Array"
+        })
+    }
+    if (trailerUrls.length == 0) {
+        return res.status(400).send({
+            message: "Failed ! Trailer Urls is empty Array"
         })
     }
     if (trailerUrls && !isValidURL(trailerUrls)) {
@@ -69,9 +89,19 @@ exports.validateMovieRequest = async (req, res, next) => {
             message: "Failed ! Trailer Url not proper format"
         })
     }
-    if (!posterUrls && posterUrls.length <= 0) {
+    if (!posterUrls) {
         return res.status(400).send({
             message: "Failed ! Poster Urls is not provided"
+        })
+    }
+    if (!Array.isArray(posterUrls)) {
+        return res.status(400).send({
+            message: "Failed ! Poster Urls is need to be Array"
+        })
+    }
+    if (posterUrls.length == 0) {
+        return res.status(400).send({
+            message: "Failed ! Poster Urls is empty Array"
         })
     }
     if (posterUrls && !isValidURL(posterUrls)) {
@@ -79,9 +109,20 @@ exports.validateMovieRequest = async (req, res, next) => {
             message: "Failed ! Poster Url not proper format"
         })
     }
-    if (!languages && languages.length <= 0) {
+    if (!languages) {
         return res.status(400).send({
             message: "Failed ! languages is not provided"
+        })
+    }
+    
+    if (!Array.isArray(languages)) {
+        return res.status(400).send({
+            message: "Failed ! Languages is need to be Array"
+        })
+    }
+    if (languages.length == 0) {
+        return res.status(400).send({
+            message: "Failed ! languages iis empty Array"
         })
     }
     if (!releaseStatus) {

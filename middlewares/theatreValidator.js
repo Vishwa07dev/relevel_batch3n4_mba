@@ -87,9 +87,19 @@ exports.validateTheatreRequest = async (req, res, next) => {
             message: "Failed ! Number Of Seats is not provided"
         })
     }
-    if (!showTypes && showTypes.length <= 0) {
+    if (!showTypes) {
         return res.status(400).send({
             message: "Failed ! Show Types is not provided"
+        })
+    }
+    if (!Array.isArray(showTypes)) {
+        return res.status(400).send({
+            message: "Failed ! Show Types is need to be Array"
+        })
+    }
+    if (showTypes.length == 0) {
+        return res.status(400).send({
+            message: "Failed ! Show Types is empty array"
         })
     }
     if (showTypes && !checkEnumData(showTypes, showTypesArr)) {
