@@ -128,25 +128,21 @@ exports.getMoviesInTheatre = async (req,res)=>{
         const theatre = req.theatreInParams;
 
         if(req.body.addMovies){
-            req.body.addMovies.forEach(movie => {
-                theatre.movies.push(movie)
-            })
-            req.body.addMovies.forEach(async (movie) =>{
-                let temp = await Movie.findOne({_id : movie})
+            for(e of req.body.addMovies){
+                theatre.movies.push(e);
+                let temp = await Movie.findOne({_id : e})
                 temp.theatres.push(theatre._id);
                 await temp.save();
-            })
+            }
         }
 
         if(req.body.removeMovies){
-            req.body.removeMovies.forEach(async (movie) => {
-                await theatre.movies.remove(movie)
-            })
-            req.body.removeMovies.forEach(async (movie) =>{
-                let temp = await Movie.findOne({_id : movie})
+            for (e of req.body.removeMovies){
+                await theatre.movies.remove(e);
+                let temp = await Movie.findOne({_id : e})
                 await temp.theatres.remove(theatre._id);
                 await temp.save();
-            })
+            }
         }
 
         await theatre.save();
