@@ -19,7 +19,9 @@ exports.signup = async (req,res)=>{
     };
 
     try{
+        
         const userCreated = await User.create(userObj);
+
 
         console.log(`#### ${userCreated.userType} ${userCreated.name} created ####`);
         res.status(201).send(objectConverter.singleUserResponse(userCreated));

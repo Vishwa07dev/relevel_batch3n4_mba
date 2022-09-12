@@ -21,6 +21,8 @@
          console.log(`#### New Movie '${movie.name}' created ####`);
          res.status(201).send(movie);
 
+         
+
  
         }catch(err){
          console.log("#### Error while creating new movie #### ", err);
@@ -86,7 +88,22 @@ exports.deleteMovie = async (req,res)=>{
 
 exports.getAllMovies = async (req,res)=>{
     try{
-        const movies = await Movie.find();
+        const queryObj = {};
+        const movieTypeQP = req.query.genre;
+        const movieStatusQP = req.query.releaseStatus;
+        const movieNameQP = req.query.name
+    
+        if(movieTypeQP){
+            queryObj.genre = movieTypeQP
+        }
+        if(movieStatusQP){
+            queryObj.releaseStatus = movieStatusQP
+        }
+        if(movieNameQP){
+            queryObj.name = movieNameQP
+        }
+        
+        const movies = await Movie.find(queryObj);
     
         res.status(200).send(movies);
     
