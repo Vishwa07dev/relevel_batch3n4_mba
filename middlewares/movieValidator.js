@@ -93,8 +93,27 @@ function isValidGenre(Genre, genre){
     return true;
 }
 
+const isValidMovie = async (req, res, next)=>{
+    try{
+        const movie = await Movie.findById(req.params.id);
+        if(movie == null){
+            res.status(400).send({
+                message : "Movie is not exist !"
+            });
+            return;
+        }
+        next();
+    }catch(err){
+        console.log("Some Error while the Validating movie Id", err.message);
+        res.status(500).send({
+            message: "Some Internal Error !"
+        });
+    }
+}
+
 const movieRequestBody = {
-    validMovieRequestBody
+    validMovieRequestBody,
+    isValidMovie
 }
 
 module.exports = movieRequestBody;

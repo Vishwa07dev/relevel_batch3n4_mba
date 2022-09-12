@@ -36,13 +36,7 @@ exports.createNewTheatre = async (req,res)=>{
 exports.editTheatre = async (req,res)=>{
    try{
        const theatre = await Theatre.findOne({_id : req.params.id});
-        if(theatre == null){
-            res.status(404).send({
-                message : "theatre is not found !"
-            });
-            return;
-        }
-
+        
        theatre.name = req.body.name ? req.body.name : theatre.name,
        theatre.description = req.body.description ? req.body.description : theatre.description,
        theatre.city = req.body.city ? req.body.city : theatre.city,
@@ -66,12 +60,7 @@ exports.editTheatre = async (req,res)=>{
 exports.deleteTheatre = async (req,res)=>{
    try{
        const theatre = await Theatre.findOne({_id : req.params.id});
-       if(theatre == null){
-            res.status(404).send({
-                message : "theatre is not found !"
-            });
-            return;
-        }
+       
        const theatreOwner = await User.findOne({_id : theatre.ownerId});
        await theatreOwner.theatresOwned.remove(theatre._id);
        await theatreOwner.save();
@@ -91,12 +80,12 @@ exports.deleteTheatre = async (req,res)=>{
 
 
 exports.getAllTheatres = async (req,res)=>{
-   try{
+    try{
        const theatres = await Theatre.find();
    
        res.status(200).send(theatres);
    
-   }catch(err){
+    }catch(err){
        console.log("#### Error while getting all theatres ####", err.message);
        res.status(500).send({
            message : "Internal server error while getting all theatres"
@@ -149,7 +138,7 @@ exports.getMoviesInTheatre = async (req,res)=>{
                 temp.theatres.push(theatre._id);
                 await temp.save();
             })
-    }
+        }
 
         if(req.body.removeMovies){
             req.body.removeMovies.forEach(async (movie) => {
@@ -160,7 +149,7 @@ exports.getMoviesInTheatre = async (req,res)=>{
                 await temp.theatres.remove(theatre._id);
                 await temp.save();
             })
-    }
+        }
 
         await theatre.save();
         res.status(200).send({message : "Updated movies in theatre"});
