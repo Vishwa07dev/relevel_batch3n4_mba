@@ -48,7 +48,7 @@ exports.editMovie = async (req,res)=>{
 
         const updatedMovie = await movie.save();
 
-        console.log(`#### Movie data updated ####`);
+        console.log(`#### Movie '${updatedMovie.name}' data updated ####`);
         res.status(200).send(updatedMovie);
 
     }catch(err){

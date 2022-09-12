@@ -18,26 +18,26 @@ function isValidObjectId(id){
 
 function checkShows (given){
     let temp = true;
-    given.forEach(e => {
+    for(e of given){
         if (!allowedShowTypes.includes(e)){
-            temp = false
+            temp = false;
         }
-    })
+    }
     return temp;
 }
 
-function checkValidObjectIds (array){
+async function checkValidObjectIds (array){
     let temp = {validIds :true, moviesExist : true};
-    array.forEach(async e => {
-        if (!isValidObjectId(e)){
+    for(e of array){
+        if(!isValidObjectId(e)){
             temp.validIds = false;
         }else{
-            let movie = await Movie.findOne({_id : e})
-            if (!movie){
-                moviesExist = false
+            const movie = await Movie.findOne({_id : e});
+            if(!movie){
+                temp.moviesExist = false;
             }
         }
-    })
+    }
     return temp;
 }
 
@@ -166,12 +166,14 @@ const editTheatreBody = (req,res,next)=>{
     }
 }
 
-const editMoviesInTheatreBody = (req,res,next)=>{
+const editMoviesInTheatreBody = async (req,res,next)=>{
     try{
+
+        const moviesInTheatre = req.theatreInParams.movies.map(e=>e.toString());
 
         if (req.body.addMovies){
 
-            req.body.addMovies = req.body.addMovies.filter(movieId => !req.theatreInParams.movies.map(e=>{e.str}).includes(movieId));
+            req.body.addMovies = req.body.addMovies.filter(movieId => !moviesInTheatre.includes(movieId));
 
             if (!Array.isArray(req.body.addMovies)){
                 return res.status(400).send({
@@ -179,7 +181,7 @@ const editMoviesInTheatreBody = (req,res,next)=>{
                 });
             }
 
-            const checker = checkValidObjectIds(req.body.addMovies)
+            const checker = await checkValidObjectIds(req.body.addMovies)
 
             if (!checker.validIds){
                 return res.status(400).send({
@@ -195,7 +197,7 @@ const editMoviesInTheatreBody = (req,res,next)=>{
 
         if (req.body.removeMovies){
 
-            req.body.removeMovies = req.body.removeMovies.filter(movieId => req.theatreInParams.movies.map(e=>{e.str}).includes(movieId));
+            req.body.removeMovies = req.body.removeMovies.filter(movieId => moviesInTheatre.includes(movieId));
 
             if (!Array.isArray(req.body.removeMovies)){
                 return res.status(400).send({
@@ -203,7 +205,7 @@ const editMoviesInTheatreBody = (req,res,next)=>{
                 });
             }
 
-            const checker = checkValidObjectIds(req.body.removeMovies)
+            const checker = await checkValidObjectIds(req.body.removeMovies)
 
             if (!checker.validIds){
                 return res.status(400).send({
@@ -217,6 +219,7 @@ const editMoviesInTheatreBody = (req,res,next)=>{
             
         }
 
+        next();
 
 
     }catch{

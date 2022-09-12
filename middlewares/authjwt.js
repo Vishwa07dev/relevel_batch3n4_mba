@@ -45,10 +45,10 @@ const isAdmin = async (req,res,next)=>{
 const isAdminOrOwner = async (req,res,next)=>{
     try {
         const callingUser = req.user;
-        if(callingUser.userType==constants.userTypes.admin || callingUser.userId == req.params.userId){
+        if(callingUser.userType==constants.userTypes.admin || callingUser.userId == req.params.id){
             next();
         }else{
-            return res.send(403).send({
+            return res.status(403).send({
                 message : "Only admin or owner is allowed to make this call"
             })
         }
@@ -84,13 +84,12 @@ const isValidTheatreOwner = async (req,res,next)=>{
         if(req.user.userType==constants.userTypes.theatre_owner){
             const theatre = req.theatreInParams
             if (theatre.ownerId.equals(req.user._id)){
-                next()
-            }else{
                 return res.send(403).send({
                     message : "Only the owner of this theatre is allowed to make this call"
                 })
             }
         }
+        next();
     }catch(err){
         console.log("#### Error while authenticating the user info ####", err.message);
         return res.status(500).send({

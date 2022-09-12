@@ -46,7 +46,7 @@ exports.editTheatre = async (req,res)=>{
 
        const updatedTheatre = await theatre.save();
 
-       console.log(`#### Theatre data updated ####`);
+       console.log(`#### Theatre '${updatedTheatre.name}' data updated ####`);
        res.status(200).send(updatedTheatre);
 
     }catch(err){

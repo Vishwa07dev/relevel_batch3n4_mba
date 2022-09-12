@@ -97,8 +97,8 @@ const newMovieBody = (req,res,next)=>{
             });
         }
 
-        if (req.body.genere){
-            if (!Array.isArray(req.body.genere)){
+        if (req.body.genre){
+            if (!Array.isArray(req.body.genre)){
                 return res.status(400).send({
                     message: "Failed ! Movie genere are not in correct format (Array)"
                 });
@@ -165,8 +165,8 @@ const editMovieBody = (req,res,next)=>{
             });
         }
 
-        if (req.body.genere){
-            if(!Array.isArray(req.body.genere)){
+        if (req.body.genre){
+            if(!Array.isArray(req.body.genre)){
                 return res.status(400).send({
                     message: "Failed ! Movie genere are not in correct format (Array)"
                 });
