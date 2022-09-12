@@ -65,31 +65,22 @@ const isTheatreOwnerOrAdmin = async (req,res,next)=>{
     try {
         const allowedUserTypes = [constants.userTypes.theatre_owner, constants.userTypes.admin]
         if(allowedUserTypes.includes(req.user.userType)){
-            next();
+            if(req.user.userType==constants.userTypes.theatre_owner){
+                const theatre = req.theatreParams
+                if (theatre.ownerId.includes(req.user._id)){
+                    next();
+                }else{
+                    return res.send(403).send({
+                        message : "Only the owner of this theatre is allowed to make this call"
+                    })
+                }
+            }else {
+                next();
+            }
         }else{
             return res.send(403).send({
                 message : "Only admin or theatre owner is allowed to make this call"
             })
-        }
-    }catch(err){
-        console.log("#### Error while authenticating the user info ####", err.message);
-        return res.status(500).send({
-            message : "Internal server error while authenticating the user data"
-        })
-    }
-}
-
-const isValidTheatreOwner = async (req,res,next)=>{
-    try {
-        if(req.user.userType==constants.userTypes.theatre_owner){
-            const theatre = req.theatreParams
-            if (theatre.ownerId.includes(req.user._id)){
-                next()
-            }else{
-                return res.send(403).send({
-                    message : "Only the owner of this theatre is allowed to make this call"
-                })
-            }
         }
     }catch(err){
         console.log("#### Error while authenticating the user info ####", err.message);
