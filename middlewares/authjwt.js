@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
-const authConfig = require('../configs/auth.config')
-const User = require('../models/user.model')
-const Theatre = require('../models/theatre.model')
-const constants = require('../utils/constants')
+const authConfig = require('../configs/auth.config');
+const User = require('../models/user.model');
+const constants = require('../utils/constants');
 
 
 const verifyToken = (req,res,next)=>{
@@ -21,6 +20,11 @@ const verifyToken = (req,res,next)=>{
             })
         }
         const user = await User.findOne({userId : decoded.id});
+        if(!user){
+            return res.status(400).send({
+                message : "user does not exist ..."
+            });
+        }
         req.user = user;
         next();
     })
@@ -78,8 +82,8 @@ const isTheatreOwnerOrAdmin = async (req,res,next)=>{
 const isValidTheatreOwner = async (req,res,next)=>{
     try {
         if(req.user.userType==constants.userTypes.theatre_owner){
-            const theatre = await Theatre.findOne({_id : req.params.id})
-            if (theatre.ownerId.equals(req.user._id)){
+            const theatre = req.theatreParams
+            if (theatre.ownerId.includes(req.user._id)){
                 next()
             }else{
                 return res.send(403).send({

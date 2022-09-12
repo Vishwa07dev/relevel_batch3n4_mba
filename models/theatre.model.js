@@ -4,7 +4,7 @@ const constants = require('../utils/constants')
 const theatreSchema = new mongoose.Schema({
 
     ownerId : {
-        type : mongoose.SchemaTypes.ObjectId,
+        type : [mongoose.SchemaTypes.ObjectId],   //A theatre can be owned by more than one user
         ref : "user",
         required : true
     },
