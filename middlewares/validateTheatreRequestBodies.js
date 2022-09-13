@@ -62,6 +62,10 @@ const newTheatreBody = async (req,res,next)=>{
                     return res.status(400).send({
                         message: "Failed ! Theatre owner id provided does not exist"
                     });
+                }else if(owner.userType != constants.userTypes.theatre_owner){
+                    return res.status(400).send({
+                        message: "Failed ! Owner id provided is not a theatre owner"
+                    });
                 }
             }
         }
