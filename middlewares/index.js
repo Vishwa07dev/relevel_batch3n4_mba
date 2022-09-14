@@ -3,11 +3,13 @@ const validateIdInParams = require('./paramsVerifier')
 const validateUserRequestBodies = require('./validateUserRequestBodies')
 const validateMovieRequestBodies = require('./validateMovieRequestBodies')
 const validateTheatreRequestBodies = require('./validateTheatreRequestBodies')
+const verifyBooking = require('./bookingVerifier')
 
 module.exports = {
     authJwt,
     validateIdInParams,
     validateUserRequestBodies,
     validateMovieRequestBodies,
-    validateTheatreRequestBodies
+    validateTheatreRequestBodies,
+    verifyBooking
 }

@@ -70,6 +70,7 @@ const movieInParams = async (req,res,next)=>{
     }
 }
 
+
 const bookingInParams = async (req, res, next) =>{
     try{
 

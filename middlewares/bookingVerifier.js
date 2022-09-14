@@ -1,7 +1,4 @@
 const Theatre = require("../models/theatre.model");
-const Movie = require("../models/movie.model");
-const Booking = require("../models/booking.model");
-const User = require("../models/user.model");
 const constants = require("../utils/constants");
 
 const verifyTheatreAndMovie = async (req, res, next) => {

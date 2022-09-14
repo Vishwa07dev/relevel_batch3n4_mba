@@ -22,6 +22,7 @@ module.exports = async ()=>{
             userType : constants.userTypes.admin
         });
 
+
         console.log("#### Admin user created ####");
 
         const users = [];
@@ -57,7 +58,8 @@ module.exports = async ()=>{
             city : "Mumbai",
             pinCode : 400049,
             showTypes : [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 100
+            numberOfSeats : 100,
+            ticketPrice : 145
         },
         theatres[1] = {
             ownerId : usersCreated[2]._id,
@@ -66,7 +68,8 @@ module.exports = async ()=>{
             city : "Ahmedabad",
             pinCode : 380007,
             showTypes : [constants.theatreShows.evening, constants.theatreShows.night],
-            numberOfSeats : 50
+            numberOfSeats : 50,
+            ticketPrice : 120
         },
         theatres[2] = {
             ownerId : usersCreated[2]._id,
@@ -75,7 +78,8 @@ module.exports = async ()=>{
             city : "New Delhi",
             pinCode : 110031,
             showTypes : [constants.theatreShows.evening],
-            numberOfSeats : 75
+            numberOfSeats : 75,
+            ticketPrice : 235
         }
 
         theatresCreated = await Theatre.insertMany(theatres);

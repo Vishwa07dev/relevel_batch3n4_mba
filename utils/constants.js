@@ -33,6 +33,7 @@ module.exports = {
         approved : "APPROVED",
         rejected : "REJECTED"
     },
+    
     bookingStatus: {
         inProgress: "IN_PROGRESS",
         completed: "COMPLETED",

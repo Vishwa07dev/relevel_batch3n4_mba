@@ -29,7 +29,7 @@ const constants = require('../utils/constants');
     },
     status: {
         type: String,
-        enum: [constants.bookingStatus.cancelled, constants.bookingStatus.completed, constants.bookingStatus.failed, constants.movieStatus.inProgress],
+        enum: [constants.bookingStatus.cancelled, constants.bookingStatus.completed, constants.bookingStatus.failed, constants.bookingStatus.inProgress],
         default: constants.bookingStatus.inProgress
     }
  }, { timestamps : true , versionKey : false});
