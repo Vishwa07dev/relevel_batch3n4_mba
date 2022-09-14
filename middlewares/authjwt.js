@@ -95,8 +95,7 @@ const authJwt = {
     verifyToken : verifyToken,
     isAdmin : isAdmin,
     isAdminOrOwner : isAdminOrOwner,
-    isTheatreOwnerOrAdmin : isTheatreOwnerOrAdmin,
-    isValidTheatreOwner : isValidTheatreOwner
+    isTheatreOwnerOrAdmin : isTheatreOwnerOrAdmin
 }
 
 module.exports = authJwt
