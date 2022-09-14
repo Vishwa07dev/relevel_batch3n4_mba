@@ -21,7 +21,10 @@ const constants = require('../utils/constants');
     },
     showTime: {
         type: Date,
-        required: true
+        required: true,
+        default: () => {
+            return Date.now();
+        }
     },
     noOfSeats: {
         type: Number,

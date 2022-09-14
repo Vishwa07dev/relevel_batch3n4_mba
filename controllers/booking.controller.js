@@ -39,13 +39,13 @@ exports.getOneBooking = async (req, res) => {
 
     try {
 
+
        const bookingObj = {
             userId: req.user._id,
             theatreId: req.body.theatreId,
             movieId: req.body.movieId,
-            showTime: req.body.showTime,
             noOfSeats: req.body.noOfSeats,
-            totalCost : calculateTheBookingCost(theatreId.ticketPrice, noOfSeats)
+            totalCost : await calculateTheBookingCost(req.body.theatreId, req.body.noOfSeats)
         }
 
         const booking = await Booking.create(bookingObj);
