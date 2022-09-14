@@ -14,9 +14,15 @@ exports.createNewMovie = async (req, res) => {
       releaseStatus: req.body.releaseStatus,
       imdbRating: req.body.imdbRating,
       genre: req.body.genre,
+      theatres: req.body.theatres,
     };
 
     const movie = await Movie.create(data);
+    const theatres = req.body.theatres;
+    theatres.forEach(async (th) => {
+      const theatre = await Theatre.findOne({ _id: th });
+      theatre.movies.push(movie._id);
+    });
 
     console.log(`#### New Movie '${movie.name}' created ####`);
     res.status(201).send(movie);
