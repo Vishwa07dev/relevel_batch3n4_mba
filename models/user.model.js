@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
         ref : "Theatre"
+    },
+    ticketBooked : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "Bookings"
     }
 },{ timestamps : true , versionKey : false});
 

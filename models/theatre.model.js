@@ -37,6 +37,14 @@ const theatreSchema = new mongoose.Schema({
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
         ref : "Movie"
+    },
+    ticketPrice : {
+        type : Number,
+        required : true
+    },
+    bookings : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        ref : "Bookings"
     }
 },{ timestamps : true , versionKey : false});
 
