@@ -25,7 +25,7 @@ const theatreSchema = new mongoose.Schema(
       required: true,
     },
     showTypes: {
-      type: String,
+      type: [String],
       required: true,
       enum: [
         constants.theatreShows.morning,

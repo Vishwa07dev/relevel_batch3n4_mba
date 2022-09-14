@@ -43,7 +43,7 @@ const movieSchema = new mongoose.Schema(
       type: Number,
     },
     genre: {
-      type: String,
+      type: [String],
       enum: [
         constants.movieGenre.action,
         constants.movieGenre.comedy,
