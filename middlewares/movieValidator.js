@@ -129,19 +129,6 @@ const isMovieCreatedValid = async (req, res, next) => {
       });
     }
   }
-  if (req.body.theatres) {
-    const checker = await checkValidObjectIds(req.body.theatres);
-    if (!checker.validIds) {
-      return res.status(400).send({
-        message: "Failed ! Invalid theatre _id provided in theatres",
-      });
-    } else if (!checker.moviesExist) {
-      return res.status(400).send({
-        message: "Failed ! theatre _id provided in theatres does not exist",
-      });
-    }
-  }
-
   next();
 };
 
