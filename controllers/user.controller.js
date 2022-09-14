@@ -3,6 +3,7 @@ const objectConverter = require('../utils/objectConverter')
 const bcrypt = require('bcryptjs');
 const constants = require('../utils/constants');
 
+
 exports.findAll = async (req,res)=>{
 
     const queryObj = {};

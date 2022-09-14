@@ -33,7 +33,7 @@
  
 exports.editMovie = async (req,res)=>{
     try{
-        const movie = await Movie.findOne({_id : req.params.id});
+        const movie = req.movieParams;
 
         movie.name = req.body.name ? req.body.name : movie.name,
         movie.description = req.body.description ? req.body.description : movie.description,
@@ -61,7 +61,7 @@ exports.editMovie = async (req,res)=>{
 
 exports.deleteMovie = async (req,res)=>{
     try{
-        const movie = await Movie.findOne({_id : req.params.id});
+        const movie = req.movieParams;
         if(movie.theatres.length > 0){
             movie.theatres.forEach(async (theatre)=>{
                 let temp = await Theatre.findOne({_id : theatre})
@@ -101,8 +101,7 @@ exports.getAllMovies = async (req,res)=>{
 exports.getSingleMovie = async (req,res)=>{
 
     try{
-        const movie = await Movie.findOne({_id : req.params.id});
-    
+        const movie = req.movieParams;
         res.status(200).send(movie);
     
     }catch(err){
