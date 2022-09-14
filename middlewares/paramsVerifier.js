@@ -1,6 +1,8 @@
 const User = require('../models/user.model')
 const Theatre = require('../models/theatre.model')
 const Movie = require('../models/movie.model')
+const Booking = require('../models/booking.model')
+const mongoose = require("mongoose");
 
 const userInParams = async (req,res,next)=>{
 
@@ -68,10 +70,41 @@ const movieInParams = async (req,res,next)=>{
     }
 }
 
+const bookingInParams = async (req, res, next) =>{
+    try{
+
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).send({
+                message: "Booking Id is not valid"
+            })
+        }
+
+        const booking = await Booking.findOne({
+            _id: req.params.id
+        });
+
+        if(!booking){
+            return res.status(400).send({
+                message: "Booking ID provided is not a valid one"
+            });
+        }
+
+        req.booking = booking;
+
+    }catch(err) {
+        console.log("error while validating booking Id", err.message);
+
+        return res.status(500).send({
+            message : "Some internal error"
+        })
+    }
+}
+
 const validateIdInParams = {
     userInParams,
     theatreInParams,
-    movieInParams
+    movieInParams,
+    bookingInParams
 }
 
 module.exports = validateIdInParams
