@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../configs/auth.config')
 const User = require('../models/user.model')
-const Theatre = require('../models/theatre.model')
 const constants = require('../utils/constants')
 
 
@@ -21,6 +20,11 @@ const verifyToken = (req,res,next)=>{
             })
         }
         const user = await User.findOne({userId : decoded.id});
+        if(!user){
+            return res.status(400).send({
+                message : "The user that this token belongs to does not exist"
+            })
+        }
         req.user = user;
         next();
     })
@@ -41,10 +45,10 @@ const isAdmin = async (req,res,next)=>{
 const isAdminOrOwner = async (req,res,next)=>{
     try {
         const callingUser = req.user;
-        if(callingUser.userType==constants.userTypes.admin || callingUser.userId == req.params.userId){
+        if(callingUser.userType==constants.userTypes.admin || callingUser.userId == req.params.id){
             next();
         }else{
-            return res.send(403).send({
+            return res.status(403).send({
                 message : "Only admin or owner is allowed to make this call"
             })
         }
@@ -78,15 +82,14 @@ const isTheatreOwnerOrAdmin = async (req,res,next)=>{
 const isValidTheatreOwner = async (req,res,next)=>{
     try {
         if(req.user.userType==constants.userTypes.theatre_owner){
-            const theatre = await Theatre.findOne({_id : req.params.id})
+            const theatre = req.theatreInParams
             if (theatre.ownerId.equals(req.user._id)){
-                next()
-            }else{
                 return res.send(403).send({
                     message : "Only the owner of this theatre is allowed to make this call"
                 })
             }
         }
+        next();
     }catch(err){
         console.log("#### Error while authenticating the user info ####", err.message);
         return res.status(500).send({
@@ -97,11 +100,11 @@ const isValidTheatreOwner = async (req,res,next)=>{
 
 
 const authJwt = {
-    verifyToken : verifyToken,
-    isAdmin : isAdmin,
-    isAdminOrOwner : isAdminOrOwner,
-    isTheatreOwnerOrAdmin : isTheatreOwnerOrAdmin,
-    isValidTheatreOwner : isValidTheatreOwner
+    verifyToken,
+    isAdmin,
+    isAdminOrOwner,
+    isTheatreOwnerOrAdmin,
+    isValidTheatreOwner
 }
 
 module.exports = authJwt
