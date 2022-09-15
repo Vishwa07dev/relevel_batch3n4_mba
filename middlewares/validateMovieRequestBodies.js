@@ -1,8 +1,6 @@
 const constants = require("../utils/constants");
+const checker = require('../utils/checker')
 
-const isDate = (date) => {
-    return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
-}
 const AllowedReleaseStatuses = [constants.movieReleaseStatuses.released, constants.movieReleaseStatuses.coming_soon, constants.movieReleaseStatuses.blocked]
 const allowedMovieGenre = [constants.movieGenre.action, constants.movieGenre.comedy, constants.movieGenre.drama, constants.movieGenre.fantasy, constants.movieGenre.horror, constants.movieGenre.mystery, constants.movieGenre.romance, constants.movieGenre.thriller]
 
@@ -75,7 +73,7 @@ const newMovieBody = (req,res,next)=>{
             });
         }
 
-        if (req.body.releaseDate && !isDate(req.body.releaseDate)){
+        if (req.body.releaseDate && !checker.isDate(req.body.releaseDate)){
             return res.status(400).send({
                 message: "Failed ! Movie release date is not in correct format (Date)"
             });
@@ -147,7 +145,7 @@ const editMovieBody = (req,res,next)=>{
             });
         }
 
-        if (req.body.releaseDate && !isDate(req.body.releaseDate)){
+        if (req.body.releaseDate && !checker.isDate(req.body.releaseDate)){
             return res.status(400).send({
                 message: "Failed ! Movie release date is not in correct format (Date)"
             });

@@ -1,20 +1,10 @@
 const User = require('../models/user.model');
 const Movie = require('../models/movie.model')
 
-const ObjectId = require('mongoose').Types.ObjectId;
 const constants = require("../utils/constants");
+const checker = require('../utils/checker')
 
 const allowedShowTypes = [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night]
- 
-function isValidObjectId(id){
-
-    if (ObjectId.isValid(id)){
-        if((String)(new ObjectId(id)) === id)
-            return true;
-        return false;
-    }
-    return false;
-}
 
 function checkShows (given){
     let temp = true;
@@ -29,7 +19,7 @@ function checkShows (given){
 async function checkValidObjectIds (array){
     let temp = {validIds :true, moviesExist : true};
     for(e of array){
-        if(!isValidObjectId(e)){
+        if(!checker.isValidObjectId(e)){
             temp.validIds = false;
         }else{
             const movie = await Movie.findOne({_id : e});
@@ -45,27 +35,27 @@ async function checkValidObjectIds (array){
 const newTheatreBody = async (req,res,next)=>{
     try{
 
-        if (req.user.userType == constants.userTypes.admin && !req.body.ownerId){
-            return res.status(400).send({
-                message: "Failed ! Theatre owner Id is not provided"
-            });
-        }
-        
-        if (req.body.ownerId){
-            if(!isValidObjectId(req.body.ownerId)){
+        if (req.user.userType == constants.userTypes.admin){
+            if(!req.body.ownerId){
                 return res.status(400).send({
-                    message: "Failed ! Invalid theatre owner Id provided"
+                    message: "Failed ! Theatre owner Id is not provided"
                 });
-            }else{
-                const owner = await User.findOne({_id : req.body.ownerId})
-                if (!owner){
+            }else {
+                if(!checker.isValidObjectId(req.body.ownerId)){
                     return res.status(400).send({
-                        message: "Failed ! Theatre owner id provided does not exist"
+                        message: "Failed ! Invalid theatre owner Id provided"
                     });
-                }else if(owner.userType != constants.userTypes.theatre_owner){
-                    return res.status(400).send({
-                        message: "Failed ! Owner id provided is not a theatre owner"
-                    });
+                }else{
+                    const owner = await User.findOne({_id : req.body.ownerId})
+                    if (!owner){
+                        return res.status(400).send({
+                            message: "Failed ! Theatre owner id provided does not exist"
+                        });
+                    }else if(owner.userType != constants.userTypes.theatre_owner){
+                        return res.status(400).send({
+                            message: "Failed ! Owner id provided is not a theatre owner"
+                        });
+                    }
                 }
             }
         }
@@ -125,6 +115,16 @@ const newTheatreBody = async (req,res,next)=>{
             });
         }
 
+        if (!req.body.ticketCost) {
+            return res.status(400).send({
+                message: "Failed ! Theatre ticket cost is not provided"
+            });
+        }else if (typeof req.body.ticketCost !== "number"){
+            return res.status(400).send({
+                message: "Failed ! Ticket cost is not in correct format (Number)"
+            });
+        }
+
         next();
     }catch{
         console.log("#### Error while velidating new theatre request body ##### ", err.message);
@@ -160,6 +160,12 @@ const editTheatreBody = (req,res,next)=>{
                 message: "Failed ! Number of seates is not in correct format (Number)"
             });
         }
+
+        if (req.body.ticketCost && typeof req.body.ticketCost !== "number"){
+            return res.status(400).send({
+                message: "Failed ! Ticket cost is not in correct format (Number)"
+            });
+        }
     
         next();
     }catch{
@@ -185,13 +191,13 @@ const editMoviesInTheatreBody = async (req,res,next)=>{
                 });
             }
 
-            const checker = await checkValidObjectIds(req.body.addMovies)
+            const dataChecker = await checkValidObjectIds(req.body.addMovies)
 
-            if (!checker.validIds){
+            if (!dataChecker.validIds){
                 return res.status(400).send({
                     message: "Failed ! Invalid movie id provided in addMovies"
                 });
-            }else if (!checker.moviesExist){
+            }else if (!dataChecker.moviesExist){
                 return res.status(400).send({
                     message: "Failed ! Movie id provided in addMovies does not exist"
                 });
@@ -209,13 +215,13 @@ const editMoviesInTheatreBody = async (req,res,next)=>{
                 });
             }
 
-            const checker = await checkValidObjectIds(req.body.removeMovies)
+            const dataChecker = await checkValidObjectIds(req.body.removeMovies)
 
-            if (!checker.validIds){
+            if (!dataChecker.validIds){
                 return res.status(400).send({
                     message: "Failed ! Invalid movie id provided in removeMovies"
                 });
-            }else if (!checker.moviesExist){
+            }else if (!dataChecker.moviesExist){
                 return res.status(400).send({
                     message: "Failed ! Movie id provided in removeMovies does not exist"
                 });

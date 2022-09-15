@@ -98,13 +98,52 @@ const isValidTheatreOwner = async (req,res,next)=>{
     }
 }
 
+const isCustomerOrAdmin = async (req,res,next)=>{
+    try {
+        const allowedUserTypes = [constants.userTypes.customer, constants.userTypes.admin]
+        if(allowedUserTypes.includes(req.user.userType)){
+            next();
+        }else{
+            return res.send(403).send({
+                message : "Only admin or customer is allowed to make this call"
+            })
+        }
+    }catch(err){
+        console.log("#### Error while authenticating the user info ####", err.message);
+        return res.status(500).send({
+            message : "Internal server error while authenticating the user data"
+        })
+    }
+}
+
+const isValidCustomer = async (req,res,next)=>{
+    try {
+        if(req.user.userType==constants.userTypes.customer){
+            const booking = req.bookingInParams
+            if (booking.userId.equals(req.user._id)){
+                return res.send(403).send({
+                    message : "Only the owner of this booking is allowed to make this call"
+                })
+            }
+        }
+        next();
+    }catch(err){
+        console.log("#### Error while authenticating the user info ####", err.message);
+        return res.status(500).send({
+            message : "Internal server error while authenticating the user data"
+        })
+    }
+}
+
 
 const authJwt = {
     verifyToken,
     isAdmin,
     isAdminOrOwner,
     isTheatreOwnerOrAdmin,
-    isValidTheatreOwner
+    isValidTheatreOwner,
+    isCustomerOrAdmin,
+    isValidCustomer
 }
 
 module.exports = authJwt
