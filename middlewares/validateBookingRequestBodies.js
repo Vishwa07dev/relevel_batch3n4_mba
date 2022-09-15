@@ -117,6 +117,12 @@ const editBookingBody = async (req,res,next) => {
                 });
             }
 
+            if (!req.body.movieId && theatre.movies.includes(req.bookingInParams.movieId)){
+                return res.status(400).send({
+                    message: "Failed ! current movieId is not present in the new theatre"
+                });
+            }
+
         }else{
             theatre = await Theatre.findOne({_id : req.bookingInParams.theatreId});
         }
@@ -139,6 +145,7 @@ const editBookingBody = async (req,res,next) => {
                         message: "Failed ! movieId provided is not released in this theatre"
                     });
                 }
+                req.movieOfBooking = movie;
             }
         }
 
@@ -153,6 +160,11 @@ const editBookingBody = async (req,res,next) => {
                     message: `Failed ! Only ${theatre.numberOfSeats} seats are available`
                 });
             }
+            
+        }else if (req.bookingInParams.seats > theatre.numberOfSeats){
+            return res.status(400).send({
+                message: `Failed ! Only ${theatre.numberOfSeats} seats are available`
+            });
         }
 
         if (req.body.bookingStatus){

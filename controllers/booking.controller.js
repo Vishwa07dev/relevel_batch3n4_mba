@@ -1,3 +1,5 @@
+const Theatre = require('../models/theatre.model')
+const Movie = require('../models/movie.model')
 const Booking = require('../models/booking.model')
 const constants = require('../utils/constants')
 const checker = require('../utils/checker')
@@ -43,10 +45,30 @@ exports.editBooking = async (req,res)=>{
    try{
        const booking = req.bookingInParams;
 
-       booking.theatreId = req.body.theatreId ? req.body.theatreId : booking.theatreId
-       booking.movieId = req.body.movieId ? req.body.movieId : booking.movieId
+       if (req.body.theatreId){
+        const oldTheatre = await Theatre.findOne({_id : booking.theatreId});
+
+        await oldTheatre.bookings.remove(booking._id);
+        booking.theatreId = req.body.theatreId;
+        await req.theatreOfBooking.bookings.push(booking._id);
+
+        await oldTheatre.save();
+        await req.theatreOfBooking.save();
+       }
+
+       if (req.body.movieId){
+        const oldMovie = await Movie.findOne({_id : booking.movieId});
+
+        await oldMovie.bookings.remove(booking._id);
+        booking.movieId = req.body.movieId;
+        await req.movieOfBooking.bookings.push(booking._id);
+
+        await oldMovie.save();
+        await req.movieOfBooking.save();
+       }
+
        booking.seats = req.body.seats ? req.body.seats : booking.seats
-       booking.totalCost = req.body.seats ? req.body.seats * req.theatreOfBooking.ticketCost : booking.totalCost
+       booking.totalCost = booking.seats * req.theatreOfBooking.ticketCost
        booking.bookingStatus = req.body.bookingStatus ? req.body.bookingStatus : booking.bookingStatus
 
        const updatedBooking = await booking.save();
