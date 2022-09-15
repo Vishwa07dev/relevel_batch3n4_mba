@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../configs/auth.config')
 const User = require('../models/user.model')
-const constants = require('../utils/constants')
+const constants = require('../utils/constants');
+const Booking = require('../models/booking.model')
 
 
 const verifyToken = (req,res,next)=>{
@@ -98,13 +99,34 @@ const isValidTheatreOwner = async (req,res,next)=>{
     }
 }
 
+const isValidBookingOwnwerOrAdmin = async (req,res,next)=>{
+    try {
+        const booking = await Booking.findOne({_id : req.params.id});
+        const user = req.user;
+        if(user.userType == constants.userTypes.admin || booking.userId.equals(user._id) || user.theatresOwned.includes(booking.theatreId)){
+            next()
+        }else{
+            return res.status(401).send({
+                message : "Only admin or Booking Owner Can do this "
+            })
+        }
+
+    }catch(err){
+        console.log("#### Error while isValidBookingOwnwerOrAdmin ####", err.message);
+        return res.status(500).send({
+            message : "Internal server error"
+        })
+    }
+}
+
 
 const authJwt = {
     verifyToken,
     isAdmin,
     isAdminOrOwner,
     isTheatreOwnerOrAdmin,
-    isValidTheatreOwner
+    isValidTheatreOwner,
+    isValidBookingOwnwerOrAdmin
 }
 
 module.exports = authJwt

@@ -1,12 +1,14 @@
 const User = require('./models/user.model')
 const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
+const Booking = require('./models/booking.model');
 const constants = require('./utils/constants')
 const bcrypt = require('bcryptjs')
 
 module.exports = async ()=>{
     try{
 
+        await Booking.collection.drop();
         await User.collection.drop();
         console.log("#### User collection dropped ####");
         await Movie.collection.drop();
