@@ -1,6 +1,7 @@
 const User = require('./models/user.model')
 const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
+const Booking = require('./models/booking.model');
 const constants = require('./utils/constants')
 const bcrypt = require('bcryptjs')
 
@@ -33,13 +34,20 @@ module.exports = async ()=>{
             userType : constants.userTypes.customer
         },
         users[1] = {
+            name : "Junaid",
+            userId : "customer2",
+            password : bcrypt.hashSync("Customer@2",8),
+            email : "mojunaid@mail.com",
+            userType : constants.userTypes.customer
+        },
+        users[2] = {
             name : "Theatre Owner 1",
             userId : "theatreOwner1",
             password : bcrypt.hashSync("TheatreOwner@1",8),
             email : "theatreOwner1@app.com",
             userType : constants.userTypes.theatre_owner
         },
-        users[2] = {
+        users[3] = {
             name : "Theatre Owner 2",
             userId : "theatreOwner2",
             password : bcrypt.hashSync("TheatreOwner@2",8),
@@ -131,7 +139,7 @@ module.exports = async ()=>{
         theatresCreated[0].save()
         moviesCreated[0].save()
         moviesCreated[1].save()
-
+        await Booking.collection.drop();
         console.log("#### Seed data initialized ####");
     }
     catch(err){
