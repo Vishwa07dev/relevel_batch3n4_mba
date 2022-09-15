@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema({
         default : constants.userStatus.approved,
         enum : [constants.userStatus.approved, constants.userStatus.pending, constants.userStatus.rejected]
     },
+    bookings : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
+        ref : "Booking"
+    },
     theatresOwned : {
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
@@ -41,4 +46,4 @@ const userSchema = new mongoose.Schema({
     }
 },{ timestamps : true , versionKey : false});
 
-module.exports = mongoose.model("user",userSchema);
+module.exports = mongoose.model("User",userSchema);
