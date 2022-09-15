@@ -14,15 +14,17 @@ const db = mongoose.connection;
 db.on("error", ()=>{
     console.log("#### Error while connecting to mongoDB ####");
 });
-db.once("open",()=>{
+db.once("open", ()=>{
     console.log("#### Connected to mongoDB ####");
     init();
+    
 });
 
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/movie.routes')(app);
 require('./routes/theatre.routes')(app);
+require('./routes/booking.route')(app);
 
 
 app.listen(serverConfig.PORT,()=>{
