@@ -179,6 +179,9 @@ const validateUpdateBookingReqBody = async (req, res, next) => {
                 });
             }
         }
+
+        next(); 
+        
     }catch (err){
         console.log("error while validating the update booking req body", err.message);
 
