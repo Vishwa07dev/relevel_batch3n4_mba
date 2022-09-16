@@ -66,6 +66,9 @@ const validateBookingBody = async (req, res, next) => {    //this validation its
             }
 
             req.bookedTheatre = theatre;
+        }else if(req.bookingInParams){
+
+            req.bookedTheatre = req.bookingInParams.theatreId;
         }
 
         if(req.body.movieId){
@@ -181,7 +184,7 @@ const validateUpdateBookingReqBody = async (req, res, next) => {
         }
 
         next(); 
-        
+
     }catch (err){
         console.log("error while validating the update booking req body", err.message);
 

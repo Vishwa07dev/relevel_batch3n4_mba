@@ -85,11 +85,11 @@ exports.getOneBooking = async (req, res) => {
 
     try{
     
-        req.bookingInParams.theatreId = req.body.theatreId != undefined ? req.body.theatreId : req.booking.theatreId;
-        req.bookingInParams.movieId = req.body.movieId != undefined ? req.body.movieId : req.booking.movieId;
-        req.bookingInParams.noOfSeats = req.body.noOfSeats != undefined ? req.body.noOfSeats : req.booking.noOfSeats;
+        req.bookingInParams.theatreId = req.body.theatreId != undefined ? req.body.theatreId : req.bookingInParams.theatreId;
+        req.bookingInParams.movieId = req.body.movieId != undefined ? req.body.movieId : req.bookingInParams.movieId;
+        req.bookingInParams.noOfSeats = req.body.noOfSeats != undefined ? req.body.noOfSeats : req.bookingInParams.noOfSeats;
         req.bookingInParams.status = req.body.status != undefined ? req.body.status : req.bookingInParams.status;
-        req.bookingInParams.totalCost = req.body.status != undefined ?  (req.bookedTheatre.ticketPrice * req.body.noOfSeats) : req.bookingInParams.totalCost;
+        req.bookingInParams.totalCost = req.body.totalCost != undefined ?  (req.bookedTheatre.ticketPrice * req.body.noOfSeats) : req.bookingInParams.totalCost;
     
         const updatedBookingObject = await req.bookingInParams.save();
     
