@@ -25,7 +25,6 @@ module.exports = (app) => {
     "/mba/api/v1/bookings/:id",
     [
       authJwt.verifyToken,
-      authJwt.isAdmin,
       validateIdInParams.bookingInParams,
       validateBookingRequestBodies.validateEdit,
     ],

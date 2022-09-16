@@ -31,7 +31,7 @@ exports.getAllBookings = async (req, res) => {
 
 exports.getSingleBooking = async (req, res) => {
   try {
-    //req.booking is provided from the middleware paramsVerifier
+    //req.bookingInparams is provided from the middleware paramsVerifier
     res.status(200).send(req.bookingInParams);
   } catch (err) {
     console.log(err);
@@ -44,9 +44,11 @@ exports.getSingleBooking = async (req, res) => {
 exports.editBooking = async (req, res) => {
   if (req.user.userType == constants.userTypes.customer) {
     try {
-      req.bookingInParams.noOfSeats = req.body.noOfSeats;
       if (!req.body.noOfSeats) {
         req.bookingInParams.bookingStatus = constants.bookingStatus.cancelled;
+      }
+      else{
+        req.bookingInParams.noOfSeats = req.body.noOfSeats
       }
       await req.bookingInParams.save();
       return res

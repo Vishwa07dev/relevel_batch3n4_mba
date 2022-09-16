@@ -49,6 +49,9 @@ const validateTheatreId = async (req, res, next) => {
   }
 };
 const validateGetSingleBooking = async (req, res, next) => {
+  if (req.user.userType == constants.userTypes.admin) {
+    next();
+  }
   if (req.user.userType == constants.userTypes.customer) {
     if (!req.user.bookingIds.include(req.params.id)) {
       return res.status(400).send("You are not allowed to make this request");
@@ -62,6 +65,9 @@ const validateGetSingleBooking = async (req, res, next) => {
           next();
         }
       });
+      return res
+        .status(401)
+        .send("You have provided incorrect credentials  for this request");
     }
   }
 };
@@ -95,7 +101,7 @@ const validateCreateBooking = async (req, res, next) => {
         "You have to provide a total cost incurred which should be more than 100"
       );
   }
-  if (!noOfSeats || noOfSeats > 10 || noOfSeats < 0) {
+  if (!noOfSeats || noOfSeats > 10 || noOfSeats < 1) {
     return res
       .status(400)
       .send(
@@ -128,9 +134,14 @@ const validateCreateBooking = async (req, res, next) => {
   next();
 };
 const validateEdit = async (req, res, next) => {
+  if (req.bookingsInParam.bookingStatus != constants.bookingStatus.completed) {
+    return res.status(400).send("This movie id is not allowed to be updated");
+  }
   if (req.body.noOfSeats) {
-    if (req.bookingsInParam.noOfSeats <= noOfSeats) {
-      return res.status(400).send("You cant delete these many seats");
+    if (req.bookingsInParam.noOfSeats < noOfSeats) {
+      return res
+        .status(400)
+        .send("You cant delete more seats than you have booked");
     }
   }
   if (req.user.userType == constants.userTypes.admin) {
@@ -140,7 +151,7 @@ const validateEdit = async (req, res, next) => {
     if (req.user.bookingIds.includes(req.params.id)) {
       next();
     } else {
-      return res.status(403).send("You are not authorized for this request");
+      return res.status(401).send("You are not authorized for this request");
     }
   }
 };
