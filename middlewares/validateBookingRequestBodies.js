@@ -1,6 +1,6 @@
 const Movie = require("../models/movie.model");
 const Theatre = require("../models/theatre.model");
-const User = require("../models/user.model")
+const User = require("../models/user.model");
 
 const { default: mongoose } = require("mongoose");
 const constants = require("../utils/constants");
@@ -48,26 +48,41 @@ const validateTheatreId = async (req, res, next) => {
     return res.status(500).send("Internal server error please try again later");
   }
 };
-const validateCreateBooking = async (req, res, next) => {
-    if(req.user.userType == constants.userTypes.admin){
-        if(!req.body.userId){
-            return res.status(400).send("Please provide a userId")
-        }
-        let userExists;
-        try{
-            userExists = await User.findOne({_id:req.body.userId})
-            if(!userExists){
-                return res.status(400).send("Invalid userId provided")
-            }
-            else{
-                req.userInBody = userExists
-            }
-        }
-        catch(err){
-            console.log(err)
-            return res.status(500).send("Internal server error")
-        }
+const validateGetSingleBooking = async (req, res, next) => {
+  if (req.user.userType == constants.userTypes.customer) {
+    if (!req.user.bookingIds.include(req.params.id)) {
+      return res.status(400).send("You are not allowed to make this request");
     }
+    next();
+  } else {
+    if (req.user.userType == constants.userTypes.theatre_owner) {
+      req.user.theatre.forEach(async (element) => {
+        let theatre = await Theatre.findOne({ _id: element });
+        if (theatre.bookings.include(req.params.id)) {
+          next();
+        }
+      });
+    }
+  }
+};
+const validateCreateBooking = async (req, res, next) => {
+  if (req.user.userType == constants.userTypes.admin) {
+    if (!req.body.userId) {
+      return res.status(400).send("Please provide a userId");
+    }
+    let userExists;
+    try {
+      userExists = await User.findOne({ _id: req.body.userId });
+      if (!userExists) {
+        return res.status(400).send("Invalid userId provided");
+      } else {
+        req.userInBody = userExists;
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send("Internal server error");
+    }
+  }
   if (!req.theatreInBody.movies.includes(req.body.movieId)) {
     return res.status(400).send({
       message: `${req.theatreInBody.name}  is not currently running this movie`,
@@ -112,11 +127,29 @@ const validateCreateBooking = async (req, res, next) => {
   }
   next();
 };
-
+const validateEdit = async (req, res, next) => {
+  if (req.body.noOfSeats) {
+    if (req.bookingsInParam.noOfSeats <= noOfSeats) {
+      return res.status(400).send("You cant delete these many seats");
+    }
+  }
+  if (req.user.userType == constants.userTypes.admin) {
+    next();
+  }
+  if (req.user.userType == constants.userTypes.customer) {
+    if (req.user.bookingIds.includes(req.params.id)) {
+      next();
+    } else {
+      return res.status(403).send("You are not authorized for this request");
+    }
+  }
+};
 const validateBookingRequestBody = {
   validateMovieId,
   validateTheatreId,
   validateCreateBooking,
+  validateEdit,
+  validateGetSingleBooking,
 };
 
-module.exports = validateBookingRequestBody
+module.exports = validateBookingRequestBody;

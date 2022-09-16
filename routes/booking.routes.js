@@ -9,23 +9,28 @@ const {
 module.exports = (app) => {
   app.get(
     "/mba/api/v1/bookings",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken],
     bookingController.getAllBookings
   );
   app.get(
     "/mba/api/v1/bookings/:id",
     [
       authJwt.verifyToken,
-      authJwt.isTheatreOwnerOrAdmin,
       validateIdInParams.bookingInParams,
+      validateBookingRequestBodies.validateGetSingleBooking,
     ],
     bookingController.getSingleBooking
   );
-  app.put("/mba/api/v1/bookings/:id", [
-    authJwt.verifyToken,
-    authJwt.isAdminOrOwner,
-    validateIdInParams.bookingInParams,
-  ]);
+  app.put(
+    "/mba/api/v1/bookings/:id",
+    [
+      authJwt.verifyToken,
+      authJwt.isAdmin,
+      validateIdInParams.bookingInParams,
+      validateBookingRequestBodies.validateEdit,
+    ],
+    bookingController.editBooking
+  );
   app.post(
     "/mba/api/v1/bookings",
     [
