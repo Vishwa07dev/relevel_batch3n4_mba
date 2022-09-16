@@ -102,7 +102,7 @@ const editBookingBody = async (req,res,next) => {
 
         let theatre;
         
-        if (req.body.theatre){
+        if (req.body.theatreId){
             if (!checker.isValidObjectId(req.body.theatreId)){
                 return res.status(400).send({
                     message: "Failed ! Invalid theatreId provided"
@@ -116,8 +116,7 @@ const editBookingBody = async (req,res,next) => {
                     message: "Failed ! TheatreId provided does not exist"
                 });
             }
-
-            if (!req.body.movieId && theatre.movies.includes(req.bookingInParams.movieId)){
+            if (!req.body.movieId && !theatre.movies.includes(req.bookingInParams.movieId)){
                 return res.status(400).send({
                     message: "Failed ! current movieId is not present in the new theatre"
                 });
