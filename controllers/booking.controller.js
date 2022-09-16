@@ -67,7 +67,7 @@ exports.getOneBooking = async (req, res) => {
            }        
            await booking.save();
         
-        },2000000);
+        },20000);
 
 
     }catch (err) {
