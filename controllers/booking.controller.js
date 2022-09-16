@@ -20,7 +20,7 @@ exports.createBooking=async (req,res)=>{
     {
         console.log("#### Error while performing booking ####",err.message);
         res.status(500).send({
-            message:"Internal Server error while performing booking"
+            message:`Internal Server error while performing booking ${err.message}`
         })
     }
 }

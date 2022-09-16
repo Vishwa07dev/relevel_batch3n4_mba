@@ -32,12 +32,7 @@ const bookingValidation=(req,res,next)=>{
             })
         }
 
-        if(!req.body.userId)
-        {
-            return res.status(400).send({
-                message:"Failed!!! userId is not Provided"
-            })
-        }
+   
 
         if(!req.body.status)
         {
