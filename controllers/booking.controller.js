@@ -6,15 +6,12 @@ const User = require('../models/user.model')
 
 exports.createBooking = async (req, res) => {
     try{
-        const movie = await Movie.findOne({_id : req.body.movieId})
         const user = await User.findOne({_id : req.user._id})
-        const theatre = await Theatre.findOne({_id : req.body.theatreId})
-
         const bookingObj = {
             totalCost : req.body.totalCost,
             userId : req.user._id,
-            movieId : movie._id,
-            theatreId : theatre._id,
+            movieId : req.body.movieId,
+            theatreId : req.body.theatreId,
             timing : req.body.timing,
             numberOfSeats : req.body.numberOfSeats
         }
@@ -53,13 +50,6 @@ exports.updateBooking = async (req, res) => {
         if(req.user.userType == constants.userTypes.customer && req.body.bookingStatus == constants.bookingStatus.cancelled){
             booking.bookingStatus = req.body.bookingStatus ? req.body.bookingStatus : booking.bookingStatus
 
-        }else if(req.user.userType == constants.userTypes.theatre_owner ){
-
-            booking.totalCost = req.body.totalCost ? req.body.totalCost : booking.totalCost,
-            booking.timing = req.body.timing ? req.body.timing : booking.timing,
-            booking.bookingStatus = req.body.bookingStatus ? req.body.bookingStatus : booking.bookingStatus,
-            booking.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : booking.numberOfSeats
-
         }else if(req.user.userType == constants.userTypes.admin){
 
             booking.totalCost = req.body.totalCost ? req.body.totalCost : booking.totalCost,
@@ -82,20 +72,16 @@ exports.updateBooking = async (req, res) => {
     }
 }
 
-
 exports.getAllBooking =  async(req, res) => {
     try{
+        const queryObj = {}
         
-        let myBookings;
-        if(req.user.userType == constants.userTypes.admin){
-            myBookings = await Booking.find()
+        if(req.user.userType != constants.userTypes.admin){
+           queryObj._id = req.user.bookings
         }
-        else {
-            myBookings = await Booking.find({_id : req.user.bookings })
-        }
+        const myBookings = await Booking.find(queryObj)
         res.status(200).send(myBookings)
 
-        
     }catch(err){
         console.log("error in fetch all booking ", err.message);
         res.status(500).send({
