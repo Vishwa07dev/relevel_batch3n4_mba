@@ -47,19 +47,14 @@ exports.updateBooking = async (req, res) => {
     try{
         const booking = await Booking.findOne({_id : req.params.id});
 
-        if(req.user.userType == constants.userTypes.customer && req.body.bookingStatus == constants.bookingStatus.cancelled){
-            booking.bookingStatus = req.body.bookingStatus ? req.body.bookingStatus : booking.bookingStatus
-
-        }else if(req.user.userType == constants.userTypes.admin){
-
-            booking.totalCost = req.body.totalCost ? req.body.totalCost : booking.totalCost,
-            booking.movieId = req.body.movieId ? req.body.movieId : booking.movieId,
-            booking.userId = req.body.userId ? req.body.userId : booking.userId,
-            booking.theatreId = req.body.theatreId ? req.body.theatreId : booking.theatreId
-            booking.timing = req.body.timing ? req.body.timing : booking.timing,
-            booking.bookingStatus = req.body.bookingStatus ? req.body.bookingStatus : booking.bookingStatus,
-            booking.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : booking.numberOfSeats
-        }
+        booking.totalCost = req.body.totalCost ? req.body.totalCost : booking.totalCost,
+        booking.movieId = req.body.movieId ? req.body.movieId : booking.movieId,
+        booking.userId = req.body.userId ? req.body.userId : booking.userId,
+        booking.theatreId = req.body.theatreId ? req.body.theatreId : booking.theatreId
+        booking.timing = req.body.timing ? req.body.timing : booking.timing,
+        booking.bookingStatus = req.body.bookingStatus ? req.body.bookingStatus : booking.bookingStatus,
+        booking.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : booking.numberOfSeats
+        
 
         const updatedBooking = await booking.save();
         res.status(200).send(updatedBooking)

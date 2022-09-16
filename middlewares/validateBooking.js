@@ -147,9 +147,16 @@ const validateBodyWhileUpdate = async (req, res, next) => {
         }
     }
 
+    
     if(req.body.timing && !constants.isDate(req.body.timing)){
         return res.status(400).send({
             message : "Timing is not valid data type"
+        })
+    }
+
+    if(req.user.userType == constants.userTypes.customer && req.body.bookingStatus != constants.bookingStatus.cancelled){
+        return res.status(400).send({
+            message : "As a Customer you can not change booking status except cancelled"
         })
     }
 

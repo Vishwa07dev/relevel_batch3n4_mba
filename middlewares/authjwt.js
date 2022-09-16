@@ -103,7 +103,7 @@ const isValidBookingOwnwerOrAdmin = async (req,res,next)=>{
     try {
         const booking = await Booking.findOne({_id : req.params.id});
         const user = req.user;
-        if(user.userType == constants.userTypes.admin || booking.userId.equals(user._id) || user.theatresOwned.includes(booking.theatreId)){
+        if(user.userType == constants.userTypes.admin || booking.userId.equals(user._id)){
             next()
         }else{
             return res.status(401).send({
