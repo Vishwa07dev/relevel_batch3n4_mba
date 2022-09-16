@@ -49,6 +49,7 @@ const validateTheatreId = async (req, res, next) => {
   }
 };
 const validateGetSingleBooking = async (req, res, next) => {
+if(req.user.userType == constants.userTypes.admin){next()}
   if (req.user.userType == constants.userTypes.customer) {
     if (!req.user.bookingIds.include(req.params.id)) {
       return res.status(400).send("You are not allowed to make this request");
