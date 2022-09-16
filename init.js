@@ -14,6 +14,8 @@ module.exports = async ()=>{
         console.log("#### Movie collection dropped ####");
         await Theatre.collection.drop();
         console.log("#### Theatre collection dropped ####");
+        await Bookings.collection.drop();
+        console.log("#### Bookings collection dropped ####");
 
         await User.create({
             name : "Dharmit",
@@ -156,6 +158,15 @@ module.exports = async ()=>{
             totalCost : 200
         
         }
+        bookings[2] = {
+            theatreId : theatresCreated[1]._id,
+            movieId : moviesCreated[1]._id,
+            userId : moviesCreated[1]._id,
+            status : constants.bookingStatus.completed,
+            noOfSeats : 5,
+            totalCost : 200
+        
+        }
         ticketBooked = await Bookings.insertMany(bookings);
         theatresCreated[0].bookings.push(ticketBooked[0]._id);
         theatresCreated[0].bookings.push(ticketBooked[1]._id);
@@ -163,7 +174,11 @@ module.exports = async ()=>{
         await theatresCreated[0].save();
         usersCreated[0].ticketBooked.push(ticketBooked[0]._id);
         usersCreated[0].ticketBooked.push(ticketBooked[1]._id);
+        usersCreated[2].ticketBooked.push(ticketBooked[2]._id);
+
         usersCreated[0].save();
+        usersCreated[2].save();
+
 
 
         console.log("ticket Booked Successfully ", ticketBooked);
