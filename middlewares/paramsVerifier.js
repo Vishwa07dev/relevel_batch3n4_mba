@@ -2,7 +2,7 @@ const User = require('../models/user.model')
 const Theatre = require('../models/theatre.model')
 const Movie = require('../models/movie.model')
 const Booking = require('../models/booking.model')
-const mongoose = require("mongoose");
+const ObjectId = require("mongoose").Types.ObjectId
 
 const userInParams = async (req,res,next)=>{
 
@@ -74,9 +74,9 @@ const movieInParams = async (req,res,next)=>{
 const bookingInParams = async (req, res, next) =>{
     try{
 
-        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        if(!ObjectId.isValid(req.params.id)) {
             return res.status(400).send({
-                message: "Booking Id is not valid"
+                message: "Booking Id is not valid Obj Id"
             })
         }
 
@@ -90,7 +90,9 @@ const bookingInParams = async (req, res, next) =>{
             });
         }
 
-        req.booking = booking;
+        req.bookingInParams = booking;
+
+        next();
 
     }catch(err) {
         console.log("error while validating booking Id", err.message);

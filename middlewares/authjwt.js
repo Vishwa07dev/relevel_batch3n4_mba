@@ -98,13 +98,35 @@ const isValidTheatreOwner = async (req,res,next)=>{
     }
 }
 
+const isAdminOrOwnerOfBooking = async (req, res, next) => {
+    try {
+
+        // check if ADMIN or USER is valid OWNER
+        if(req.user.userType != constants.userTypes.admin){
+            if(req.bookingInParams.userId.valueOf() != req.userInParams._id.valueOf()){
+                return res.status(400).send({
+                    message: "Only the owner of the booking/admin has access to this operation"
+                });
+            }
+        }
+        
+        next();
+    } catch (err) {
+        console.log("Error while validating usertype is admin/ownerOfBooking", err.message);
+        return res.status(500).send({
+            message: "Some internal error"
+        })
+    }
+};
+
 
 const authJwt = {
     verifyToken,
     isAdmin,
     isAdminOrOwner,
     isTheatreOwnerOrAdmin,
-    isValidTheatreOwner
+    isValidTheatreOwner,
+    isAdminOrOwnerOfBooking
 }
 
 module.exports = authJwt

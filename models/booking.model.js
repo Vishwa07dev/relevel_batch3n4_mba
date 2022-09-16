@@ -19,12 +19,10 @@ const constants = require('../utils/constants');
         type: mongoose.SchemaTypes.ObjectId,
         ref : "User"
     },
-    showTime: {
+    ticketBookedTime: {
         type: Date,
         required: true,
-        default: () => {
-            return Date.now();
-        }
+        immutable : true
     },
     noOfSeats: {
         type: Number,
@@ -32,8 +30,9 @@ const constants = require('../utils/constants');
     },
     status: {
         type: String,
-        enum: [constants.bookingStatus.cancelled, constants.bookingStatus.completed, constants.bookingStatus.failed, constants.bookingStatus.inProgress],
-        default: constants.bookingStatus.inProgress
+        required : true,
+        default: constants.bookingStatuses.inProgress,
+        enum: [constants.bookingStatuses.cancelled, constants.bookingStatuses.completed, constants.bookingStatuses.failed, constants.bookingStatuses.inProgress]
     }
  }, { timestamps : true , versionKey : false});
  

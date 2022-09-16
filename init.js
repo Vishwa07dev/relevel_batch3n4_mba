@@ -3,6 +3,7 @@ const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
 const bcrypt = require('bcryptjs')
+const Booking = require('./models/booking.model')
 
 module.exports = async ()=>{
     try{
@@ -13,6 +14,8 @@ module.exports = async ()=>{
         console.log("#### Movie collection dropped ####");
         await Theatre.collection.drop();
         console.log("#### Theatre collection dropped ####");
+        await Booking.collection.drop();
+        console.log("Booking collection dropped ");
 
         await User.create({
             name : "Dharmit",
@@ -83,10 +86,10 @@ module.exports = async ()=>{
         }
 
         theatresCreated = await Theatre.insertMany(theatres);
-        usersCreated[1].theatresOwned.push(theatresCreated[0]._id);
-        usersCreated[2].theatresOwned.push(theatresCreated[1]._id, theatresCreated[2]._id);
-        usersCreated[1].save();
-        usersCreated[2].save();
+        await usersCreated[1].theatresOwned.push(theatresCreated[0]._id);
+        await usersCreated[2].theatresOwned.push(theatresCreated[1]._id, theatresCreated[2]._id);
+        await usersCreated[1].save();
+        await usersCreated[2].save();
 
         const movies = [];
         movies[0] = {
@@ -128,13 +131,31 @@ module.exports = async ()=>{
 
         moviesCreated = await Movie.insertMany(movies);
 
-        theatresCreated[0].movies.push(moviesCreated[0]._id, moviesCreated[1]._id)
-        moviesCreated[0].theatres.push(theatresCreated[0]._id)
-        moviesCreated[1].theatres.push(theatresCreated[0]._id)
+        await theatresCreated[0].movies.push(moviesCreated[0]._id, moviesCreated[1]._id)
+        await moviesCreated[0].theatres.push(theatresCreated[0]._id)
+        await moviesCreated[1].theatres.push(theatresCreated[0]._id)
     
-        theatresCreated[0].save()
-        moviesCreated[0].save()
-        moviesCreated[1].save()
+        await theatresCreated[0].save()
+        await moviesCreated[0].save()
+        await moviesCreated[1].save()
+
+        const booking = await Booking.create({
+            totalCost : 200,
+            theatreId : theatresCreated[0]._id,
+            movieId : moviesCreated[0]._id,
+            userId : usersCreated[0]._id,
+            noOfSeats : 2,
+            ticketBookedTime : Date.now(),
+            status : constants.bookingStatuses.completed
+        });
+        console.log("booking: --------", booking);
+
+        await usersCreated[0].myBookings.push(booking._id)
+        await moviesCreated[0].bookings.push(booking._id)
+
+        await usersCreated[0].save();
+        await theatresCreated[0].save();
+        await moviesCreated[0].save();
 
         console.log("#### Seed data initialized ####");
     }

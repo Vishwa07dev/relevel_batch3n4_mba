@@ -27,7 +27,8 @@ const movieSchema  = new mongoose.Schema({
         required : true
     },
     releaseDate :{
-        type : Date
+        type : Date,
+        required : true
     },
     releaseStatus : {
         type : String,
@@ -39,12 +40,18 @@ const movieSchema  = new mongoose.Schema({
     },
     genre : {
         type : [ String ],
+        required :true,
         enum : [constants.movieGenre.action, constants.movieGenre.comedy, constants.movieGenre.drama, constants.movieGenre.fantasy, constants.movieGenre.horror, constants.movieGenre.mystery, constants.movieGenre.romance, constants.movieGenre.thriller]
     },
     theatres : {
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
         ref : "Theatre"
+    },
+    bookings : {
+        type : [mongoose.SchemaTypes.ObjectId],
+        default : [],
+        ref : "Booking"
     }
 },{ timestamps : true , versionKey : false});
 
