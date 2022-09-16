@@ -2,38 +2,38 @@
  const Theatre = require('../models/theatre.model')
  
  exports.createNewMovie = async (req,res)=>{
-     try{
-         const data = {
-             name : req.body.name,
-             description : req.body.description,
-             casts : req.body.casts,
-             trailerUrls : req.body.trailerUrls,
-             posterUrls : req.body.posterUrls,
-             languages : req.body.languages,
-             releaseDate : req.body.releaseDate,
-             releaseStatus : req.body.releaseStatus,
-             imdbRating : req.body.imdbRating,
-             genre : req.body.genre
-         }
-     
-         const movie = await Movie.create(data);
+    try{
+        const data = {
+            name : req.body.name,
+            description : req.body.description,
+            casts : req.body.casts,
+            trailerUrls : req.body.trailerUrls,
+            posterUrls : req.body.posterUrls,
+            languages : req.body.languages,
+            releaseDate : req.body.releaseDate,
+            releaseStatus : req.body.releaseStatus,
+            imdbRating : req.body.imdbRating,
+            genre : req.body.genre
+        }
+    
+        const movie = await Movie.create(data);
 
-         console.log(`#### New Movie '${movie.name}' created ####`);
-         res.status(201).send(movie);
+        console.log(`#### New Movie '${movie.name}' created ####`);
+        res.status(201).send(movie);
 
- 
-        }catch(err){
-         console.log("#### Error while creating new movie #### ", err);
-         res.status(500).send({
-             message : "Internal server error while creating new movie"
-         });
-     }
- }
+
+    }catch(err){
+        console.log("#### Error while creating new movie #### ", err);
+        res.status(500).send({
+            message : "Internal server error while creating new movie"
+        });
+    }
+}
 
  
 exports.editMovie = async (req,res)=>{
     try{
-        const movie = await Movie.findOne({_id : req.params.id});
+        const movie = req.movieInParams;
 
         movie.name = req.body.name ? req.body.name : movie.name,
         movie.description = req.body.description ? req.body.description : movie.description,
@@ -48,7 +48,7 @@ exports.editMovie = async (req,res)=>{
 
         const updatedMovie = await movie.save();
 
-        console.log(`#### Movie data updated ####`);
+        console.log(`#### Movie '${updatedMovie.name}' data updated ####`);
         res.status(200).send(updatedMovie);
 
     }catch(err){
@@ -61,7 +61,8 @@ exports.editMovie = async (req,res)=>{
 
 exports.deleteMovie = async (req,res)=>{
     try{
-        const movie = await Movie.findOne({_id : req.params.id});
+        const movie = req.movieInParams;
+
         if(movie.theatres.length > 0){
             movie.theatres.forEach(async (theatre)=>{
                 let temp = await Theatre.findOne({_id : theatre})
@@ -101,7 +102,7 @@ exports.getAllMovies = async (req,res)=>{
 exports.getSingleMovie = async (req,res)=>{
 
     try{
-        const movie = await Movie.findOne({_id : req.params.id});
+        const movie = req.movieInParams;
     
         res.status(200).send(movie);
     

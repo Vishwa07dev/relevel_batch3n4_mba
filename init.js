@@ -17,7 +17,7 @@ module.exports = async ()=>{
         await User.create({
             name : "Dharmit",
             userId : "admin",
-            password : bcrypt.hashSync("Admin1",8),
+            password : bcrypt.hashSync("AdminOfTheApp@123",8),
             email : "dharmit@admin.com",
             userType : constants.userTypes.admin
         });
@@ -28,21 +28,21 @@ module.exports = async ()=>{
         users[0] = {
             name : "Dharmit Customer",
             userId : "customer1",
-            password : bcrypt.hashSync("Customer1",8),
+            password : bcrypt.hashSync("Customer@1",8),
             email : "dharmit@customer.com",
             userType : constants.userTypes.customer
         },
         users[1] = {
             name : "Theatre Owner 1",
             userId : "theatreOwner1",
-            password : bcrypt.hashSync("TheatreOwner1",8),
+            password : bcrypt.hashSync("TheatreOwner@1",8),
             email : "theatreOwner1@app.com",
             userType : constants.userTypes.theatre_owner
         },
         users[2] = {
             name : "Theatre Owner 2",
             userId : "theatreOwner2",
-            password : bcrypt.hashSync("TheatreOwner2",8),
+            password : bcrypt.hashSync("TheatreOwner@2",8),
             email : "theatreOwner2@app.com",
             userType : constants.userTypes.theatre_owner
         },
