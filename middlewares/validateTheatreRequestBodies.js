@@ -125,6 +125,20 @@ const newTheatreBody = async (req,res,next)=>{
             });
         }
 
+        if (!req.body.ticketPrice) {
+            return res.status(400).send({
+                message: "Failed ! Theatre ticketPrice is not provided"
+            });
+        }else if (typeof req.body.ticketPrice !== "number"){
+            return res.status(400).send({
+                message: "Failed ! Number of seates is not in correct format (Number)"
+            });
+        }else if(req.body.ticketPrice <= 0){
+            return res.status(400).send({
+                message: "ticketPrice is could not be negative !"
+            });
+        }
+
         next();
     }catch{
         console.log("#### Error while velidating new theatre request body ##### ", err.message);

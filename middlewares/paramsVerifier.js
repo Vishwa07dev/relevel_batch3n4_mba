@@ -1,7 +1,7 @@
 const User = require('../models/user.model')
 const Theatre = require('../models/theatre.model')
 const Movie = require('../models/movie.model')
-
+const Bookings = require('../models/booking.model')
 const userInParams = async (req,res,next)=>{
 
     try{
@@ -68,10 +68,32 @@ const movieInParams = async (req,res,next)=>{
     }
 }
 
+const bookingInParams = async (req,res,next)=>{
+
+    try{
+
+        const booking = await Bookings.findOne({_id : req.params.id});
+
+        if(!booking){
+            return res.status(400).send({
+                message : "booking Id passed dosen't exist"
+            })
+        }
+        req.bookingInParams = booking;
+        next();
+        
+    }catch(err){
+        console.log("#### Error while reading the movie info #### ", err.message);
+        return res.status(500).send({
+            message : "Internal server error while reading the movie data"
+        })
+    }
+}
 const validateIdInParams = {
     userInParams,
     theatreInParams,
-    movieInParams
+    movieInParams,
+    bookingInParams
 }
 
 module.exports = validateIdInParams
