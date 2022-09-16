@@ -79,6 +79,10 @@ exports.createBooking = async (req, res) => {
   };
   try {
     let booking = await Booking.create(newBooking);
+    req.theatreInBody.bookings.push(booking.id)
+     req.user.bookingIds.push(bookingCheck._id);
+     await req.theatreInBody.save()
+     await req.user.save()
     res.status(201).send({
       id: bookingCheck._id,
       Movie: req.movieInBody.name,
