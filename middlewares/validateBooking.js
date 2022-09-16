@@ -154,7 +154,7 @@ const validateBodyWhileUpdate = async (req, res, next) => {
         })
     }
 
-    if(req.user.userType == constants.userTypes.customer && req.body.bookingStatus != constants.bookingStatus.cancelled){
+    if((req.user.userType == constants.userTypes.customer || req.user.userType == constants.userTypes.theatre_owner) && req.body.bookingStatus != constants.bookingStatus.cancelled){
         return res.status(400).send({
             message : "As a Customer you can not change booking status except cancelled"
         })
