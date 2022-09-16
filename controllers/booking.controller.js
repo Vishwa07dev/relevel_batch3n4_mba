@@ -16,9 +16,18 @@ exports.createNewBooking = async (req, res) => {
     };
 
     const booking = await Booking.create(data);
+    setTimeout(async () => {
+      runAfter();
+    }, 10000);
 
+    async function runAfter() {
+      if (booking.status == constants.bookingStatus.in_progress) {
+        booking.status = constants.bookingStatus.canceled;
+        const updatedBooking = await booking.save();
+        res.status(201).send(updatedBooking);
+      }
+    }
     console.log(`#### New booking '${booking._id}' created ####`);
-    res.status(201).send(booking);
   } catch (err) {
     console.log("#### Error while creating new booking #### ", err);
     res.status(500).send({

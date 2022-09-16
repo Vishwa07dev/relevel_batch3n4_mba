@@ -19,7 +19,6 @@ const bookingSchema = new mongoose.Schema(
     },
     timing: {
       type: Date,
-
       required: true,
     },
     movieId: {

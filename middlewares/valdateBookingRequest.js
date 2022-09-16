@@ -4,6 +4,7 @@ const User = require("../models/user.model");
 const Movie = require("../models/movie.model");
 const Theatre = require("../models/theatre.model");
 const Booking = require("../models/booking.model");
+var getMoviesTheatre = [];
 
 const isDate = (date) => {
   return new Date(date) !== "Invalid Date" && !isNaN(new Date(date));
@@ -18,6 +19,7 @@ const isDate = (date) => {
 function isValidObjectId(id) {
   if (mongoose.Types.ObjectId.isValid(id)) {
     if (String(new mongoose.Types.ObjectId.isValid(id)) === id) return true;
+    //console.log("Here");
     return false;
   }
   return false;
@@ -34,46 +36,17 @@ const newBookingBody = async (req, res, next) => {
     });
   }
 
-  if (!req.body.timing) {
-    return res.status(400).send({
-      message: "Failed ! Booking timing is not provided",
-    });
-  } else if (!isDate(req.body.timing)) {
-    return res.status(400).send({
-      message: "Failed ! Booking timing  is not in correct format (Date)",
-    });
-  }
-
-  //   if (!req.body.status) {
+  //   if (!req.body.timing) {
   //     return res.status(400).send({
-  //       message: "Failed ! Booking status is not provided",
+  //       message: "Failed ! Booking timing is not provided",
   //     });
-  //   } else if (!allowedBookingStatus.includes(req.body.status)) {
+  //   } else if (!isDate(req.body.timing)) {
   //     return res.status(400).send({
-  //       message: "Failed ! Invalid movie  status provided",
+  //       message: "Failed ! Booking timing  is not in correct format (Date)",
   //     });
   //   }
 
   try {
-    if (!req.body.userId) {
-      return res.status(400).send({
-        message: "Failed ! Booking userId is not provided",
-      });
-    } else if (req.body.userId) {
-      if (!isValidObjectId(req.body.userId)) {
-        return res.status(400).send({
-          message: "Failed ! Invalid Booking userId provided",
-        });
-      } else {
-        const user = await User.findOne({ _id: req.body.ownerId });
-        if (!user) {
-          return res.status(400).send({
-            message: "Failed ! Booking userId provided does not exist",
-          });
-        }
-      }
-    }
-
     if (!req.body.theatreId) {
       return res.status(400).send({
         message: "Failed ! Booking theatreId is not provided",
@@ -89,6 +62,8 @@ const newBookingBody = async (req, res, next) => {
           return res.status(400).send({
             message: "Failed ! Booking theatreId provided does not exist",
           });
+        } else {
+          getMoviesTheatre = [...theatre.movies];
         }
       }
     }
@@ -107,6 +82,12 @@ const newBookingBody = async (req, res, next) => {
           return res.status(400).send({
             message: "Failed ! Booking movieId provided does not exist",
           });
+        } else {
+          if (!getMoviesTheatre.includes(movie._id)) {
+            return res.status(400).send({
+              message: "Failed ! Movie id does not exits in current theatre",
+            });
+          }
         }
       }
     }
@@ -172,21 +153,6 @@ const editBookingBody = async (req, res, next) => {
   //   }
 
   try {
-    if (req.body.userId) {
-      if (!isValidObjectId(req.body.userId)) {
-        return res.status(400).send({
-          message: "Failed ! Invalid Booking userId provided",
-        });
-      } else {
-        const user = await User.findOne({ _id: req.body.ownerId });
-        if (!user) {
-          return res.status(400).send({
-            message: "Failed ! Booking userId provided does not exist",
-          });
-        }
-      }
-    }
-
     if (req.body.theatreId) {
       if (!isValidObjectId(req.body.theatreId)) {
         return res.status(400).send({
