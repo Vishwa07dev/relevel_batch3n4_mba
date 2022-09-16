@@ -35,7 +35,7 @@ exports.createBooking = async (req, res) => {
                 temp.save();
             }
 
-        }, 1000 * 1* 60)
+        }, 1000 * 2* 60)
 
 
     }catch(err){
