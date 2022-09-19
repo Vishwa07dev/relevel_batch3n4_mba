@@ -1,3 +1,4 @@
+const ObjectId = require("mongoose").Types.ObjectId
 module.exports = {
     movieReleaseStatuses : {
         released : "RELEASED",
@@ -39,5 +40,18 @@ module.exports = {
         completed: "COMPLETED",
         cancelled: "CANCELLED",
         failed: "FAILED"
+    },
+    paymentStatus : {
+        successful : "SUCCESSFUL",
+        failed : "FAILED"
+    },
+    isValidObjectId : (id) => {
+
+        if (ObjectId.isValid(id)){
+            if((String)(new ObjectId(id)) === id)
+                return true;
+            return false;
+        }
+        return false;
     }
 }
