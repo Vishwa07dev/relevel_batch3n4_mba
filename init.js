@@ -4,7 +4,7 @@ const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
 const bcrypt = require('bcryptjs')
 const Booking = require('./models/booking.model')
-
+const Payment = require('./models/payment.model')
 module.exports = async ()=>{
     try{
 
@@ -16,7 +16,9 @@ module.exports = async ()=>{
         console.log("#### Theatre collection dropped ####");
         await Booking.collection.drop();
         console.log("Booking collection dropped ");
-
+        await Payment.collection.drop();
+        console.log("Payment collection dropped ");
+        
         await User.create({
             name : "Dharmit",
             userId : "admin",
@@ -146,7 +148,7 @@ module.exports = async ()=>{
             userId : usersCreated[0]._id,
             noOfSeats : 2,
             ticketBookedTime : Date.now(),
-            status : constants.bookingStatuses.completed
+            status : constants.bookingStatuses.inProgress
         });
         console.log("booking: --------", booking);
 
@@ -157,6 +159,18 @@ module.exports = async ()=>{
         await theatresCreated[0].save();
         await moviesCreated[0].save();
 
+        const payment = await Payment.create({
+            bookingId : booking._id,
+            amount : booking.totalCost,
+            status : constants.paymentStatus.completed
+        });
+        
+        await usersCreated[0].payments.push(payment._id);
+        await usersCreated[0].save();
+        booking.status = constants.bookingStatuses.completed;
+        await booking.save();
+        console.log("payment created successfully", payment);
+        console.log('booking payment completed successfully', booking);
         console.log("#### Seed data initialized ####");
     }
     catch(err){

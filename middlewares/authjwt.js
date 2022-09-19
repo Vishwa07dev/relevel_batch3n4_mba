@@ -119,6 +119,32 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
     }
 };
 
+const isAdminOrOwnerOfPayment = async (req,res,next)=>{
+    try{
+        let user = req.user;
+        if(user.userType != constants.userTypes.admin){
+            if(req.params.id){
+                if(!user.payments.includes(req.params.id)){
+                    res.status(404).send({
+                        message : "There is no such payment reciept !"
+                    });
+                    return;
+                }
+                next();
+            }else{
+                req.payments = user.payments;
+                next();
+            }
+        }else{
+            next();
+        }
+    }catch(err){
+        console.log("#### Error while checking payment reciept ####");
+        res.status(500).send({
+            message : "Some internal error"
+        })
+    }
+}
 
 const authJwt = {
     verifyToken,
@@ -126,7 +152,8 @@ const authJwt = {
     isAdminOrOwner,
     isTheatreOwnerOrAdmin,
     isValidTheatreOwner,
-    isAdminOrOwnerOfBooking
+    isAdminOrOwnerOfBooking,
+    isAdminOrOwnerOfPayment
 }
 
 module.exports = authJwt

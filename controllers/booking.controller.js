@@ -55,20 +55,10 @@ exports.getOneBooking = async (req, res) => {
 
         req.bookedMovie.bookings.push(booking._id);
         req.bookedMovie.save();
-
+        setTimeout(()=>{
+            checkStatus(booking._id)
+        }, 30000)//120000 = 2 Minutes
         res.status(201).send(booking);
-
-        return setTimeout( async ()=>{
-
-           if(booking.status !== constants.bookingStatuses.completed){
-
-            booking.status = constants.bookingStatuses.failed;
-
-           }        
-           await booking.save();
-        
-        },20000);
-
 
     }catch (err) {
         console.log("Error while initiating the booking", err.message);
@@ -79,7 +69,21 @@ exports.getOneBooking = async (req, res) => {
     }
 
 }
-
+async function checkStatus(id){
+    try{
+        console.log("Checking status of " + id)
+        let booking = await Booking.findOne({_id : id});
+        if(booking.status == constants.bookingStatuses.inProgress){
+            booking.status = constants.bookingStatuses.failed
+        }else{
+            return;
+        }
+        await booking.save();
+        console.log(booking);
+    }catch(err){
+        console.log("Some Error while Checking Status", err.message);
+    }
+}
 
  exports.updateTheBookingDetails = async (req, res) => {
 
