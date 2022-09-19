@@ -10,7 +10,7 @@ exports.createBooking = async (req, res )=>{
         console.log(theatre.ticketPrice);
         const user = await User.findById(req.user);
         let bookingObj = {
-            theatreId : theatre._id,
+            theatreId : req.body.theatreId,
             movieId : req.body.movieId,
             userId : req.user,
             noOfSeats : req.body.noOfSeats,
@@ -62,27 +62,14 @@ exports.updateBooking = async (req, res )=>{
         const theatre = await Theatre.findOne({_id : booking.theatreId});
         console.log(booking.theatreId);
         console.log(theatre.ticketPrice)
-        if(req.user.userType == constants.userTypes.customer && req.body.bookingStatus == constants.bookingStatus.cancelled){
-            booking.status = req.body.status ? req.body.status : booking.status
 
-        }else if(req.user.userType == constants.userTypes.theatre_owner ){
-
-            booking.timing = req.body.timing ? req.body.timing : booking.timing,
-            booking.status = req.body.status ? req.body.status : booking.status,
-            booking.noOfSeats = req.body.noOfSeats ? req.body.noOfSeats : booking.noOfSeats
-            booking.totalCost = theatre.ticketPrice * req.body.noOfSeats;
-
-        }else if(req.user.userType == constants.userTypes.admin){
-
-            booking.movieId = req.body.movieId ? req.body.movieId : booking.movieId,
-            booking.userId = req.body.userId ? req.body.userId : booking.userId,
-            booking.theatreId = req.body.theatreId ? req.body.theatreId : booking.theatreId
-            booking.timing = req.body.timing ? req.body.timing : booking.timing,
-            booking.status = req.body.status ? req.body.status : booking.status,
-            booking.noOfSeats = req.body.noOfSeats ? req.body.noOfSeats : booking.noOfSeats
-            booking.totalCost = theatre.ticketPrice * req.body.noOfSeats;
-
-        }
+        booking.movieId = req.body.movieId ? req.body.movieId : booking.movieId,
+        booking.userId = req.body.userId ? req.body.userId : booking.userId,
+        booking.theatreId = req.body.theatreId ? req.body.theatreId : booking.theatreId
+        booking.timing = req.body.timing ? req.body.timing : booking.timing,
+        booking.status = req.body.status ? req.body.status : booking.status,
+        booking.noOfSeats = req.body.noOfSeats ? req.body.noOfSeats : booking.noOfSeats
+        booking.totalCost = theatre.ticketPrice * req.body.noOfSeats;
 
         const updatedBooking = await booking.save();
         res.status(200).send(updatedBooking)
@@ -113,34 +100,19 @@ exports.findOneBooking = async (req, res )=>{
 
 exports.findAllBookings = async (req, res )=>{
     try{
-        const user = req.user;
-        var qureyObj = {};
-        if(user.userType == constants.userTypes.customer){
-            if(!user.ticketBooked){
-                res.status(404).send({
-                    message : "No ticket booked by the user yet."
-                });
-                return;
-            }
-            qureyObj["_id"] = { $in : user.ticketBooked };
-        } else if(user.userType == constants.userTypes.theatre_owner){
-            if(!user.theatresOwned){
-                res.status(404).send({
-                    message : "you don't have any theatre's"
-                });
-                return;
-            }
-            qureyObj["theatreId"] = { $in : user.theatresOwned };
+        
+        let queryObj = {};
 
+        if(req.user.userType != constants.userTypes.admin){
+            queryObj.userId = req.user._id;
         }
-        const bookings = await Bookings.find(qureyObj);
 
-        console.log(bookings);
-        res.status(200).send({
-            message : "Successfully fetch the Bookings details",
-            booking : bookings
-        })
-
+    const bookings = await Bookings.find(queryObj);
+    console.log(bookings);
+    res.status(200).send({
+        message : "Successfully fetch the Bookings details",
+        booking : bookings
+    })
     }catch(err){
         console.log("Some Error while fetch booking", err.message);
         res.status(500).send({
