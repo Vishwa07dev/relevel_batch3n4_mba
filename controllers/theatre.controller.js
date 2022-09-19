@@ -12,7 +12,8 @@ exports.createNewTheatre = async (req,res)=>{
             city : req.body.city,
             pinCode : req.body.pinCode,
             showTypes : req.body.showTypes,
-            numberOfSeats : req.body.numberOfSeats
+            numberOfSeats : req.body.numberOfSeats,
+            ticketCost : req.body.ticketCost
         }
     
         const theatre = await Theatre.create(data);
@@ -42,7 +43,8 @@ exports.editTheatre = async (req,res)=>{
        theatre.city = req.body.city ? req.body.city : theatre.city,
        theatre.pinCode = req.body.pinCode ? req.body.pinCode : theatre.pinCode,
        theatre.showTypes = req.body.showTypes ? req.body.showTypes : theatre.showTypes,
-       theatre.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : theatre.numberOfSeats
+       theatre.numberOfSeats = req.body.numberOfSeats ? req.body.numberOfSeats : theatre.numberOfSeats,
+       theatre.ticketCost = req.body.ticketCost ? req.body.ticketCost : theatre.ticketCost
 
        const updatedTheatre = await theatre.save();
 
@@ -79,17 +81,16 @@ exports.deleteTheatre = async (req,res)=>{
 
 
 exports.getAllTheatres = async (req,res)=>{
-   try{
-       const theatres = await Theatre.find();
+    try{
+        const theatres = await Theatre.find();
    
-       res.status(200).send(theatres);
-   
+        res.status(200).send(theatres);
     }catch(err){
-       console.log("#### Error while getting all theatres ####", err.message);
-       res.status(500).send({
-           message : "Internal server error while getting all theatres"
-       })
-   }
+        console.log("#### Error while getting all theatres ####", err.message);
+        res.status(500).send({
+            message : "Internal server error while getting all theatres"
+        })
+    }
 }
 
 exports.getSingleTheatre = async (req,res)=>{

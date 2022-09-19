@@ -5,7 +5,7 @@ const theatreSchema = new mongoose.Schema({
 
     ownerId : {
         type : mongoose.SchemaTypes.ObjectId,
-        ref : "user",
+        ref : "User",
         required : true
     },
     name : {
@@ -30,6 +30,10 @@ const theatreSchema = new mongoose.Schema({
         enum : [constants.theatreShows.morning, constants.theatreShows.noon, constants.theatreShows.evening, constants.theatreShows.night]
     },
     numberOfSeats : {
+        type : Number,
+        required : true
+    },
+    ticketCost : {
         type : Number,
         required : true
     },
