@@ -1,3 +1,4 @@
+const ObjectId = require('mongoose').Types.ObjectId;
 module.exports = {
     movieReleaseStatuses : {
         released : "RELEASED",
@@ -32,5 +33,23 @@ module.exports = {
         pending : "PENDING",
         approved : "APPROVED",
         rejected : "REJECTED"
+    },
+    bookingStatus :{
+        in_progress : "IN_PROGRESS",
+        complete : "COMPLETED",
+        failed : "FAILED",
+        cancelled : "CANCELLED"
+    },
+    isDate : (date) => {
+        return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+    },
+    isValidObjectId : (id) => {
+
+        if (ObjectId.isValid(id)){
+            if((String)(new ObjectId(id)) === id)
+                return true;
+            return false;
+        }
+        return false;
     }
 }
