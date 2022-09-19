@@ -2,7 +2,9 @@ const User = require('../models/user.model')
 const Theatre = require('../models/theatre.model')
 const Movie = require('../models/movie.model')
 const Booking = require('../models/booking.model')
+const { constants } = require('../utils')
 const ObjectId = require("mongoose").Types.ObjectId
+const Payment = require('../models/payment.model')
 
 const userInParams = async (req,res,next)=>{
 
@@ -103,11 +105,42 @@ const bookingInParams = async (req, res, next) =>{
     }
 }
 
+const paymentInParams = async (req, res, next) =>{
+    try{
+
+        if(!constants.isValidObjectId(req.params.id)) {
+            return res.status(400).send({
+                message: "Payment Id is not valid Object Id"
+            })
+        }
+
+        const payment = await Payment.findOne({
+            _id: req.params.id
+        });
+
+        if(!payment){
+            return res.status(400).send({
+                message: "Payment ID provided is not a valid one"
+            });
+        }
+
+        next();
+
+    }catch(err) {
+        console.log("error while validating paymet Id", err.message);
+
+        return res.status(500).send({
+            message : "Internal Server Error"
+        })
+    }
+}
+
 const validateIdInParams = {
     userInParams,
     theatreInParams,
     movieInParams,
-    bookingInParams
+    bookingInParams,
+    paymentInParams
 }
 
 module.exports = validateIdInParams
