@@ -119,6 +119,10 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
     }
 };
 
+const isAdminOrPaymentOwner=async (req,res,next)=>{
+
+}
+
 
 const authJwt = {
     verifyToken,

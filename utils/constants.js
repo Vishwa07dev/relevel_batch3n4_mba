@@ -39,5 +39,9 @@ module.exports = {
         completed: "COMPLETED",
         cancelled: "CANCELLED",
         failed: "FAILED"
+    },
+    paymentStatus:{
+        success:"SUCCESS",
+        failed:"FAILED"
     }
 }
