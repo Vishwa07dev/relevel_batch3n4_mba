@@ -14,7 +14,11 @@ const paymentSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      default: constants.paymentStatuses.completed,
+      enum: [
+        constants.paymentStatuses.completed,
+        constants.paymentStatuses.failed,
+      ],
+      required: true,
     },
   },
   { timestamps: true, versionKey: false }

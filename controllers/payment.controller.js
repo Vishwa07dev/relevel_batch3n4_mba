@@ -9,6 +9,7 @@ const constants = require("../utils/constants");
 exports.createPayment = async (req, res) => {
   let randomStatus = await statusCreators.statusCreate();
   if (randomStatus.status != constant.paymentStatuses.completed) {
+    req.booking.status = constant.bookingStatuses.failed;
     return res
       .status(400)
       .send("Your session has timed out....please try again later");
