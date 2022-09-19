@@ -1,90 +1,99 @@
-const constants = require("../utils/constants");
-const User = require("../models/user.model");
-const Movie = require("../models/movie.model");
-const Theatre = require("../models/theatre.model");
 const Booking = require("../models/booking.model");
-
-exports.createNewBooking = async (req, res) => {
-  try {
-    const data = {
-      totalCost: req.body.totalCost,
-      status: constants.bookingStatus.in_progress,
-      timing: req.body.timing,
-      movieId: req.body.movieId,
-      userId: req.body.userId,
-      theatreId: req.body.theatreId,
-    };
-
-    const booking = await Booking.create(data);
-    setTimeout(async () => {
-      runAfter();
-    }, 10000);
-
-    async function runAfter() {
-      if (booking.status == constants.bookingStatus.in_progress) {
-        booking.status = constants.bookingStatus.canceled;
-        const updatedBooking = await booking.save();
-        res.status(201).send(updatedBooking);
-      }
-    }
-    console.log(`#### New booking '${booking._id}' created ####`);
-  } catch (err) {
-    console.log("#### Error while creating new booking #### ", err);
-    res.status(500).send({
-      message: "Internal server error while creating new theatre",
-    });
-  }
-};
-
-exports.editBooking = async (req, res) => {
-  try {
-    const booking = await Booking.findOne({ _id: req.params.id });
-
-    (booking.totalCost = req.body.totalCost
-      ? req.body.totalCost
-      : booking.totalCost),
-      (booking.status = req.body.status ? req.body.status : booking.status),
-      (booking.timing = req.body.timing ? req.body.timing : booking.timing),
-      (booking.movieId = req.body.movieId ? req.body.movieId : booking.movieId),
-      (booking.userId = req.body.userId ? req.body.userId : booking.userId),
-      (booking.theatreId = req.body.theatreId
-        ? req.body.theatreId
-        : booking.theatreId);
-
-    const updatedBooking = await booking.save();
-
-    console.log(`#### Booking '${updatedBooking._id}' data updated ####`);
-    res.status(200).send(updatedBooking);
-  } catch (err) {
-    console.log("#### Error while updating Booking data #### ", err.message);
-    res.status(500).send({
-      message: "Internal server error while updating Booking data",
-    });
-  }
-};
+const constants = require("../utils/constants");
 
 exports.getAllBookings = async (req, res) => {
-  try {
-    const bookings = await Booking.find();
+  let queryObj = {};
 
-    res.status(200).send(bookings);
-  } catch (err) {
-    console.log("#### Error while getting all bookings ####", err.message);
-    res.status(500).send({
-      message: "Internal server error while getting all bookings",
-    });
+  if (req.user.userType != constants.userTypes.admin) {
+    queryObj.userId = req.user._id;
   }
+
+  const bookings = await Booking.find(queryObj);
+
+  res.status(200).send(bookings);
 };
 
-exports.getSingleBooking = async (req, res) => {
+exports.getOneBooking = async (req, res) => {
   try {
-    const booking = await Booking.findOne({ _id: req.params.id });
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+    });
 
     res.status(200).send(booking);
   } catch (err) {
-    console.log("#### Error while getting the booking ####", err.message);
-    res.status(500).send({
-      message: "Internal server error while getting the booking",
+    console.log("Error while getting given one booking record", err.message);
+
+    return res.status(500).send({
+      message: "Some internal error",
+    });
+  }
+};
+
+exports.initiateBooking = async (req, res) => {
+  try {
+    const bookingObj = {
+      userId: req.user._id,
+      theatreId: req.body.theatreId,
+      movieId: req.body.movieId,
+      noOfSeats: req.body.noOfSeats,
+      ticketBookedTime: Date.now(),
+      totalCost: req.bookedTheatre.ticketPrice * req.body.noOfSeats,
+    };
+
+    const booking = await Booking.create(bookingObj);
+    req.user.myBookings.push(booking._id);
+    req.user.save();
+
+    req.bookedMovie.bookings.push(booking._id);
+    req.bookedMovie.save();
+
+    res.status(201).send(booking);
+
+    return setTimeout(async () => {
+      if (booking.status !== constants.bookingStatuses.completed) {
+        booking.status = constants.bookingStatuses.failed;
+      }
+      await booking.save();
+    }, 20000);
+  } catch (err) {
+    console.log("Error while initiating the booking", err.message);
+
+    return res.status(500).send({
+      message: "Some internal error",
+    });
+  }
+};
+
+exports.updateTheBookingDetails = async (req, res) => {
+  try {
+    req.bookingInParams.theatreId =
+      req.body.theatreId != undefined
+        ? req.body.theatreId
+        : req.bookingInParams.theatreId;
+    req.bookingInParams.movieId =
+      req.body.movieId != undefined
+        ? req.body.movieId
+        : req.bookingInParams.movieId;
+    req.bookingInParams.noOfSeats =
+      req.body.noOfSeats != undefined
+        ? req.body.noOfSeats
+        : req.bookingInParams.noOfSeats;
+    req.bookingInParams.status =
+      req.body.status != undefined
+        ? req.body.status
+        : req.bookingInParams.status;
+    req.bookingInParams.totalCost =
+      req.body.totalCost != undefined
+        ? req.bookedTheatre.ticketPrice * req.body.noOfSeats
+        : req.bookingInParams.totalCost;
+
+    const updatedBookingObject = await req.bookingInParams.save();
+
+    return res.status(200).send(updatedBookingObject);
+  } catch (err) {
+    console.log("Error while updating booking details", err.message);
+    return res.status(500).send({
+      message: "Some internal error",
     });
   }
 };

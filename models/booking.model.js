@@ -1,42 +1,47 @@
-const mongoose = require("mongoose");
 const constants = require("../utils/constants");
+const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema(
   {
-    status: {
-      type: String,
-      required: true,
-      enum: [
-        constants.bookingStatus.canceled,
-        constants.bookingStatus.completed,
-        constants.bookingStatus.failed,
-        constants.bookingStatus.in_progress,
-      ],
-    },
     totalCost: {
       type: Number,
       required: true,
     },
-    timing: {
-      type: Date,
-      required: true,
+    theatreId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Theatre",
     },
     movieId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Movie",
-      required: true,
     },
-
     userId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
+    },
+    ticketBookedTime: {
+      type: Date,
+      required: true,
+      immutable: true,
+    },
+    noOfSeats: {
+      type: Number,
       required: true,
     },
-
-    theatreId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "Theatre",
+    status: {
+      type: String,
       required: true,
+      default: constants.bookingStatuses.inProgress,
+      enum: [
+        constants.bookingStatuses.cancelled,
+        constants.bookingStatuses.completed,
+        constants.bookingStatuses.failed,
+        constants.bookingStatuses.inProgress,
+      ],
+    },
+    paymentId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Payment",
     },
   },
   { timestamps: true, versionKey: false }

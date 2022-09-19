@@ -5,7 +5,7 @@ const theatreSchema = new mongoose.Schema({
 
     ownerId : {
         type : mongoose.SchemaTypes.ObjectId,
-        ref : "user",
+        ref : "User",
         required : true
     },
     name : {
@@ -37,6 +37,10 @@ const theatreSchema = new mongoose.Schema({
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
         ref : "Movie"
+    },
+    ticketPrice: {
+        type: Number,
+        required: true
     }
 },{ timestamps : true , versionKey : false});
 

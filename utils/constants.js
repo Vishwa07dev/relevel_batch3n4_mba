@@ -33,10 +33,15 @@ module.exports = {
     approved: "APPROVED",
     rejected: "REJECTED",
   },
-  bookingStatus: {
-    in_progress: "IN_PROGRESS",
+
+  bookingStatuses: {
+    inProgress: "IN_PROGRESS",
+    completed: "COMPLETED",
+    cancelled: "CANCELLED",
+    failed: "FAILED",
+  },
+  paymentStatus: {
     completed: "COMPLETED",
     failed: "FAILED",
-    canceled: "CANCELED",
   },
 };
