@@ -32,5 +32,12 @@ module.exports = {
         pending : "PENDING",
         approved : "APPROVED",
         rejected : "REJECTED"
+    },
+
+    bookingStatuses: {
+        inProgress: "IN_PROGRESS",
+        completed: "COMPLETED",
+        cancelled: "CANCELLED",
+        failed: "FAILED"
     }
 }
