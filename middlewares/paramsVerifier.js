@@ -2,6 +2,8 @@ const User = require('../models/user.model')
 const Theatre = require('../models/theatre.model')
 const Movie = require('../models/movie.model')
 const Booking = require('../models/booking.model')
+const Payment = require('../models/payment.model')
+
 const ObjectId = require("mongoose").Types.ObjectId
 
 const userInParams = async (req,res,next)=>{
@@ -103,11 +105,34 @@ const bookingInParams = async (req, res, next) =>{
     }
 }
 
+const paymentInParams = async (req,res,next)=>{
+
+    try{
+
+        const payment = await Payment.findOne({_id : req.params.id});
+
+        if(!payment){
+            return res.status(400).send({
+                message : "Payment Id passed dosen't exist"
+            })
+        }
+        req.paymentInParams = payment;
+        next();
+        
+    }catch(err){
+        console.log("#### Error while reading the payment info #### ", err.message);
+        return res.status(500).send({
+            message : "Internal server error while reading the payment data"
+        })
+    }
+}
+
 const validateIdInParams = {
     userInParams,
     theatreInParams,
     movieInParams,
-    bookingInParams
+    bookingInParams,
+    paymentInParams
 }
 
 module.exports = validateIdInParams
