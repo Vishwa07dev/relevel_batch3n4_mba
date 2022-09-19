@@ -11,7 +11,7 @@ function isValidObjectId(id) {
 const newPaymentBody = async (req, res, next) => {
   if (!req.body.bookingId) {
     return res.status(400).send({
-      message: "Failed ! Theatre title is not provided",
+      message: "Failed ! Booking Id is not provided",
     });
   } else {
     if (!isValidObjectId(req.body.bookingId)) {
@@ -26,6 +26,16 @@ const newPaymentBody = async (req, res, next) => {
         });
       }
     }
+  }
+
+  if (!req.body.amount) {
+    return res.status(400).send({
+      message: "Failed !  AmoPaymentunt is not provided",
+    });
+  } else if (typeof req.body.pinCode !== "number") {
+    return res.status(400).send({
+      message: "Failed ! Payment Amount is not in correct format (Number)",
+    });
   }
 };
 
