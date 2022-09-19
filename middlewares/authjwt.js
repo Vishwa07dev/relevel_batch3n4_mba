@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../configs/auth.config')
 const User = require('../models/user.model')
+const Booking = require('../models/booking.model')
 const constants = require('../utils/constants')
 
 
@@ -122,7 +123,7 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
 const isAdminOrOwnerOfPayment = async (req, res, next) => {
     try {
 
-        if(req.user.userType != constants.userTypes.admin || req.paymentInParams.userId.valueOf() != req.user._id.valueOf()){
+        if(req.user.userType != constants.userTypes.admin || !req.user.myPayments.includes(req.params.id)){
             return res.status(400).send({
                 message: "Only the owner of the payment/admin has access to this operation"
             });

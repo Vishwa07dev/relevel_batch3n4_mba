@@ -3,11 +3,6 @@ const constants = require('../utils/constants');
  
  
  const paymentSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true,
-        ref : "User"
-    },
     bookingId: {
         type: mongoose.SchemaTypes.ObjectId,
         required: true,

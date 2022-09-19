@@ -34,9 +34,15 @@ const newPaymentBody = async (req,res,next)=>{
                 return res.status(400).send({
                     message: "Failed ! BookingId provided does not exist"
                 });
-            }else if(booking.status != constants.bookingStatuses.inProgress){
+            }else if (booking.status != constants.bookingStatuses.inProgress){
                 return res.status(400).send({
                     message: "Failed ! Booking status is not IN_PROGRESS"
+                });
+            }
+
+            if (req.user._id.valueOf() != booking.userId.valueOf()){
+                return res.status(403).send({
+                    message: "Failed ! You cannot do the payment for this booking"
                 });
             }
 

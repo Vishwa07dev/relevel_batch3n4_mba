@@ -32,7 +32,6 @@ exports.getOnePayment = async (req, res) => {
 
     try {
         const paymentObj = {
-            userId: req.user._id,
             bookingId: req.body.bookingId,
             amount: req.body.amount,
             status: req.body.status           
