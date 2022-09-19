@@ -3,6 +3,16 @@ const authConfig = require('../configs/auth.config')
 const User = require('../models/user.model')
 const constants = require('../utils/constants')
 
+function checkIsPaymentOwner (given){
+    let temp = false
+    given.forEach(e=>{
+
+        if (req.paymentInParams.bookingId.valueOf() == e.valueOf()){
+            temp = true;
+        }
+    })
+    return temp;
+}
 
 const verifyToken = (req,res,next)=>{
     const token = req.headers["x-access-token"];
@@ -119,6 +129,25 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
     }
 };
 
+const isAdminOrOwnerOfThePayment = async (req, res, next) =>{
+
+    try {
+
+        if(req.user.userType != constants.userTypes.admin){
+            if(!checkIsPaymentOwner(req.user.myBookings)){
+                return res.status(400).send({
+                    message: "Only the owner of the payment/admin has access to this operation"
+                });
+            }
+        }
+    }catch (err) {
+        console.log("Error while validating is owner or admin for payment Id ", err.message);
+        return res.status(500).send({
+            message: "Some internal error"
+        })
+    }
+}
+
 
 const authJwt = {
     verifyToken,
@@ -126,7 +155,8 @@ const authJwt = {
     isAdminOrOwner,
     isTheatreOwnerOrAdmin,
     isValidTheatreOwner,
-    isAdminOrOwnerOfBooking
+    isAdminOrOwnerOfBooking,
+    isAdminOrOwnerOfThePayment
 }
 
 module.exports = authJwt
