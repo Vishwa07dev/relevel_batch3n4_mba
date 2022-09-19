@@ -7,7 +7,7 @@ const myPayment = require("../utils/paymentDetails");
 const constants = require("../utils/constants");
 // const { theatreInParams } = require("../middlewares/paramsVerifier");
 exports.createPayment = async (req, res) => {
-  let randomStatus = await statusCreators.statusCreate();
+  const randomStatus = await statusCreators.statusCreate();
   if (randomStatus.status != constant.paymentStatuses.completed) {
     req.booking.status = constant.bookingStatuses.failed;
     return res
@@ -15,7 +15,7 @@ exports.createPayment = async (req, res) => {
       .send("Your session has timed out....please try again later");
   }
 
-  let newObj = {
+  const newObj = {
     bookingId: req.body.bookingId,
     amount: req.body.amount,
     status: randomStatus,
