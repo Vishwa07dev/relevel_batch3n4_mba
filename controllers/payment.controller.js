@@ -43,6 +43,9 @@ exports.getOnePayment = async (req, res) => {
         req.booking.status = payment.status == constants.paymentStatuses.success ? constants.bookingStatuses.completed : constants.bookingStatuses.failed;
         req.booking.save()
 
+        req.user.myPayments.push(payment._id);
+        req.user.save();
+
         res.status(201).send(payment);
 
     }catch (err) {
