@@ -9,12 +9,12 @@ module.exports = (app) => {
   app.post(
     "/mba/api/v1/movies",
     [authJwt.verifyToken, verifyPayment.newPaymentBody],
-    movieController.createNewMovie
+    paymentController.intializePayment
   );
   app.get(
     "/mba/api/v1/payments",
     [authJwt.verifyToken],
-    movieController.getAllMovies
+    paymentController.getAllPayment
   );
   app.get(
     "/mba/api/v1/payments/:id",
