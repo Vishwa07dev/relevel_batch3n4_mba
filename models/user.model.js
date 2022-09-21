@@ -43,7 +43,12 @@ const userSchema = new mongoose.Schema({
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
         ref : "Booking"
-    }
+    },
+    myPayments: {
+        type: [mongoose.SchemaTypes.ObjectId],
+        default: [],
+        ref: "Payment",
+      },
 },{ timestamps : true , versionKey : false});
 
 module.exports = mongoose.model("user",userSchema);

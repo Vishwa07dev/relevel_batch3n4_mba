@@ -59,15 +59,18 @@ exports.getOneBooking = async (req, res) => {
         res.status(201).send(booking);
 
         return setTimeout( async ()=>{
+            const newbooking = await Booking.findOne({
+                _id: booking._id
+            });
 
-           if(booking.status !== constants.bookingStatuses.completed){
+           if(newbooking.status !== constants.bookingStatuses.completed){
 
-            booking.status = constants.bookingStatuses.failed;
+            newbooking.status = constants.bookingStatuses.failed;
 
            }        
-           await booking.save();
+           await newbooking.save();
         
-        },20000);
+        },120000);
 
 
     }catch (err) {

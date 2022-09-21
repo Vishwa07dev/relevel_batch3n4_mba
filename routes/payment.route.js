@@ -7,7 +7,7 @@ const {
 
 module.exports = (app) => {
   app.post(
-    "/mba/api/v1/movies",
+    "/mba/api/v1/payments",
     [authJwt.verifyToken, verifyPayment.newPaymentBody],
     paymentController.intializePayment
   );
