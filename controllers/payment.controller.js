@@ -39,6 +39,7 @@ exports.getAllpayments = async ( req, res) => {
 
         if(req.user.userType != constants.userTypes.admin){
            queryObj.userId = req.user._id;
+           console.log("admin signin")
         }
     
         const bookings = await Booking.find(queryObj);
@@ -46,6 +47,7 @@ exports.getAllpayments = async ( req, res) => {
         queryObj.bookingId = bookings;
     
         const payments = await Payment.find(queryObj);
+        console.log(payments, "---");
     
         res.status(200).send(payments);
     }catch(err){

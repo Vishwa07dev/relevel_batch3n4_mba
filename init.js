@@ -157,14 +157,6 @@ module.exports = async ()=>{
         await theatresCreated[0].save();
         await moviesCreated[0].save();
 
-        const payment = await Payment.create({
-            bookingId : booking._id,
-            amount : 725,
-            status : "SUCCESS"
-        });
-
-        await usersCreated[0].myPayments.push(payment._id);
-        await usersCreated[0].save();
 
         console.log("#### Seed data initialized ####");
     }
