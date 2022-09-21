@@ -5,5 +5,5 @@ module.exports = (app)=>{
     app.post("/mba/api/v1/auth/signup", [validateUserRequestBodies.signUpBody], authController.signup)
     app.post("/mba/api/v1/auth/signin", [validateUserRequestBodies.signInBody], authController.signin)
     
-    app.post("/mba/api/v1/auth/signin", [validateUserRequestBodies.verifyReferenceToken], authController.getAccessToken)
+    app.post("/mba/api/v1/auth/refershtokens/:refershtoken", [validateUserRequestBodies.verifyReferenceToken], authController.getAccessToken)
 }

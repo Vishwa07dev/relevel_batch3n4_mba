@@ -32,7 +32,7 @@ const verifyToken = (req,res,next)=>{
 }
 
 const verifyReferenceToken = (req,res,next)=>{
-    const token = req.headers["x-reference-token"];
+    const token = req.params.refershtoken;
 
     if(!token){
         return res.status(403).send({
@@ -172,7 +172,8 @@ const authJwt = {
     isTheatreOwnerOrAdmin,
     isValidTheatreOwner,
     isAdminOrOwnerOfBooking,
-    isAdminOrOwnerOfPayment
+    isAdminOrOwnerOfPayment,
+    verifyReferenceToken
 }
 
 module.exports = authJwt
