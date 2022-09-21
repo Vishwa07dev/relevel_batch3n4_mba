@@ -4,7 +4,7 @@ const Booking = require('../models/booking.model');
  
 exports.makePayment = async (req, res) => {
 
-     try {
+    try {
  
         const paymentObj = {
 

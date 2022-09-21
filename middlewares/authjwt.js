@@ -3,16 +3,6 @@ const authConfig = require('../configs/auth.config')
 const User = require('../models/user.model')
 const constants = require('../utils/constants')
 
-function checkIsPaymentOwner (given){
-    let temp = false
-    given.forEach(e=>{
-
-        if (req.paymentInParams.bookingId.valueOf() == e.valueOf()){
-            temp = true;
-        }
-    })
-    return temp;
-}
 
 const verifyToken = (req,res,next)=>{
     const token = req.headers["x-access-token"];
@@ -113,7 +103,7 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
 
         // check if ADMIN or USER is valid OWNER
         if(req.user.userType != constants.userTypes.admin){
-            if(req.bookingInParams.userId.valueOf() != req.userInParams._id.valueOf()){
+            if(req.bookingInParams.userId.valueOf() != req.user._id.valueOf()){
                 return res.status(400).send({
                     message: "Only the owner of the booking/admin has access to this operation"
                 });
@@ -134,12 +124,15 @@ const isAdminOrOwnerOfThePayment = async (req, res, next) =>{
     try {
 
         if(req.user.userType != constants.userTypes.admin){
-            if(!checkIsPaymentOwner(req.user.myBookings)){
+            if(!req.user.myBookings.includes(req.paymentInParams.bookingId)){
                 return res.status(400).send({
                     message: "Only the owner of the payment/admin has access to this operation"
                 });
             }
         }
+
+        next();
+
     }catch (err) {
         console.log("Error while validating is owner or admin for payment Id ", err.message);
         return res.status(500).send({
