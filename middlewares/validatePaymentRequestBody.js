@@ -79,6 +79,8 @@ const newPaymentBody = async (req,res,next)=>{
             });
         }
 
+        next();
+
     }catch{
         console.log("#### Error while velidating new payment request body ##### ", err.message);
         res.status(500).send({

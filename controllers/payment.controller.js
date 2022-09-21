@@ -6,7 +6,7 @@ exports.getAllPayments = async (req, res) => {
         let queryObj = {};
 
         if(req.user.userType != constants.userTypes.admin){
-           queryObj = req.user.myPayments;
+           queryObj._id = req.user.myPayments;
         }
     
         const payments = await Payment.find(queryObj);

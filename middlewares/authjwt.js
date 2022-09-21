@@ -123,7 +123,7 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
 const isAdminOrOwnerOfPayment = async (req, res, next) => {
     try {
 
-        if(req.user.userType != constants.userTypes.admin || !req.user.myPayments.includes(req.params.id)){
+        if(req.user.userType != constants.userTypes.admin && !req.user.myPayments.includes(req.params.id)){
             return res.status(400).send({
                 message: "Only the owner of the payment/admin has access to this operation"
             });

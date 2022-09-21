@@ -4,6 +4,7 @@ const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
 const bcrypt = require('bcryptjs')
 const Booking = require('./models/booking.model')
+const Payment = require('./models/payment.model')
 
 module.exports = async ()=>{
     try{
@@ -16,6 +17,8 @@ module.exports = async ()=>{
         console.log("#### Theatre collection dropped ####");
         await Booking.collection.drop();
         console.log("Booking collection dropped ");
+        await Payment.collection.drop();
+        console.log("#### Payment collection dropped ####");
 
         await User.create({
             name : "Dharmit",
@@ -156,6 +159,16 @@ module.exports = async ()=>{
         await usersCreated[0].save();
         await theatresCreated[0].save();
         await moviesCreated[0].save();
+
+        const payment = await Payment.create({
+            bookingId : booking._id,
+            amount : 200,
+            status : constants.paymentStatuses.success
+        })
+
+        await usersCreated[0].myPayments.push(payment._id);
+        await usersCreated[0].save();
+
 
         console.log("#### Seed data initialized ####");
     }
