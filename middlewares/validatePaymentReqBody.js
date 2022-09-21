@@ -5,10 +5,16 @@ const constants = require("../utils/constants");
 const verifyPaymentReqBody = async (req, res, next) => {
     try {
 
-        if (!mongoose.Types.ObjectId.isValid(req.body.bookingId)) {
+        if (!req.body.bookingId) {
             return res.status(400).send({
-                message: "Booking Id is not valid"
-            })
+                message: "Failed ! BookingId is not provided"
+            });
+        }else {
+            if(!mongoose.Types.ObjectId.isValid(req.body.bookingId)){
+                return res.status(400).send({
+                    message: "Booking Id is not valid"
+                })
+            }
         }
 
         const booking = await Booking.findOne({
@@ -44,7 +50,13 @@ const verifyPaymentReqBody = async (req, res, next) => {
 
         req.bookingInParams = booking;
 
-        if(typeof req.body.amount !== "number"){
+        if(!req.body.amount){
+
+            return res.status(400).send({
+                message: "amount is not provided"
+            });
+
+        }else if(typeof req.body.amount !== "number"){
 
             return res.status(400).send({
 
