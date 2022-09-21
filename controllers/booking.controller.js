@@ -1,5 +1,6 @@
 const Booking = require("../models/booking.model");
 const constants = require("../utils/constants");
+const checker = require('../utils/checker');
 
 exports.getAllBookings = async ( req, res) => {
 
@@ -58,17 +59,7 @@ exports.getOneBooking = async (req, res) => {
 
         res.status(201).send(booking);
 
-        return setTimeout( async ()=>{
-
-           if(booking.status !== constants.bookingStatuses.completed){
-
-            booking.status = constants.bookingStatuses.failed;
-
-           }        
-           await booking.save();
-        
-        },120000);
-
+        checker.checkBookingStatus(booking._id);
 
     }catch (err) {
         console.log("Error while initiating the booking", err.message);
