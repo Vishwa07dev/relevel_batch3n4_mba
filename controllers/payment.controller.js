@@ -62,11 +62,7 @@ exports.getOnepayment = async (req, res) => {
 
     try{
 
-        const payment = await Payment.findOne({
-            _id: req.params.id
-        });
-
-        res.status(200).send(payment);
+        res.status(200).send(paymentInParams);
 
     }catch(err){
         console.log("Error while getting given one payment record", err.message);
