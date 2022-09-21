@@ -2,8 +2,8 @@ const User = require('./models/user.model')
 const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
-const bcrypt = require('bcryptjs')
 const Booking = require('./models/booking.model')
+const bcrypt = require('bcryptjs')
 
 module.exports = async ()=>{
     try{
@@ -148,7 +148,6 @@ module.exports = async ()=>{
             ticketBookedTime : Date.now(),
             status : constants.bookingStatuses.completed
         });
-        console.log("booking: --------", booking);
 
         await usersCreated[0].myBookings.push(booking._id)
         await moviesCreated[0].bookings.push(booking._id)
@@ -156,6 +155,7 @@ module.exports = async ()=>{
         await usersCreated[0].save();
         await theatresCreated[0].save();
         await moviesCreated[0].save();
+
 
         console.log("#### Seed data initialized ####");
     }

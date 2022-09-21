@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const User = require('../models/user.model');
 const constants = require('../utils/constants')
 

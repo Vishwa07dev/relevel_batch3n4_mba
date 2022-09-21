@@ -1,6 +1,22 @@
 const Booking = require("../models/booking.model");
 const constants = require("../utils/constants");
 
+async function checkStatus(id){
+    try{
+        console.log("Checking status of " + id)
+        let booking = await Booking.findOne({_id : id});
+        if(booking.status == constants.bookingStatuses.inProgress){
+            booking.status = constants.bookingStatuses.failed
+        }else{
+            return;
+        }
+        await booking.save();
+        console.log(booking);
+    }catch(err){
+        console.log("Some Error while Checking Status", err.message);
+    }
+}
+
 exports.getAllBookings = async ( req, res) => {
 
     let queryObj = {};
@@ -58,16 +74,9 @@ exports.getOneBooking = async (req, res) => {
 
         res.status(201).send(booking);
 
-        return setTimeout( async ()=>{
-
-           if(booking.status !== constants.bookingStatuses.completed){
-
-            booking.status = constants.bookingStatuses.failed;
-
-           }        
-           await booking.save();
-        
-        },20000);
+        setTimeout(()=>{
+            checkStatus(booking._id)
+        }, 30000);
 
 
     }catch (err) {

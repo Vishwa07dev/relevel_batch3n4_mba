@@ -39,5 +39,10 @@ module.exports = {
         completed: "COMPLETED",
         cancelled: "CANCELLED",
         failed: "FAILED"
+    },
+    paymentStatus: {
+        inProgress: "IN_PROGRESS",
+        success: "SUCCESS",
+        failed: "FAILED"
     }
 }
