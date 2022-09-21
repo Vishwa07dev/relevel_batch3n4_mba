@@ -53,8 +53,10 @@ exports.signin = async (req,res)=>{
             });
         }
 
-        const token = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME});
+        const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME_ACCESS_TOKEN});
         console.log(`#### ${user.userType} ${user.name} logged in ####`);
+        const refreshToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME_REFRESH_TOKEN});
+        
 
         res.status(200).send({
             name : user.name,
@@ -62,8 +64,25 @@ exports.signin = async (req,res)=>{
             email : user.email,
             userType : user.userType,
             userStatus : user.userStatus,
-            accesToken : token
+            accessToken : user.accessToken,
+            refreshToken: user.refreshToken
         });
+    }catch(err){
+        console.log("#### Error while user sign in ##### ", err.message);
+        res.status(500).send({
+            message : "Internal server error while user signin"
+        });
+    }
+}
+
+
+
+exports.getAccessToken =async(req,res) =>{
+    try{
+    const user = await User.findOne({userId : req.body.userId})
+    const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME_ACCESS_TOKEN});
+    
+    res.status(200).send({accessToken:accessToken})    
     }catch(err){
         console.log("#### Error while user sign in ##### ", err.message);
         res.status(500).send({
