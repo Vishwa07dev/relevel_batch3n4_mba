@@ -33,6 +33,10 @@ const theatreSchema = new mongoose.Schema({
         type : Number,
         required : true
     },
+    bookings:{
+        type:[mongoose.SchemaTypes.ObjectId],
+        
+    },
     movies : {
         type : [mongoose.SchemaTypes.ObjectId],
         default : [],
