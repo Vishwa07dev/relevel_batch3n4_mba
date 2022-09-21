@@ -2,17 +2,17 @@ const Payment = require('../models/payment.model');
 const { constants } = require('../utils');
 
 
-exports.createPayment = async (req, res, next)=>{
+exports.createPayment = async (req, res)=>{
     try{
         
-        const user = req.user;
-        const booking = req.bookingInParams;
-        
+        const user = req.user;        
+
         let paymentObj = {
-            bookingId : booking._id,
-            amount : booking.totalCost,
+            bookingId : req.bookingInParams._id,
+            amount : req.bookingInParams.totalCost,
             status : constants.paymentStatus.completed
         }
+
         let payment = await Payment.create(paymentObj);
 
         booking.status = constants.bookingStatuses.completed;
@@ -38,16 +38,13 @@ exports.createPayment = async (req, res, next)=>{
     }
 }
 
-exports.singlePaymentReciept = async (req, res, next)=>{
+exports.singlePaymentReciept = async (req, res)=>{
     try{
         
         
         let payment = req.paymentInParams;
 
-        res.status(201).send({
-            message : "Payment reciept fetch successfully",
-            reciept : payment
-        })
+        res.status(200).send(payment)
 
     }catch(err){
         console.log(`Error fetching single reciept payment: ${err.message}`);
@@ -57,23 +54,18 @@ exports.singlePaymentReciept = async (req, res, next)=>{
     }
 }
 
-exports.allPaymentReciept = async (req, res, next)=>{
+exports.allPaymentReciept = async (req, res)=>{
     try{
         var queryObj = {};
         console.log(req.payments)
+
         if(req.payments){
             queryObj["_id"] = { $in : req.payments};
         }
 
         let payments = await Payment.find(queryObj);
 
-        
-
-        res.status(201).send({
-            message : "Payment reciept fetch successfully",
-            totalCost : payments.length,
-            reciept : payments
-        })
+        res.status(201).send(payments)
 
     }catch(err){
         console.log(`Error fetching all reciept payment: ${err.message}`);
