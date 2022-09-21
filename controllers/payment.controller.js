@@ -40,10 +40,10 @@ exports.getOnePayment = async (req, res) => {
         const payment = await Payment.create(paymentObj);
 
         req.booking.status = payment.status == constants.paymentStatuses.success ? constants.bookingStatuses.completed : constants.bookingStatuses.failed;
-        req.booking.save()
+        await req.booking.save()
 
         req.user.myPayments.push(payment._id);
-        req.user.save();
+        await req.user.save();
 
         res.status(201).send(payment);
 
