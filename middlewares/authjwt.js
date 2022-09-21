@@ -118,15 +118,41 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
         })
     }
 };
-
-
-const authJwt = {
+const isAdminOrOwnerOfPayment = async (req, res, next) => {
+    try {
+      // check if ADMIN or USER is valid OWNER
+  
+      const payment = req.paymentInParams;
+      const booking = Booking.findById({ _id: payment.bookingId });
+      if (
+        req.user.userType == constants.userTypes.admin ||
+        booking.userId.equals(req.user._id)
+      ) {
+        next();
+      } else {
+        return res.status(400).send({
+          message:
+            "Only the owner of the booking/admin has access to this operation",
+        });
+      }
+    } catch (err) {
+      console.log(
+        "Error while validating usertype is admin/ownerOfPayment",
+        err.message
+      );
+      return res.status(500).send({
+        message: "Some internal error",
+      });
+    }
+  };
+  
+  const authJwt = {
     verifyToken,
     isAdmin,
     isAdminOrOwner,
     isTheatreOwnerOrAdmin,
     isValidTheatreOwner,
-    isAdminOrOwnerOfBooking
-}
-
+    isAdminOrOwnerOfBooking,
+    isAdminOrOwnerOfPayment,
+  };
 module.exports = authJwt

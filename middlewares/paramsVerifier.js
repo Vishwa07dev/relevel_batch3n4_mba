@@ -102,12 +102,43 @@ const bookingInParams = async (req, res, next) =>{
         })
     }
 }
-
-const validateIdInParams = {
+const paymentInParams = async (req, res, next) => {
+    try {
+      if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({
+          message: "Payment Id is not valid Obj Id",
+        });
+      }
+  
+      const payment = await Payment.findOne({
+        _id: req.params.id,
+      });
+  
+      if (!payment) {
+        return res.status(400).send({
+          message: "Payment ID provided is not a valid one",
+        });
+      }
+  
+      req.paymentInParams = payment;
+  
+      next();
+    } catch (err) {
+      console.log("error while validating booking Id", err.message);
+  
+      return res.status(500).send({
+        message: "Some internal error",
+      });
+    }
+  };
+  
+  const validateIdInParams = {
     userInParams,
     theatreInParams,
     movieInParams,
-    bookingInParams
-}
+    bookingInParams,
+    paymentInParams,
+  };
+  
 
 module.exports = validateIdInParams
