@@ -51,10 +51,10 @@ exports.getOneBooking = async (req, res) => {
 
         const booking = await Booking.create(bookingObj);
         req.user.myBookings.push(booking._id);
-        req.user.save();
+        await req.user.save();
 
         req.bookedMovie.bookings.push(booking._id);
-        req.bookedMovie.save();
+        await req.bookedMovie.save();
 
         res.status(201).send(booking);
 
