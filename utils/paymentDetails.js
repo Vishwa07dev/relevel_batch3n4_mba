@@ -1,14 +1,15 @@
 const Movie = require("../models/movie.model");
 const Theatre = require("../models/theatre.model");
-const Booking = require("../models/booking.model");
-
-exports.paymentDetail = async (payments) => {
+const Payment = require("../models/payment.model");
+const Booking = require("../models/payment.model");
+exports.paymentDetail = async (bookings) => {
   let payment = [];
-  for (let x = 0; x < payments.length; x++) {
+  for (let x = 0; x < bookings.length; x++) {
     try {
-      const booking = await Booking.findOne({ _id: payments[x].bookingId });
+      const booking = await Booking.findOne({ _id: bookings[x] });
       const movie = await Movie.findOne({ _id: booking.movieId });
       const theatre = await Theatre.findOne({ _id: booking.theatreId });
+      const payment = await Payment.findOne({ _id: booking.myPayment });
       let obj = {
         Movie: movie.name,
         Theatre: theatre.name,

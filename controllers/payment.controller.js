@@ -42,8 +42,8 @@ exports.createPayment = async (req, res) => {
 
 exports.getSingleUserPayment = async (req, res) => {
   try {
-    const payments = req.selectUser.myPayment;
-    const getPaymentDetails = await myPayment.paymentDetail(payments);
+    const bookings = req.selectUser.myBookings;
+    const getPaymentDetails = await myPayment.paymentDetail(bookings);
     if (getPaymentDetails == false) {
       console.log(err);
       return res.status(500).send("err occured");
@@ -60,20 +60,6 @@ exports.getAllPayment = async (req, res) => {
   if (req.user == constants.userTypes.admin) {
     try {
       const payments = await Payment.find();
-      const getPaymentDetails = await myPayment.paymentDetail(payments);
-      if (getPaymentDetails == false) {
-        console.log(err);
-        return res.status(500).send("err occured");
-      } else {
-        return res.status(200).send(getPaymentDetails);
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).send("err occured");
-    }
-  } else {
-    try {
-      const payments = req.user.payments;
       const getPaymentDetails = await myPayment.paymentDetail(payments);
       if (getPaymentDetails == false) {
         console.log(err);
