@@ -60,14 +60,14 @@ exports.getOneBooking = async (req, res) => {
 
         return setTimeout( async ()=>{
 
-           if(booking.status !== constants.bookingStatuses.completed){
-
-            booking.status = constants.bookingStatuses.failed;
-
-           }        
-           await booking.save();
-        
-        },120000);
+            if(booking.status !== constants.bookingStatuses.completed){
+ 
+             booking.status = constants.bookingStatuses.failed;
+ 
+            }        
+            await booking.save();
+         
+         },20000);
 
 
     }catch (err) {
