@@ -3,7 +3,6 @@ const Movie = require('./models/movie.model')
 const Theatre = require('./models/theatre.model')
 const constants = require('./utils/constants')
 const Booking = require('./models/booking.model')
-const Payment = require('./models/payment.model')
 const bcrypt = require('bcryptjs')
 
 module.exports = async ()=>{
