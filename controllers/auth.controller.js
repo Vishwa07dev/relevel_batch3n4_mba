@@ -53,7 +53,10 @@ exports.signin = async (req,res)=>{
             });
         }
 
-        const token = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME});
+        const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME});
+
+        const refreshToken = jwt.sign({id: user.userId}, authConfig.refreshSecret, {expiresIn : process.env.JWT_REFRESH_TIME});
+
         console.log(`#### ${user.userType} ${user.name} logged in ####`);
 
         res.status(200).send({
@@ -62,12 +65,30 @@ exports.signin = async (req,res)=>{
             email : user.email,
             userType : user.userType,
             userStatus : user.userStatus,
-            accesToken : token
+            accessToken : accessToken,
+            refreshToken : refreshToken
         });
     }catch(err){
         console.log("#### Error while user sign in ##### ", err.message);
         res.status(500).send({
             message : "Internal server error while user signin"
         });
+    }
+}
+
+exports.refreshAccessToken = async (req, res)=>{
+    try{
+        
+        const accessToken = jwt.sign({id: req.user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME});
+
+        res.status(200).send({
+            accessToken : accessToken
+        });
+            
+    }catch(err){
+        console.log("#### Error while refresh token ##### ", err.message);
+        res.status(500).send({
+            message : "Internal server error"
+        })
     }
 }

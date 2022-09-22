@@ -3,6 +3,8 @@ const Theatre = require('../models/theatre.model')
 const Movie = require('../models/movie.model')
 const Booking = require('../models/booking.model')
 const Payment = require('../models/payment.model')
+const jwt = require('jsonwebtoken');
+const authConfig = require('../configs/auth.config');
 
 const ObjectId = require("mongoose").Types.ObjectId
 
@@ -127,12 +129,51 @@ const paymentInParams = async (req,res,next)=>{
     }
 }
 
+const refreshTokenInParams = async (req,res,next)=>{
+
+    try{
+        
+        const refreshToken = req.params.refreshToken;
+        console.log("Refresh token: " +  refreshToken);
+        if(!refreshToken){
+            res.status(400).send({
+            message : "No refresh token provided"
+            })
+            return;
+        }
+        else{
+            jwt.verify(refreshToken, authConfig.refreshSecret , async(err, decoded)=>{
+                if(err){
+                    return res.status(401).send({
+                        message : "UnAuthorised!"
+                    })
+                }
+                const user = await User.findOne({userId : decoded.id});
+                if(!user){
+                    return res.status(400).send({
+                        message : "The user that this token belongs to does not exist"
+                    })
+                }
+                req.user = user;
+                next();
+            })
+        }
+        
+    }catch(err){
+        console.log("#### Error while validating refreshToken #### ", err.message);
+        return res.status(500).send({
+            message : "Internal server error while validating refreshToken"
+        })
+    }
+}
+
 const validateIdInParams = {
     userInParams,
     theatreInParams,
     movieInParams,
     bookingInParams,
-    paymentInParams
+    paymentInParams,
+    refreshTokenInParams
 }
 
 module.exports = validateIdInParams
