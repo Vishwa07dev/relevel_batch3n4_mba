@@ -79,25 +79,3 @@ exports.signin = async (req,res)=>{
         });
     }
 }
-
-
-exports.refreshToken=async(req,res)=>{
-    const refreshToken=req.headers["x-refresh-token"]
-    jwt.verify(refreshToken,authConfig.refreshToken,(err,decoded)=>{
-        if(err)
-        {
-            return res.status(400).send({
-                message:"Unauthorised"
-            })
-        }
-        else
-        {
-            const accesToken=jwt.sign({
-                userId:req.body.userId
-            },authConfig.secret,{
-                expiresIn:600000
-            })
-            return res.status(200).send(accesToken)
-        }
-    })
-}

@@ -31,6 +31,43 @@ const verifyToken = (req,res,next)=>{
     })
 }
 
+const refreshToken= (req,res)=>{
+    const refreshToken=req.headers["x-refresh-token"]
+
+    if(!refreshToken){
+        return res.status(403).send({
+            message : "no token provided! Access prohibited"
+        })
+    }
+    
+    jwt.verify(refreshToken,authConfig.refreshToken,async(err,decoded)=>{
+        if(err)
+        {
+            return res.status(400).send({
+                message:"Unauthorised"
+            })
+        }
+       else{
+            const user = await User.findOne({userId : decoded.id});
+            if(!user){
+                return res.status(400).send({
+                message : "The user that this token belongs to does not exist"
+                })
+            }
+            
+            const accesToken=jwt.sign({
+                id:user.userId
+            },authConfig.secret,{
+                expiresIn:600000
+            });
+           return res.status(200).send({
+            accesToken:accesToken})
+          
+        }
+    });
+    
+}
+
 const isAdmin = async (req,res,next)=>{
     const user = req.user;
     if (user && user.userType == constants.userTypes.admin){
@@ -145,7 +182,8 @@ const authJwt = {
     isTheatreOwnerOrAdmin,
     isValidTheatreOwner,
     isAdminOrOwnerOfBooking,
-    isAdminOrOwnerOfPayment
+    isAdminOrOwnerOfPayment,
+    refreshToken
 }
 
 module.exports = authJwt
