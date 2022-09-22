@@ -54,6 +54,13 @@ exports.signin = async (req,res)=>{
         }
 
         const token = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME});
+        const refreshToken=jwt.sign({
+            id: user.userId
+        },authConfig.refreshToken,
+        {
+            expiresIn:600000 //wait for 10 minute
+        }
+        )
         console.log(`#### ${user.userType} ${user.name} logged in ####`);
 
         res.status(200).send({
@@ -62,7 +69,8 @@ exports.signin = async (req,res)=>{
             email : user.email,
             userType : user.userType,
             userStatus : user.userStatus,
-            accesToken : token
+            accesToken : token,
+            refreshToken:refreshToken
         });
     }catch(err){
         console.log("#### Error while user sign in ##### ", err.message);
@@ -70,4 +78,26 @@ exports.signin = async (req,res)=>{
             message : "Internal server error while user signin"
         });
     }
+}
+
+
+exports.refreshToken=async(req,res)=>{
+    const refreshToken=req.headers["x-refresh-token"]
+    jwt.verify(refreshToken,authConfig.refreshToken,(err,decoded)=>{
+        if(err)
+        {
+            return res.status(400).send({
+                message:"Unauthorised"
+            })
+        }
+        else
+        {
+            const accesToken=jwt.sign({
+                userId:req.body.userId
+            },authConfig.secret,{
+                expiresIn:600000
+            })
+            return res.status(200).send(accesToken)
+        }
+    })
 }
