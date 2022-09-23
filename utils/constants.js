@@ -34,6 +34,7 @@ module.exports = {
     rejected: "REJECTED",
   },
 
+<<<<<<< HEAD
   bookingStatuses: {
     inProgress: "IN_PROGRESS",
     completed: "COMPLETED",
@@ -47,3 +48,17 @@ module.exports = {
     failed: "FAILED",
   },
 };
+=======
+    bookingStatuses: {
+        inProgress: "IN_PROGRESS",
+        completed: "COMPLETED",
+        cancelled: "CANCELLED",
+        failed: "FAILED"
+    },
+
+    paymentStatuses : {
+        success: "SUCCESS",
+        failed: "FAILED"
+    }
+}
+>>>>>>> 30e529642b5ca1e54b019b8ea4ee6e58174a3dcb

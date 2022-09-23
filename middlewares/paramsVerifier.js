@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const User = require("../models/user.model");
 const Theatre = require("../models/theatre.model");
 const Movie = require("../models/movie.model");
@@ -12,6 +13,35 @@ const userInParams = async (req, res, next) => {
       return res.status(400).send({
         message: "userId passed dosen't exist",
       });
+=======
+const User = require('../models/user.model')
+const Theatre = require('../models/theatre.model')
+const Movie = require('../models/movie.model')
+const Booking = require('../models/booking.model')
+const Payment = require('../models/payment.model')
+
+const ObjectId = require("mongoose").Types.ObjectId
+
+const userInParams = async (req,res,next)=>{
+
+    try{
+
+        const user = await User.findOne({userId : req.params.id});
+
+        if(!user){
+            return res.status(400).send({
+                message : "userId passed dosen't exist"
+            })
+        }
+        req.userInParams = user;
+        next();
+        
+    }catch(err){
+        console.log("#### Error while reading the user info #### ", err.message);
+        return res.status(500).send({
+            message : "Internal server error while reading the user data"
+        })
+>>>>>>> 30e529642b5ca1e54b019b8ea4ee6e58174a3dcb
     }
     req.userInParams = user;
     next();
@@ -91,11 +121,42 @@ const bookingInParams = async (req, res, next) => {
   }
 };
 
+const paymentInParams = async (req,res,next)=>{
+
+    try{
+
+        const payment = await Payment.findOne({_id : req.params.id});
+
+        if(!payment){
+            return res.status(400).send({
+                message : "Payment Id passed dosen't exist"
+            })
+        }
+        req.paymentInParams = payment;
+        next();
+        
+    }catch(err){
+        console.log("#### Error while reading the payment info #### ", err.message);
+        return res.status(500).send({
+            message : "Internal server error while reading the payment data"
+        })
+    }
+}
+
 const validateIdInParams = {
+<<<<<<< HEAD
   userInParams,
   theatreInParams,
   movieInParams,
   bookingInParams,
 };
+=======
+    userInParams,
+    theatreInParams,
+    movieInParams,
+    bookingInParams,
+    paymentInParams
+}
+>>>>>>> 30e529642b5ca1e54b019b8ea4ee6e58174a3dcb
 
 module.exports = validateIdInParams;

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../configs/auth.config')
 const User = require('../models/user.model')
+const Booking = require('../models/booking.model')
 const constants = require('../utils/constants')
 
 
@@ -117,8 +118,25 @@ const isAdminOrOwnerOfBooking = async (req, res, next) => {
             message: "Some internal error"
         })
     }
-};
+}
 
+const isAdminOrOwnerOfPayment = async (req, res, next) => {
+    try {
+
+        if(req.user.userType != constants.userTypes.admin && !req.user.myPayments.includes(req.params.id)){
+            return res.status(400).send({
+                message: "Only the owner of the payment/admin has access to this operation"
+            });
+        }
+        
+        next();
+    } catch (err) {
+        console.log("Error while validating usertype is admin/ownerOfPayment", err.message);
+        return res.status(500).send({
+            message: "Some internal error"
+        })
+    }
+}
 
 const authJwt = {
     verifyToken,
@@ -126,7 +144,8 @@ const authJwt = {
     isAdminOrOwner,
     isTheatreOwnerOrAdmin,
     isValidTheatreOwner,
-    isAdminOrOwnerOfBooking
+    isAdminOrOwnerOfBooking,
+    isAdminOrOwnerOfPayment
 }
 
 module.exports = authJwt
