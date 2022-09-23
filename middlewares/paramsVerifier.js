@@ -129,7 +129,7 @@ const paymentInParams = async (req,res,next)=>{
 }
 
 const verifyRefreshToken = async (req,res,next)=>{
-    jwt.verify(token, authConfig.secret, async (err, decoded)=>{
+    jwt.verify(req.params.refreshToken, authConfig.secret, async (err, decoded)=>{
         if(err){
             return res.status(401).send({
                 message : "UnAuthorised!"
