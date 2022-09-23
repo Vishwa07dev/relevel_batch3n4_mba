@@ -129,27 +129,21 @@ const paymentInParams = async (req,res,next)=>{
 }
 
 const verifyRefreshToken = async (req,res,next)=>{
-    if(!req.params.refreshToken){
-        return res.status(400).send({
-            message : "No refresh token provided"
-        })
-    }else{
-        jwt.verify(token, authConfig.secret, async (err, decoded)=>{
-            if(err){
-                return res.status(401).send({
-                    message : "UnAuthorised!"
-                })
-            }
-            const user = await User.findOne({userId : decoded.id});
-            if(!user){
-                return res.status(400).send({
-                    message : "The user that this token belongs to does not exist"
-                })
-            }
-            req.user = user;
-            next();
-        })
-    }
+    jwt.verify(token, authConfig.secret, async (err, decoded)=>{
+        if(err){
+            return res.status(401).send({
+                message : "UnAuthorised!"
+            })
+        }
+        const user = await User.findOne({userId : decoded.id});
+        if(!user){
+            return res.status(400).send({
+                message : "The user that this token belongs to does not exist"
+            })
+        }
+        req.user = user;
+        next();
+    })
 }
 
 const validateIdInParams = {
