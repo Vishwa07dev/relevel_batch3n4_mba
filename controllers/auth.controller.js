@@ -53,9 +53,9 @@ exports.signin = async (req,res)=>{
             });
         }
 
-        const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME_ACCESS_TOKEN});
+        const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : authConfig.JWT_TIME_ACCESS_TOKEN});
         console.log(`#### ${user.userType} ${user.name} logged in ####`);
-        const refreshToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME_REFRESH_TOKEN});
+        const refreshToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : authConfig.JWT_TIME_REFRESH_TOKEN});
         
 
         res.status(200).send({
@@ -80,8 +80,9 @@ exports.signin = async (req,res)=>{
 exports.getAccessToken =async(req,res) =>{
     try{
     const user = await User.findOne({userId : req.body.userId})
-    const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME_ACCESS_TOKEN});
-    
+    const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : authConfig.JWT_TIME_ACCESS_TOKEN});
+    user.accessToken = accessToken;
+    await user.save()
     res.status(200).send({accessToken:accessToken})    
     }catch(err){
         console.log("#### Error while user sign in ##### ", err.message);

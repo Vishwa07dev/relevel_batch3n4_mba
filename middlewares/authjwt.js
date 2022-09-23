@@ -31,7 +31,7 @@ const verifyToken = (req,res,next)=>{
     })
 }
 
-const verifyReferenceToken = (req,res,next)=>{
+const verifyRefreshToken = (req,res,next)=>{
     const token = req.params.refershtoken;
 
     if(!token){
@@ -49,7 +49,7 @@ const verifyReferenceToken = (req,res,next)=>{
         const user = await User.findOne({userId : decoded.id});
         if(!user){
             return res.status(400).send({
-                message : "The user that this token belongs to does not exist"
+                message : "The user that this refernce token belongs to does not exist"
             })
         }
         req.user = user;
@@ -173,7 +173,7 @@ const authJwt = {
     isValidTheatreOwner,
     isAdminOrOwnerOfBooking,
     isAdminOrOwnerOfPayment,
-    verifyReferenceToken
+    verifyRefreshToken
 }
 
 module.exports = authJwt
