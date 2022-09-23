@@ -92,7 +92,7 @@ const isAdminOrOwner = async (req,res,next)=>{
 const isTheatreOwnerOrAdmin = async (req,res,next)=>{
     try {
         const allowedUserTypes = [constants.userTypes.theatre_owner, constants.userTypes.admin]
-        if(allowedUserTypes.includes(req.user.userType)){
+        if(!allowedUserTypes.includes(req.user.userType)){
             next();
         }else{
             return res.send(403).send({
