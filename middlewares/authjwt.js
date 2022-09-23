@@ -84,7 +84,7 @@ const isValidTheatreOwner = async (req,res,next)=>{
     try {
         if(req.user.userType==constants.userTypes.theatre_owner){
             const theatre = req.theatreInParams
-            if (theatre.ownerId.equals(req.user._id)){
+            if (!theatre.ownerId.equals(req.user._id)){
                 return res.send(403).send({
                     message : "Only the owner of this theatre is allowed to make this call"
                 })
