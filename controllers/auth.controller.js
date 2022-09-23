@@ -54,6 +54,13 @@ exports.signin = async (req,res)=>{
         }
 
         const token = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME});
+        const refreshToken=jwt.sign({
+            id: user.userId
+        },authConfig.refreshToken,
+        {
+            expiresIn:600000 //wait for 10 minute
+        }
+        )
         console.log(`#### ${user.userType} ${user.name} logged in ####`);
 
         res.status(200).send({
@@ -62,7 +69,8 @@ exports.signin = async (req,res)=>{
             email : user.email,
             userType : user.userType,
             userStatus : user.userStatus,
-            accesToken : token
+            accesToken : token,
+            refreshToken:refreshToken
         });
     }catch(err){
         console.log("#### Error while user sign in ##### ", err.message);
