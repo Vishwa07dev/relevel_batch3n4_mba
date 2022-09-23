@@ -135,29 +135,22 @@ const refreshTokenInParams = async (req,res,next)=>{
         
         const refreshToken = req.params.refreshToken;
         console.log("Refresh token: " +  refreshToken);
-        if(!refreshToken){
-            res.status(400).send({
-            message : "No refresh token provided"
-            })
-            return;
-        }
-        else{
-            jwt.verify(refreshToken, authConfig.refreshSecret , async(err, decoded)=>{
-                if(err){
-                    return res.status(401).send({
-                        message : "UnAuthorised!"
-                    })
-                }
-                const user = await User.findOne({userId : decoded.id});
-                if(!user){
-                    return res.status(400).send({
-                        message : "The user that this token belongs to does not exist"
-                    })
-                }
-                req.user = user;
-                next();
-            })
-        }
+        
+        jwt.verify(refreshToken, authConfig.refreshSecret , async(err, decoded)=>{
+            if(err){
+                return res.status(401).send({
+                    message : "UnAuthorised!"
+                })
+            }
+            const user = await User.findOne({userId : decoded.id});
+            if(!user){
+                return res.status(400).send({
+                    message : "The user that this token belongs to does not exist"
+                })
+            }
+            req.user = user;
+            next();
+        })
         
     }catch(err){
         console.log("#### Error while validating refreshToken #### ", err.message);
