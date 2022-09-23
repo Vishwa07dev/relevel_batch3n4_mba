@@ -32,7 +32,7 @@ const verifyToken = (req,res,next)=>{
 }
 
 const verifyRefreshToken = (req,res,next)=>{
-    const token = req.params.refershtoken;
+    const token = req.params.refreshtoken;
 
     if(!token){
         return res.status(403).send({
