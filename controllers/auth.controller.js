@@ -53,21 +53,41 @@ exports.signin = async (req,res)=>{
             });
         }
 
-        const token = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : process.env.JWT_TIME});
+        const accessToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : authConfig.JWT_TIME_ACCESS_TOKEN});
         console.log(`#### ${user.userType} ${user.name} logged in ####`);
-
+        const refreshToken = jwt.sign({id: user.userId}, authConfig.secret, {expiresIn : authConfig.JWT_TIME_REFRESH_TOKEN});
+        
         res.status(200).send({
             name : user.name,
             userId : user.userId,
             email : user.email,
             userType : user.userType,
             userStatus : user.userStatus,
-            accesToken : token
+            accessToken :  accessToken,
+            refreshToken:  refreshToken
         });
     }catch(err){
         console.log("#### Error while user sign in ##### ", err.message);
         res.status(500).send({
             message : "Internal server error while user signin"
+        });
+    }
+}
+
+
+
+exports.getAccessToken =async(req,res) =>{
+    try{
+
+   
+    const accessToken = jwt.sign({_id: req.user._id}, authConfig.secret, {expiresIn : authConfig.JWT_TIME_ACCESS_TOKEN});
+    
+  
+    res.status(200).send({accessToken:accessToken})    
+    }catch(err){
+        console.log("#### Error while user creating access token ##### ", err.message);
+        res.status(500).send({
+            message : "Internal server error while user creating access token"
         });
     }
 }
