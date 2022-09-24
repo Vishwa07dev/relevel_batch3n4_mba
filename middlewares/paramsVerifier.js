@@ -20,6 +20,7 @@ const Movie = require('../models/movie.model')
 const Booking = require('../models/booking.model')
 const Payment = require('../models/payment.model')
 
+const jwt = require('jsonwebtoken');
 const ObjectId = require("mongoose").Types.ObjectId
 
 const userInParams = async (req,res,next)=>{
@@ -143,6 +144,24 @@ const paymentInParams = async (req,res,next)=>{
     }
 }
 
+const verifyRefreshToken = async (req,res,next)=>{
+    jwt.verify(req.params.refreshToken, authConfig.secret, async (err, decoded)=>{
+        if(err){
+            return res.status(401).send({
+                message : "UnAuthorised!"
+            })
+        }
+        const user = await User.findOne({userId : decoded.id});
+        if(!user){
+            return res.status(400).send({
+                message : "The user that this token belongs to does not exist"
+            })
+        }
+        req.user = user;
+        next();
+    })
+}
+
 const validateIdInParams = {
 <<<<<<< HEAD
   userInParams,
@@ -155,7 +174,8 @@ const validateIdInParams = {
     theatreInParams,
     movieInParams,
     bookingInParams,
-    paymentInParams
+    paymentInParams,
+    verifyRefreshToken
 }
 >>>>>>> 30e529642b5ca1e54b019b8ea4ee6e58174a3dcb
 
