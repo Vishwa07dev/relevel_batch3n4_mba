@@ -1,5 +1,7 @@
 const Payment = require("../models/payment.model");
 const constants = require("../utils/constants");
+const clinetConfig = require('../configs/client.config');
+const sendNotificationReq = require('../utils/notificationClient');
 
 exports.getAllPayments = async (req, res) => {
     try{
@@ -10,7 +12,7 @@ exports.getAllPayments = async (req, res) => {
         }
     
         const payments = await Payment.find(queryObj);
-    
+        
         res.status(200).send(payments);
     }catch{
         console.log("Error while getting given all payment records", err.message);
@@ -45,6 +47,7 @@ exports.getOnePayment = async (req, res) => {
         req.user.myPayments.push(payment._id);
         await req.user.save();
 
+        await sendNotificationReq("Payment Successfuly MovieBooking", payment, req.user.email, clinetConfig.companyEmail);
         res.status(201).send(payment);
 
     }catch (err) {
