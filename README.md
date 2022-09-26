@@ -47,6 +47,10 @@ This project is node.js back-end code for a movie booking application that can c
 |body-parser|
 |bcryptjs|
 
+|external applications|
+|-|
+|notification service application|
+
 <br/>
 
 ## REST API paths
