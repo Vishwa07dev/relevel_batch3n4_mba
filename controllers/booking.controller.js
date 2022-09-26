@@ -1,13 +1,14 @@
 const Booking = require("../models/booking.model");
 const constants = require("../utils/constants");
 const checker = require('../utils/checker');
+//const sendNotificationReq = require("../utils/notificationClient");
 
-exports.getAllBookings = async ( req, res) => {
+exports.getAllBookings = async(req, res) => {
 
     let queryObj = {};
 
-    if(req.user.userType != constants.userTypes.admin){
-       queryObj.userId = req.user._id;
+    if (req.user.userType != constants.userTypes.admin) {
+        queryObj.userId = req.user._id;
     }
 
     const bookings = await Booking.find(queryObj);
@@ -16,9 +17,9 @@ exports.getAllBookings = async ( req, res) => {
 }
 
 
-exports.getOneBooking = async (req, res) => {
+exports.getOneBooking = async(req, res) => {
 
-    try{
+    try {
 
         const booking = await Booking.findOne({
             _id: req.params.id
@@ -26,7 +27,7 @@ exports.getOneBooking = async (req, res) => {
 
         res.status(200).send(booking);
 
-    }catch(err){
+    } catch (err) {
         console.log("Error while getting given one booking record", err.message);
 
         return res.status(500).send({
@@ -35,19 +36,19 @@ exports.getOneBooking = async (req, res) => {
     }
 }
 
- exports.initiateBooking = async (req, res) => {
+exports.initiateBooking = async(req, res) => {
 
     try {
 
 
-       const bookingObj = {
+        const bookingObj = {
             userId: req.user._id,
             theatreId: req.body.theatreId,
             movieId: req.body.movieId,
             noOfSeats: req.body.noOfSeats,
-            ticketBookedTime : Date.now(),
-            totalCost : req.bookedTheatre.ticketPrice * req.body.noOfSeats
-            
+            ticketBookedTime: Date.now(),
+            totalCost: req.bookedTheatre.ticketPrice * req.body.noOfSeats
+
         }
 
         const booking = await Booking.create(bookingObj);
@@ -61,37 +62,46 @@ exports.getOneBooking = async (req, res) => {
 
         checker.checkBookingStatus(booking._id);
 
-    }catch (err) {
+
+        //Now we should send the notification request to notificationService
+        /**
+         * Enrich the content of the email content
+         */
+        // sendNotificationReq(`booking created with id : ${booking._id}`, "Yay ! Movie ticket has bee booked", `${customer.email},${admin.email},tilakbhaiya0909@gmail.com`, "movie-app");
+
+
+        res.status(201).send(booking);
+    } catch (err) {
         console.log("Error while initiating the booking", err.message);
 
         return res.status(500).send({
             message: "Some internal error"
         });
     }
-
 }
 
 
- exports.updateTheBookingDetails = async (req, res) => {
 
-    try{
-    
+exports.updateTheBookingDetails = async(req, res) => {
+
+    try {
+
         req.bookingInParams.theatreId = req.body.theatreId != undefined ? req.body.theatreId : req.bookingInParams.theatreId;
         req.bookingInParams.movieId = req.body.movieId != undefined ? req.body.movieId : req.bookingInParams.movieId;
         req.bookingInParams.noOfSeats = req.body.noOfSeats != undefined ? req.body.noOfSeats : req.bookingInParams.noOfSeats;
         req.bookingInParams.status = req.body.status != undefined ? req.body.status : req.bookingInParams.status;
-        req.bookingInParams.totalCost = req.body.totalCost != undefined ?  (req.bookedTheatre.ticketPrice * req.body.noOfSeats) : req.bookingInParams.totalCost;
-    
+        req.bookingInParams.totalCost = req.body.totalCost != undefined ? (req.bookedTheatre.ticketPrice * req.body.noOfSeats) : req.bookingInParams.totalCost;
+
         const updatedBookingObject = await req.bookingInParams.save();
-    
+
         return res.status(200).send(updatedBookingObject);
 
-    }catch(err){
+    } catch (err) {
 
         console.log("Error while updating booking details", err.message);
         return res.status(500).send({
             message: "Some internal error"
         })
     }
-    
+
 }
