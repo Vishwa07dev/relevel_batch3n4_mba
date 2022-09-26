@@ -1,6 +1,7 @@
 const Booking = require("../models/booking.model");
 const constants = require("../utils/constants");
 const checker = require('../utils/checker');
+const sendNotificationReq = require('../utils/sendEmailRequest')
 
 exports.getAllBookings = async ( req, res) => {
 
@@ -59,7 +60,7 @@ exports.getOneBooking = async (req, res) => {
 
         res.status(201).send(booking);
 
-        checker.checkBookingStatus(booking._id);
+        checker.checkBookingStatus(booking._id, req.user);
 
     }catch (err) {
         console.log("Error while initiating the booking", err.message);
@@ -83,6 +84,9 @@ exports.getOneBooking = async (req, res) => {
         req.bookingInParams.totalCost = req.body.totalCost != undefined ?  (req.bookedTheatre.ticketPrice * req.body.noOfSeats) : req.bookingInParams.totalCost;
     
         const updatedBookingObject = await req.bookingInParams.save();
+        if(updatedBookingObject.status == constants.bookingStatuses.cancelled){
+            sendNotificationReq.bookingCancelled(req.user.email)
+        }
     
         return res.status(200).send(updatedBookingObject);
 

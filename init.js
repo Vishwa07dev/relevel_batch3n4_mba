@@ -151,7 +151,6 @@ module.exports = async ()=>{
             ticketBookedTime : Date.now(),
             status : constants.bookingStatuses.completed
         });
-        console.log("booking: --------", booking);
 
         await usersCreated[0].myBookings.push(booking._id)
         await moviesCreated[0].bookings.push(booking._id)
